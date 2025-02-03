@@ -2,56 +2,49 @@
   <div class="container-fluid py-4">
     <div class="row justify-content-center mb-5">
       <div class="col-12 col-md-8 col-lg-6">
-          <div class="card-body">
-            <div class="input-group input-group-lg">
-              <div class="input-group-prepend">
+        <div class="card-body">
+          <div class="input-group input-group-lg">
+            <div class="input-group-prepend">
                 <span class="input-group-text bg-white border-right-0">
                   <i class="fas fa-search text-primary"></i>
                 </span>
-              </div>
-              <input
-                  v-model="searchTerm"
-                  type="text"
-                  class="form-control border-left-0 pl-0"
-                  placeholder="Buscar pacientes por nombre, email o teléfono"
-                  style="border-left: none; box-shadow: none;"
-              >
             </div>
+            <input
+              v-model="searchTerm"
+              type="text"
+              class="form-control border-left-0 pl-0"
+              placeholder="Buscar pacientes por nombre, email o teléfono"
+              style="border-left: none; box-shadow: none;"
+            >
           </div>
+        </div>
       </div>
     </div>
 
     <div class="row">
       <div class="col-12 col-md-6 col-lg-4 mb-4" v-for="patient in filteredPatients" :key="patient.id">
         <div
-            class="card h-100 shadow-sm cursor-pointer patient-card"
-            @click="$router.push('/patient/' + patient.id)"
+          class="card h-100 shadow-sm cursor-pointer patient-card"
+          @click="$router.push('/patient/' + patient.id)"
         >
           <div class="card-body">
             <div class="d-flex align-items-center mb-3">
               <div
-                  class="rounded-circle d-flex align-items-center justify-content-center mr-3"
-                  :class="patient.estado === 'Activo' ? 'bg-success' : 'bg-danger'"
-                  style="width: 50px; height: 50px;"
+                class="rounded-circle d-flex align-items-center justify-content-center mr-3 bg-primary"
+                style="width: 50px; height: 50px;"
               >
-                <span class="text-white font-weight-bold">{{ patient.nombre.charAt(0) }}</span>
+                <span class="text-white font-weight-bold">{{ patient.fullName.charAt(0) }}</span>
               </div>
               <div class="flex-grow-1">
-                <h5 class="card-title mb-0">{{ patient.nombre }}</h5>
-                <p class="card-text text-muted small mb-0">{{ patient.edad }} años</p>
+                <h5 class="card-title mb-0">{{ patient.fullName }}</h5>
+                <p class="card-text text-muted small mb-0">{{ calculateAge(patient.birthDate) }} años</p>
               </div>
-              <span
-                  class="badge px-3 py-2"
-                  :class="patient.estado === 'Activo' ? 'badge-success' : 'badge-danger'"
-              >
-                {{ patient.estado }}
-              </span>
             </div>
 
             <div class="border-top pt-3">
               <p class="card-text mb-2 d-flex align-items-center">
                 <i class="fas fa-phone-alt text-primary mr-2"></i>
-                <span class="text-muted">{{ patient.telefono }}</span>
+                <span class="text-muted">{{ patient.phone }}</span>
               </p>
               <p class="card-text d-flex align-items-center mb-0">
                 <i class="fas fa-envelope text-primary mr-2"></i>
@@ -61,16 +54,16 @@
 
             <div class="position-absolute" style="right: 10px; bottom: 10px">
               <button
-                  @click.stop="$router.push('/patients/edit/' + patient.id)"
-                  class="btn btn-light btn-sm mr-2"
-                  title="Editar"
+                @click.stop="$router.push('/patients/edit/' + patient.id)"
+                class="btn btn-light btn-sm mr-2"
+                title="Editar"
               >
                 <i class="fas fa-edit text-primary"></i>
               </button>
               <button
-                  @click.stop="deletePatient(patient)"
-                  class="btn btn-light btn-sm"
-                  title="Eliminar"
+                @click.stop="deletePatient(patient)"
+                class="btn btn-light btn-sm"
+                title="Eliminar"
               >
                 <i class="fas fa-trash-alt text-danger"></i>
               </button>
@@ -89,14 +82,14 @@
     </div>
 
     <ConfirmDialog
-        :show="showDeleteDialog"
-        title="Eliminar Paciente"
-        :message="deleteMessage"
-        type="danger"
-        confirm-text="Eliminar"
-        cancel-text="Cancelar"
-        @confirm="confirmDelete"
-        @cancel="cancelDelete"
+      :show="showDeleteDialog"
+      title="Eliminar Paciente"
+      :message="deleteMessage"
+      type="danger"
+      confirm-text="Eliminar"
+      cancel-text="Cancelar"
+      @confirm="confirmDelete"
+      @cancel="cancelDelete"
     />
   </div>
 </template>
@@ -111,7 +104,6 @@ export default {
   components: {
     ConfirmDialog
   },
-
   data() {
     return {
       searchTerm: '',
@@ -120,25 +112,21 @@ export default {
       isLoading: false
     }
   },
-
   computed: {
     ...mapState(useCounterStore, ['patients']),
-
     filteredPatients() {
       const searchTermLower = this.searchTerm.toLowerCase().trim()
       return this.patients.filter(patient =>
-          patient.nombre.toLowerCase().includes(searchTermLower) ||
-          patient.email.toLowerCase().includes(searchTermLower) ||
-          patient.telefono.includes(searchTermLower)
+        patient.fullName.toLowerCase().includes(searchTermLower) ||
+        patient.email.toLowerCase().includes(searchTermLower) ||
+        patient.phone.includes(searchTermLower)
       )
     },
-
     deleteMessage() {
       if (!this.patientToDelete) return ''
-      return `¿Está seguro que desea eliminar al paciente ${this.patientToDelete.nombre}?`
+      return `¿Está seguro que desea eliminar al paciente ${this.patientToDelete.fullName}?`
     }
   },
-
   async mounted() {
     try {
       this.isLoading = true
@@ -151,7 +139,6 @@ export default {
       this.isLoading = false
     }
   },
-
   methods: {
     ...mapActions(useCounterStore, ['loadPatients']),
 
@@ -182,13 +169,24 @@ export default {
     },
 
     handleSearchInput() {
-      // Podríamos implementar aquí un debounce si fuera necesario
       this.searchTerm = this.searchTerm.trim()
+    },
+
+    calculateAge(birthDate) {
+      const today = new Date()
+      const birthDateObj = new Date(birthDate)
+      let age = today.getFullYear() - birthDateObj.getFullYear()
+      const monthDiff = today.getMonth() - birthDateObj.getMonth()
+
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+        age--
+      }
+
+      return age
     }
   },
 
   beforeDestroy() {
-    // Limpieza antes de destruir el componente
     this.showDeleteDialog = false
     this.patientToDelete = null
   }

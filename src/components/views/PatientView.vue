@@ -7,36 +7,24 @@
             <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Paciente" />
           </div>
           <div class="bg-light-gray padding-30px-all text-center">
-            <h4 class="font-size24">{{ patient.nombre }}</h4>
-            <p>{{ patient.descripcion }}</p>
+            <h4 class="font-size24">{{ patient.fullName }}</h4>
           </div>
         </div>
 
         <div class="col-lg-8 col-md-7">
           <div class="team-single-text padding-50px-left">
-            <h4 class="font-size38">{{ patient.nombre }}</h4>
-            <p>{{ patient.situacionPersonal }}</p>
+            <h4 class="font-size38">{{ patient.fullName }}</h4>
+            <p>{{ patient.personalFamilySituation }}</p>
             <div class="contact-info-section margin-40px-tb">
               <ul class="list-style9">
-                <li v-if="patient.edad">
+                <li v-if="patient.birthDate">
                   <div class="row">
                     <div class="col-md-5 col-5">
                       <i class="fas fa-birthday-cake text-orange" style="margin-right: 5px"></i>
-                      <strong class="text-orange">Edad:</strong>
+                      <strong class="text-orange">Fecha de Nacimiento:</strong>
                     </div>
                     <div class="col-md-7 col-7">
-                      <p>{{ patient.edad }} años</p>
-                    </div>
-                  </div>
-                </li>
-                <li v-if="patient.fechaNacimiento">
-                  <div class="row">
-                    <div class="col-md-5 col-5">
-                      <i class="fas fa-calendar-alt text-blue" style="margin-right: 5px"></i>
-                      <strong class="text-blue">Fecha de Nacimiento:</strong>
-                    </div>
-                    <div class="col-md-7 col-7">
-                      <p>{{ patient.fechaNacimiento }}</p>
+                      <p>{{ patient.birthDate }}</p>
                     </div>
                   </div>
                 </li>
@@ -51,80 +39,102 @@
                     </div>
                   </div>
                 </li>
-                <li v-if="patient.numTarjetaSanitaria">
+                <li v-if="patient.healthCardNumber">
                   <div class="row">
                     <div class="col-md-5 col-5">
                       <i class="fas fa-credit-card text-cyan" style="margin-right: 5px"></i>
                       <strong class="text-cyan">Tarjeta Sanitaria:</strong>
                     </div>
                     <div class="col-md-7 col-7">
-                      <p>{{ patient.numTarjetaSanitaria }}</p>
+                      <p>{{ patient.healthCardNumber }}</p>
                     </div>
                   </div>
                 </li>
-                <li v-if="patient.zona">
+                <li v-if="patient.phone">
                   <div class="row">
                     <div class="col-md-5 col-5">
-                      <i class="fas fa-map text-green" style="margin-right: 5px"></i>
-                      <strong class="text-green">Zona:</strong>
+                      <i class="fas fa-phone text-blue" style="margin-right: 5px"></i>
+                      <strong class="text-blue">Teléfono:</strong>
                     </div>
                     <div class="col-md-7 col-7">
-                      <p>{{ patient.zona }}</p>
+                      <p>{{ patient.phone }}</p>
                     </div>
                   </div>
                 </li>
-                <li v-if="patient.situacionSanitaria">
+                <li v-if="patient.email">
+                  <div class="row">
+                    <div class="col-md-5 col-5">
+                      <i class="fas fa-envelope text-pink" style="margin-right: 5px"></i>
+                      <strong class="text-pink">Email:</strong>
+                    </div>
+                    <div class="col-md-7 col-7">
+                      <p>{{ patient.email }}</p>
+                    </div>
+                  </div>
+                </li>
+                <li v-if="patient.fullAddress">
+                  <div class="row">
+                    <div class="col-md-5 col-5">
+                      <i class="fas fa-map-marker-alt text-green" style="margin-right: 5px"></i>
+                      <strong class="text-green">Dirección:</strong>
+                    </div>
+                    <div class="col-md-7 col-7">
+                      <p>{{ patient.fullAddress }}</p>
+                    </div>
+                  </div>
+                </li>
+                <li v-if="patient.healthSituation">
                   <div class="row">
                     <div class="col-md-5 col-5">
                       <i class="fas fa-heartbeat text-lightred" style="margin-right: 5px"></i>
                       <strong class="text-lightred">Situación Sanitaria:</strong>
                     </div>
                     <div class="col-md-7 col-7">
-                      <p>{{ patient.situacionSanitaria }}</p>
+                      <p>{{ patient.healthSituation }}</p>
                     </div>
                   </div>
                 </li>
-                <li v-if="patient.situacionHabitacion">
+                <li v-if="patient.housingSituation">
                   <div class="row">
                     <div class="col-md-5 col-5">
                       <i class="fas fa-home text-brown" style="margin-right: 5px"></i>
                       <strong class="text-brown">Situación Habitacional:</strong>
                     </div>
                     <div class="col-md-7 col-7">
-                      <p>{{ patient.situacionHabitacion }}</p>
+                      <p>{{ patient.housingSituation }}</p>
                     </div>
                   </div>
                 </li>
-                <li v-if="patient.autonomiaPersonal">
+                <li v-if="patient.personalAutonomy">
                   <div class="row">
                     <div class="col-md-5 col-5">
                       <i class="fas fa-wheelchair text-purple" style="margin-right: 5px"></i>
                       <strong class="text-purple">Autonomía Personal:</strong>
                     </div>
                     <div class="col-md-7 col-7">
-                      <p>{{ patient.autonomiaPersonal }}</p>
+                      <p>{{ patient.personalAutonomy }}</p>
                     </div>
                   </div>
                 </li>
-                <li v-if="patient.situacionEconomica">
+                <li v-if="patient.economicSituation">
                   <div class="row">
                     <div class="col-md-5 col-5">
                       <i class="fas fa-money-bill-wave text-green" style="margin-right: 5px"></i>
                       <strong class="text-green">Situación Económica:</strong>
                     </div>
                     <div class="col-md-7 col-7">
-                      <p>{{ patient.situacionEconomica }}</p>
+                      <p>{{ patient.economicSituation }}</p>
                     </div>
                   </div>
                 </li>
               </ul>
             </div>
 
-            <div v-if="patient.contactos && patient.contactos.length"  style="margin-bottom: 50px">
-              <h5 class="font-size24">Contactos</h5>
+            <div v-if="patient.contactPeople && patient.contactPeople.length" style="margin-bottom: 50px">
+              <h5 class="font-size24">Personas de Contacto</h5>
               <ul class="list-group">
-                <li v-for="contacto in patient.contactos" :key="contacto.id" class="list-group-item">
-                  <strong>{{ contacto.nombre }}</strong> - {{ contacto.relacion }} - 📞 {{ contacto.telefono }}
+                <li v-for="contact in patient.contactPeople" :key="contact.id" class="list-group-item">
+                  <strong>{{ contact.firstName }} {{ contact.lastName }}</strong> - {{ contact.relationship }} - 📞 {{ contact.phone }}
                 </li>
               </ul>
             </div>
@@ -150,9 +160,8 @@ export default {
     if (this.id) {
       const repositoryPatients = new PatientsRepository()
       const response = await repositoryPatients.getPatientById(this.id);
-      if (response) {
+      if (response[0]) {
         this.patient = response[0];
-        console.log(this.patient);
       } else {
         this.$router.push('/patients');
       }

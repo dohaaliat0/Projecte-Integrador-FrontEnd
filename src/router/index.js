@@ -4,6 +4,8 @@ import Login from "@/components/views/Login.vue";
 import PatientsView from "@/components/views/PatientsView.vue";
 import CallDashboard from "@/components/views/CallDashboard.vue";
 import PatientView from "@/components/views/PatientView.vue";
+import ReportView from '@/components/views/ReportView.vue'
+import AddCall from '@/components/views/AddCall.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,7 +41,12 @@ const router = createRouter({
       path: '/call-management',
       name: 'call-management',
       component: CallDashboard
-    }
+    },
+    {
+      path: '/reports',
+      name: 'reports',
+      component: ReportView
+    },
   ]
 });
 

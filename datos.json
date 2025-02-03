@@ -1,436 +1,290 @@
 {
   "calls": [
-    { "id": 1, "tipo": "Entrante", "paciente": "Juan Pérez", "fecha": "2025-02-01 10:00", "teleoperador": "Carlos Díaz", "estado": "Completada", "descripcion": "Revisión de medicación." },
-    { "id": 2, "tipo": "Saliente", "paciente": "María López", "fecha": "2025-02-01 14:30", "teleoperador": "Ana Ruiz", "estado": "Pendiente", "descripcion": "Seguimiento de emergencias." },
-    { "id": 3, "tipo": "Entrante", "paciente": "Pedro Gómez", "fecha": "2025-02-02 09:15", "teleoperador": "Luis Martínez", "estado": "Completada", "descripcion": "Consulta sobre medicación." },
-    { "id": 4, "tipo": "Saliente", "paciente": "Lucía Fernández", "fecha": "2025-02-02 16:45", "teleoperador": "Sofía Ramírez", "estado": "En proceso", "descripcion": "Recordatorio de cita médica." },
-    { "id": 5, "tipo": "Entrante", "paciente": "Carlos Méndez", "fecha": "2025-02-03 11:00", "teleoperador": "David Torres", "estado": "Completada", "descripcion": "Duda sobre efectos secundarios." },
-    { "id": 6, "tipo": "Saliente", "paciente": "Elena Ríos", "fecha": "2025-02-03 15:30", "teleoperador": "María Castillo", "estado": "Pendiente", "descripcion": "Seguimiento postoperatorio." },
-    { "id": 7, "tipo": "Entrante", "paciente": "Diego Torres", "fecha": "2025-02-04 08:30", "teleoperador": "Santiago Velázquez", "estado": "Completada", "descripcion": "Consulta sobre rehabilitación." },
-    { "id": 8, "tipo": "Saliente", "paciente": "Rosa Sánchez", "fecha": "2025-02-04 12:00", "teleoperador": "Paula Domínguez", "estado": "Cancelada", "descripcion": "Paciente no atendió la llamada." },
-    { "id": 9, "tipo": "Entrante", "paciente": "Antonio Ramírez", "fecha": "2025-02-05 09:45", "teleoperador": "Javier Medina", "estado": "En proceso", "descripcion": "Cambio de médico de cabecera." },
-    { "id": 10, "tipo": "Saliente", "paciente": "Clara Moreno", "fecha": "2025-02-05 17:15", "teleoperador": "Elisa Gómez", "estado": "Completada", "descripcion": "Confirmación de pruebas médicas." },
-    { "id": 11, "tipo": "Entrante", "paciente": "Fernando Álvarez", "fecha": "2025-02-06 08:10", "teleoperador": "Raquel Ortega", "estado": "Completada", "descripcion": "Cambio de dosis de insulina." },
-    { "id": 12, "tipo": "Saliente", "paciente": "Gloria Nieto", "fecha": "2025-02-06 14:20", "teleoperador": "Hugo Delgado", "estado": "Pendiente", "descripcion": "Control de hipertensión." },
-    { "id": 13, "tipo": "Entrante", "paciente": "María López", "fecha": "2025-02-07 10:30", "teleoperador": "Cecilia Hernández", "estado": "Completada", "descripcion": "Consulta de rutina." },
-    { "id": 14, "tipo": "Saliente", "paciente": "Juan Pérez", "fecha": "2025-02-07 13:45", "teleoperador": "Miguel Reyes", "estado": "Pendiente", "descripcion": "Revisión de síntomas." },
-    { "id": 15, "tipo": "Entrante", "paciente": "Pedro Gómez", "fecha": "2025-02-08 09:00", "teleoperador": "Laura Flores", "estado": "En proceso", "descripcion": "Recomendación de ejercicios." },
-    { "id": 16, "tipo": "Saliente", "paciente": "Carlos Méndez", "fecha": "2025-02-08 15:30", "teleoperador": "Andrés Silva", "estado": "Completada", "descripcion": "Confirmación de cita." },
-    { "id": 17, "tipo": "Entrante", "paciente": "Lucía Fernández", "fecha": "2025-02-09 11:20", "teleoperador": "Marta Campos", "estado": "Cancelada", "descripcion": "Paciente no respondió." },
-    { "id": 18, "tipo": "Saliente", "paciente": "Clara Moreno", "fecha": "2025-02-09 16:00", "teleoperador": "Jorge Martínez", "estado": "Pendiente", "descripcion": "Seguimiento de tratamiento." },
-    { "id": 19, "tipo": "Entrante", "paciente": "María López", "fecha": "2025-02-10 08:45", "teleoperador": "Sergio Ruiz", "estado": "Completada", "descripcion": "Consulta de medicamentos." },
-    { "id": 20, "tipo": "Saliente", "paciente": "Juan Pérez", "fecha": "2025-02-10 14:00", "teleoperador": "Daniela Rojas", "estado": "En proceso", "descripcion": "Información sobre pruebas." },
-    { "id": 21, "tipo": "Entrante", "paciente": "Pedro Gómez", "fecha": "2025-02-11 10:15", "teleoperador": "Antonio Herrera", "estado": "Completada", "descripcion": "Consulta de resultados de laboratorio." },
-    { "id": 22, "tipo": "Saliente", "paciente": "Carlos Méndez", "fecha": "2025-02-11 15:45", "teleoperador": "Rosa Jiménez", "estado": "Pendiente", "descripcion": "Reprogramación de cita." },
-    { "id": 23, "tipo": "Entrante", "paciente": "Lucía Fernández", "fecha": "2025-02-12 09:30", "teleoperador": "Eduardo Navarro", "estado": "Completada", "descripcion": "Actualización de historial médico." },
-    { "id": 24, "tipo": "Saliente", "paciente": "Clara Moreno", "fecha": "2025-02-12 13:15", "teleoperador": "Verónica Soto", "estado": "En proceso", "descripcion": "Consulta sobre receta médica." },
-    { "id": 25, "tipo": "Entrante", "paciente": "María López", "fecha": "2025-02-13 10:00", "teleoperador": "Roberto Vargas", "estado": "Completada", "descripcion": "Consulta de seguimiento." },
-    { "id": 26, "tipo": "Saliente", "paciente": "Juan Pérez", "fecha": "2025-02-13 16:30", "teleoperador": "Gloria Mendoza", "estado": "Pendiente", "descripcion": "Recordatorio de cita." },
-    { "id": 27, "tipo": "Entrante", "paciente": "Pedro Gómez", "fecha": "2025-02-14 08:00", "teleoperador": "Felipe Contreras", "estado": "Completada", "descripcion": "Consulta sobre tratamiento nutricional." },
-    { "id": 28, "tipo": "Saliente", "paciente": "Carlos Méndez", "fecha": "2025-02-14 12:45", "teleoperador": "Adriana Morales", "estado": "En proceso", "descripcion": "Verificación de datos de contacto." },
-    { "id": 29, "tipo": "Entrante", "paciente": "Lucía Fernández", "fecha": "2025-02-15 11:10", "teleoperador": "Esteban Rojas", "estado": "Completada", "descripcion": "Seguimiento de recuperación." },
-    { "id": 30, "tipo": "Saliente", "paciente": "Clara Moreno", "fecha": "2025-02-15 17:00", "teleoperador": "Marina Peña", "estado": "Cancelada", "descripcion": "Paciente canceló la llamada." },
-    { "id": 31, "tipo": "Entrante", "paciente": "María López", "fecha": "2025-02-16 09:20", "teleoperador": "Gustavo Pineda", "estado": "Pendiente", "descripcion": "Consulta sobre medicamentos nuevos." },
-    { "id": 32, "tipo": "Saliente", "paciente": "Juan Pérez", "fecha": "2025-02-16 14:40", "teleoperador": "Patricia León", "estado": "Completada", "descripcion": "Confirmación de asistencia a evento médico." }
+    {
+      "id": 1,
+      "patientId": 1,
+      "operatorId": 1,
+      "details": "El paciente solicitó información sobre sus próximas citas médicas.",
+      "dateTime": "2023-05-15T10:30:00Z",
+      "patient": {
+        "id": 1,
+        "fullName": "María González Pérez"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Juan Operador"
+      },
+      "incoming": true,
+      "incomingCall": {
+        "type": "INFORMATION"
+      }
+    },
+    {
+      "id": 2,
+      "patientId": 2,
+      "operatorId": 2,
+      "details": "Llamada de seguimiento programada para verificar el estado del paciente después de su última consulta.",
+      "dateTime": "2023-05-16T14:45:00Z",
+      "patient": {
+        "id": 2,
+        "fullName": "Antonio Fernández López"
+      },
+      "operator": {
+        "id": 2,
+        "name": "Ana Operadora"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "SCHEDULED",
+        "alertId": null
+      }
+    },
+    {
+      "id": 3,
+      "patientId": 3,
+      "operatorId": null,
+      "details": "El paciente reportó una caída en su domicilio. Se activó el protocolo de emergencia.",
+      "dateTime": "2023-05-17T08:15:00Z",
+      "patient": {
+        "id": 3,
+        "fullName": "Isabel Martínez Ruiz"
+      },
+      "operator": null,
+      "incoming": true,
+      "incomingCall": {
+        "type": "EMERGENCY"
+      }
+    },
+    {
+      "id": 4,
+      "patientId": 1,
+      "operatorId": 3,
+      "details": "Llamada de seguimiento para verificar la evolución del paciente después de su última visita al médico.",
+      "dateTime": "2023-05-18T11:00:00Z",
+      "patient": {
+        "id": 1,
+        "fullName": "María González Pérez"
+      },
+      "operator": {
+        "id": 3,
+        "name": "Carlos Operador"
+      },
+      "incoming": true,
+      "incomingCall": {
+        "type": "FOLLOW_UP"
+      }
+    },
+    {
+      "id": 5,
+      "patientId": 4,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de medicación no tomada.",
+      "dateTime": "2023-05-19T09:30:00Z",
+      "patient": {
+        "id": 4,
+        "fullName": "José Luis Sánchez García"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Juan Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 1
+      }
+    },
+    {
+      "id": 6,
+      "patientId": 2,
+      "operatorId": null,
+      "details": "El paciente solicitó información sobre los efectos secundarios de su nueva medicación.",
+      "dateTime": "2023-05-20T16:20:00Z",
+      "patient": {
+        "id": 2,
+        "fullName": "Antonio Fernández López"
+      },
+      "operator": null,
+      "incoming": true,
+      "incomingCall": {
+        "type": "INFORMATION"
+      }
+    },
+    {
+      "id": 7,
+      "patientId": 5,
+      "operatorId": 2,
+      "details": "Llamada programada para recordar al paciente su próxima cita médica.",
+      "dateTime": "2023-05-21T13:00:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Laura Gómez Torres"
+      },
+      "operator": {
+        "id": 2,
+        "name": "Ana Operadora"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "SCHEDULED",
+        "alertId": null
+      }
+    },
+    {
+      "id": 8,
+      "patientId": 3,
+      "operatorId": 3,
+      "details": "Seguimiento después de la emergencia reportada. El paciente se encuentra estable.",
+      "dateTime": "2023-05-22T10:45:00Z",
+      "patient": {
+        "id": 3,
+        "fullName": "Isabel Martínez Ruiz"
+      },
+      "operator": {
+        "id": 3,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "FOLLOW_UP",
+        "alertId": null
+      }
+    },
+    {
+      "id": 9,
+      "patientId": 4,
+      "operatorId": null,
+      "details": "El paciente activó el botón de emergencia por error. No se requirió intervención.",
+      "dateTime": "2023-05-23T18:30:00Z",
+      "patient": {
+        "id": 4,
+        "fullName": "José Luis Sánchez García"
+      },
+      "operator": null,
+      "incoming": true,
+      "incomingCall": {
+        "type": "EMERGENCY"
+      }
+    },
+    {
+      "id": 10,
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Laura Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Juan Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    }
   ],
   "patients": [
     {
       "id": 1,
-      "nombre": "Juan Pérez",
-      "edad": 65,
-      "telefono": "123-456-789",
-      "email": "juan@example.com",
-      "direccion": "Calle 123",
-      "estado": "Activo",
-      "descripcion": "Paciente con historial de hipertensión.",
-      "fechaNacimiento": "1959-04-12",
+      "fullName": "María González Pérez",
+      "birthDate": "1950-05-15",
+      "fullAddress": "Calle Mayor 123, 28001 Madrid",
       "dni": "12345678A",
-      "numTarjetaSanitaria": "TS12345678",
-      "zona": "Zona A",
-      "situacionPersonal": "Vive solo, pasa mucho tiempo solo.",
-      "situacionSanitaria": "Hipertensión, toma medicación diaria.",
-      "situacionHabitacion": "Vivienda con algunas barreras arquitectónicas.",
-      "autonomiaPersonal": "Requiere ayuda para actividades diarias.",
-      "situacionEconomica": "No tiene copagamento, vive de una pensión.",
-      "contactos": [
-        { "id": 1, "nombre": "Ana Pérez", "telefono": "123-987-654", "relacion": "Hija" },
-        { "id": 2, "nombre": "Carlos López", "telefono": "321-654-987", "relacion": "Hermano" }
+      "healthCardNumber": "SALUD123456",
+      "phone": "+34 600 123 456",
+      "email": "maria.gonzalez@email.com",
+      "zoneId": 1,
+      "personalFamilySituation": "Viuda, vive sola. Tiene dos hijos que viven en otra ciudad.",
+      "healthSituation": "Hipertensión controlada, artritis leve",
+      "housingSituation": "Piso propio, primer piso sin ascensor",
+      "personalAutonomy": "Independiente para actividades básicas, necesita ayuda para tareas complejas",
+      "economicSituation": "Pensión de jubilación, situación económica estable",
+      "operatorId": 1,
+      "contactPeople": [
+        {
+          "id": 1,
+          "firstName": "Juan",
+          "lastName": "González Martínez",
+          "phone": "+34 600 234 567",
+          "relationship": "Hijo"
+        },
+        {
+          "id": 2,
+          "firstName": "Ana",
+          "lastName": "González Martínez",
+          "phone": "+34 600 345 678",
+          "relationship": "Hija"
+        }
       ]
     },
     {
       "id": 2,
-      "nombre": "María López",
-      "edad": 70,
-      "telefono": "987-654-321",
-      "email": "maria@example.com",
-      "direccion": "Avenida 456",
-      "estado": "Inactivo",
-      "descripcion": "Paciente en seguimiento por diabetes.",
-      "fechaNacimiento": "1955-03-30",
+      "fullName": "Antonio Fernández López",
+      "birthDate": "1945-11-30",
+      "fullAddress": "Avenida de la Constitución 45, 41001 Sevilla",
       "dni": "87654321B",
-      "numTarjetaSanitaria": "TS87654321",
-      "zona": "Zona B",
-      "situacionPersonal": "Vive acompañada de su hija.",
-      "situacionSanitaria": "Diabetes tipo 2, medicación diaria.",
-      "situacionHabitacion": "Vivienda adaptada para movilidad reducida.",
-      "autonomiaPersonal": "Autónoma en la mayoría de actividades diarias.",
-      "situacionEconomica": "Tiene copagamento, depende de su pensión.",
-      "contactos": [
-        { "id": 1, "nombre": "Laura López", "telefono": "987-654-123", "relacion": "Hija" },
-        { "id": 2, "nombre": "Javier López", "telefono": "654-321-987", "relacion": "Esposo" }
+      "healthCardNumber": "SALUD654321",
+      "phone": "+34 600 987 654",
+      "email": "antonio.fernandez@email.com",
+      "zoneId": 2,
+      "personalFamilySituation": "Casado, vive con su esposa",
+      "healthSituation": "Diabetes tipo 2, problemas de movilidad",
+      "housingSituation": "Casa propia adaptada, planta baja",
+      "personalAutonomy": "Necesita ayuda para movilidad y algunas actividades diarias",
+      "economicSituation": "Pensión de jubilación, algunos ahorros",
+      "operatorId": 2,
+      "contactPeople": [
+        {
+          "id": 3,
+          "firstName": "Carmen",
+          "lastName": "López García",
+          "phone": "+34 600 876 543",
+          "relationship": "Esposa"
+        },
+        {
+          "id": 4,
+          "firstName": "Pedro",
+          "lastName": "Fernández López",
+          "phone": "+34 600 765 432",
+          "relationship": "Hijo"
+        }
       ]
     },
     {
       "id": 3,
-      "nombre": "Pedro Gómez",
-      "edad": 75,
-      "telefono": "654-321-987",
-      "email": "pedro@example.com",
-      "direccion": "Calle Mayor 789",
-      "estado": "Activo",
-      "descripcion": "Paciente con antecedentes de insuficiencia renal.",
-      "fechaNacimiento": "1950-06-15",
-      "dni": "11223344C",
-      "numTarjetaSanitaria": "TS11223344",
-      "zona": "Zona C",
-      "situacionPersonal": "Vive con su esposa, requiere asistencia frecuente.",
-      "situacionSanitaria": "Diálisis tres veces por semana.",
-      "situacionHabitacion": "Vivienda adaptada con accesibilidad.",
-      "autonomiaPersonal": "Dependiente para ciertas actividades.",
-      "situacionEconomica": "Recibe apoyo social.",
-      "contactos": [
-        { "id": 1, "nombre": "Carmen Gómez", "telefono": "111-222-333", "relacion": "Esposa" }
-      ]
-    },
-    {
-      "id": 4,
-      "nombre": "Lucía Fernández",
-      "edad": 80,
-      "telefono": "111-222-333",
-      "email": "lucia@example.com",
-      "direccion": "Calle Sol 101",
-      "estado": "Activo",
-      "descripcion": "Paciente con movilidad reducida.",
-      "fechaNacimiento": "1944-09-25",
-      "dni": "55667788D",
-      "numTarjetaSanitaria": "TS55667788",
-      "zona": "Zona D",
-      "situacionPersonal": "Vive con cuidador.",
-      "situacionSanitaria": "Artrosis avanzada, usa silla de ruedas.",
-      "situacionHabitacion": "Vivienda completamente adaptada.",
-      "autonomiaPersonal": "Dependiente de ayuda externa.",
-      "situacionEconomica": "Pensiones y apoyo familiar.",
-      "contactos": [
-        { "id": 1, "nombre": "Miguel Fernández", "telefono": "222-333-444", "relacion": "Hijo" }
-      ]
-    },
-    {
-      "id": 5,
-      "nombre": "Ana Martínez",
-      "edad": 68,
-      "telefono": "555-666-777",
-      "email": "ana@example.com",
-      "direccion": "Calle Luna 202",
-      "estado": "Activo",
-      "descripcion": "Paciente con problemas cardíacos.",
-      "fechaNacimiento": "1956-11-10",
-      "dni": "99887766E",
-      "numTarjetaSanitaria": "TS99887766",
-      "zona": "Zona E",
-      "situacionPersonal": "Vive con su esposo, quien también requiere cuidados.",
-      "situacionSanitaria": "Insuficiencia cardíaca, medicación específica.",
-      "situacionHabitacion": "Vivienda con adaptaciones menores.",
-      "autonomiaPersonal": "Requiere supervisión para actividades diarias.",
-      "situacionEconomica": "Depende de su pensión y ayuda familiar.",
-      "contactos": [
-        { "id": 1, "nombre": "Roberto Martínez", "telefono": "555-777-999", "relacion": "Esposo" },
-        { "id": 2, "nombre": "Sofía Martínez", "telefono": "555-888-000", "relacion": "Hija" }
-      ]
-    },
-    {
-      "id": 6,
-      "nombre": "Carlos Ruiz",
-      "edad": 72,
-      "telefono": "444-555-666",
-      "email": "carlos@example.com",
-      "direccion": "Avenida Estrella 303",
-      "estado": "Inactivo",
-      "descripcion": "Paciente con enfermedad pulmonar obstructiva crónica.",
-      "fechaNacimiento": "1952-02-20",
-      "dni": "33445566F",
-      "numTarjetaSanitaria": "TS33445566",
-      "zona": "Zona F",
-      "situacionPersonal": "Vive solo, con visitas regulares de su hijo.",
-      "situacionSanitaria": "EPOC, uso de oxígeno domiciliario.",
-      "situacionHabitacion": "Vivienda sin adaptaciones específicas.",
-      "autonomiaPersonal": "Autónomo con limitaciones.",
-      "situacionEconomica": "Pensión y ahorros personales.",
-      "contactos": [
-        { "id": 1, "nombre": "Elena Ruiz", "telefono": "444-666-888", "relacion": "Hija" }
-      ]
-    },
-    {
-      "id": 7,
-      "nombre": "Elena Vargas",
-      "edad": 77,
-      "telefono": "777-888-999",
-      "email": "elena@example.com",
-      "direccion": "Calle Planeta 404",
-      "estado": "Activo",
-      "descripcion": "Paciente con Alzheimer en fase inicial.",
-      "fechaNacimiento": "1947-07-07",
-      "dni": "77889900G",
-      "numTarjetaSanitaria": "TS77889900",
-      "zona": "Zona G",
-      "situacionPersonal": "Vive con su hija, quien es su cuidadora principal.",
-      "situacionSanitaria": "Alzheimer, requiere medicación y seguimiento neurológico.",
-      "situacionHabitacion": "Vivienda adaptada para seguridad.",
-      "autonomiaPersonal": "Dependiente para la mayoría de actividades.",
-      "situacionEconomica": "Apoyo familiar y pensión.",
-      "contactos": [
-        { "id": 1, "nombre": "Marta Vargas", "telefono": "777-999-111", "relacion": "Hija" }
-      ]
-    },
-    {
-      "id": 8,
-      "nombre": "Jorge Navarro",
-      "edad": 69,
-      "telefono": "222-333-444",
-      "email": "jorge@example.com",
-      "direccion": "Calle Cometa 505",
-      "estado": "Activo",
-      "descripcion": "Paciente con artritis reumatoide.",
-      "fechaNacimiento": "1955-12-15",
-      "dni": "44556677H",
-      "numTarjetaSanitaria": "TS44556677",
-      "zona": "Zona H",
-      "situacionPersonal": "Vive con su pareja, ambos se apoyan mutuamente.",
-      "situacionSanitaria": "Artritis reumatoide, tratamiento biológico.",
-      "situacionHabitacion": "Vivienda con adaptaciones para movilidad.",
-      "autonomiaPersonal": "Requiere ayuda para tareas que implican movilidad.",
-      "situacionEconomica": "Pensión y apoyo mutuo con su pareja.",
-      "contactos": [
-        { "id": 1, "nombre": "Lucía Navarro", "telefono": "222-444-666", "relacion": "Pareja" }
-      ]
-    },
-    {
-      "id": 9,
-      "nombre": "Sofía Castro",
-      "edad": 74,
-      "telefono": "333-444-555",
-      "email": "sofia@example.com",
-      "direccion": "Calle Galaxia 606",
-      "estado": "Activo",
-      "descripcion": "Paciente con osteoporosis avanzada.",
-      "fechaNacimiento": "1950-08-22",
-      "dni": "11223344I",
-      "numTarjetaSanitaria": "TS11223344",
-      "zona": "Zona I",
-      "situacionPersonal": "Vive con su nieta, quien la cuida.",
-      "situacionSanitaria": "Osteoporosis, riesgo de fracturas.",
-      "situacionHabitacion": "Vivienda con adaptaciones para seguridad.",
-      "autonomiaPersonal": "Dependiente para movilidad y actividades físicas.",
-      "situacionEconomica": "Pensión y apoyo familiar.",
-      "contactos": [
-        { "id": 1, "nombre": "Clara Castro", "telefono": "333-555-777", "relacion": "Nieta" }
-      ]
-    },
-    {
-      "id": 10,
-      "nombre": "Miguel Ángel Díaz",
-      "edad": 71,
-      "telefono": "666-777-888",
-      "email": "miguel@example.com",
-      "direccion": "Calle Nebulosa 707",
-      "estado": "Inactivo",
-      "descripcion": "Paciente con enfermedad de Parkinson.",
-      "fechaNacimiento": "1953-05-18",
-      "dni": "55667788J",
-      "numTarjetaSanitaria": "TS55667788",
-      "zona": "Zona J",
-      "situacionPersonal": "Vive con su esposa, quien es su cuidadora principal.",
-      "situacionSanitaria": "Parkinson, tratamiento farmacológico y terapia física.",
-      "situacionHabitacion": "Vivienda adaptada para movilidad reducida.",
-      "autonomiaPersonal": "Dependiente para la mayoría de actividades.",
-      "situacionEconomica": "Pensión y apoyo familiar.",
-      "contactos": [
-        { "id": 1, "nombre": "Isabel Díaz", "telefono": "666-888-999", "relacion": "Esposa" }
-      ]
-    },
-    {
-      "id": 11,
-      "nombre": "Carmen Rojas",
-      "edad": 76,
-      "telefono": "999-000-111",
-      "email": "carmen@example.com",
-      "direccion": "Calle Astro 808",
-      "estado": "Activo",
-      "descripcion": "Paciente con insuficiencia cardíaca.",
-      "fechaNacimiento": "1948-10-30",
-      "dni": "99887766K",
-      "numTarjetaSanitaria": "TS99887766",
-      "zona": "Zona K",
-      "situacionPersonal": "Vive sola, con visitas regulares de su hijo.",
-      "situacionSanitaria": "Insuficiencia cardíaca, medicación diaria.",
-      "situacionHabitacion": "Vivienda sin adaptaciones específicas.",
-      "autonomiaPersonal": "Requiere ayuda para actividades diarias.",
-      "situacionEconomica": "Pensión y apoyo familiar.",
-      "contactos": [
-        { "id": 1, "nombre": "Javier Rojas", "telefono": "999-111-222", "relacion": "Hijo" }
-      ]
-    },
-    {
-      "id": 12,
-      "nombre": "Francisco Morales",
-      "edad": 73,
-      "telefono": "111-222-333",
-      "email": "francisco@example.com",
-      "direccion": "Calle Satélite 909",
-      "estado": "Activo",
-      "descripcion": "Paciente con diabetes tipo 1.",
-      "fechaNacimiento": "1951-01-25",
-      "dni": "33445566L",
-      "numTarjetaSanitaria": "TS33445566",
-      "zona": "Zona L",
-      "situacionPersonal": "Vive con su esposa, quien lo ayuda con su tratamiento.",
-      "situacionSanitaria": "Diabetes tipo 1, uso de insulina.",
-      "situacionHabitacion": "Vivienda con adaptaciones menores.",
-      "autonomiaPersonal": "Autónomo con supervisión en su tratamiento.",
-      "situacionEconomica": "Pensión y apoyo familiar.",
-      "contactos": [
-        { "id": 1, "nombre": "Luisa Morales", "telefono": "111-333-444", "relacion": "Esposa" }
-      ]
-    },
-    {
-      "id": 13,
-      "nombre": "Isabel Torres",
-      "edad": 79,
-      "telefono": "444-555-666",
-      "email": "isabel@example.com",
-      "direccion": "Calle Meteorito 1010",
-      "estado": "Inactivo",
-      "descripcion": "Paciente con glaucoma.",
-      "fechaNacimiento": "1945-06-12",
-      "dni": "77889900M",
-      "numTarjetaSanitaria": "TS77889900",
-      "zona": "Zona M",
-      "situacionPersonal": "Vive con su hijo, quien la cuida.",
-      "situacionSanitaria": "Glaucoma, tratamiento oftalmológico.",
-      "situacionHabitacion": "Vivienda adaptada para seguridad.",
-      "autonomiaPersonal": "Dependiente para actividades que requieren visión.",
-      "situacionEconomica": "Pensión y apoyo familiar.",
-      "contactos": [
-        { "id": 1, "nombre": "Alberto Torres", "telefono": "444-666-777", "relacion": "Hijo" }
-      ]
-    },
-    {
-      "id": 14,
-      "nombre": "Ricardo Soto",
-      "edad": 68,
-      "telefono": "777-888-999",
-      "email": "ricardo@example.com",
-      "direccion": "Calle Cometa 1111",
-      "estado": "Activo",
-      "descripcion": "Paciente con enfermedad renal crónica.",
-      "fechaNacimiento": "1956-03-08",
-      "dni": "11223344N",
-      "numTarjetaSanitaria": "TS11223344",
-      "zona": "Zona N",
-      "situacionPersonal": "Vive con su hija, quien lo ayuda con su tratamiento.",
-      "situacionSanitaria": "Enfermedad renal crónica, diálisis tres veces por semana.",
-      "situacionHabitacion": "Vivienda adaptada para movilidad reducida.",
-      "autonomiaPersonal": "Dependiente para actividades diarias.",
-      "situacionEconomica": "Pensión y apoyo familiar.",
-      "contactos": [
-        { "id": 1, "nombre": "Patricia Soto", "telefono": "777-999-000", "relacion": "Hija" }
-      ]
-    },
-    {
-      "id": 15,
-      "nombre": "Laura Méndez",
-      "edad": 75,
-      "telefono": "222-333-444",
-      "email": "laura@example.com",
-      "direccion": "Calle Estrella Fugaz 1212",
-      "estado": "Activo",
-      "descripcion": "Paciente con artrosis severa.",
-      "fechaNacimiento": "1949-09-17",
-      "dni": "55667788O",
-      "numTarjetaSanitaria": "TS55667788",
-      "zona": "Zona O",
-      "situacionPersonal": "Vive con su esposo, quien también requiere cuidados.",
-      "situacionSanitaria": "Artrosis severa, uso de silla de ruedas.",
-      "situacionHabitacion": "Vivienda completamente adaptada.",
-      "autonomiaPersonal": "Dependiente de ayuda externa.",
-      "situacionEconomica": "Pensión y apoyo familiar.",
-      "contactos": [
-        { "id": 1, "nombre": "Antonio Méndez", "telefono": "222-444-555", "relacion": "Esposo" }
-      ]
-    },
-    {
-      "id": 16,
-      "nombre": "Manuel Ruiz",
-      "edad": 70,
-      "telefono": "555-666-777",
-      "email": "manuel@example.com",
-      "direccion": "Calle Asteroide 1313",
-      "estado": "Inactivo",
-      "descripcion": "Paciente con enfermedad pulmonar obstructiva crónica.",
-      "fechaNacimiento": "1954-04-20",
-      "dni": "99887766P",
-      "numTarjetaSanitaria": "TS99887766",
-      "zona": "Zona P",
-      "situacionPersonal": "Vive solo, con visitas regulares de su hija.",
-      "situacionSanitaria": "EPOC, uso de oxígeno domiciliario.",
-      "situacionHabitacion": "Vivienda sin adaptaciones específicas.",
-      "autonomiaPersonal": "Autónomo con limitaciones.",
-      "situacionEconomica": "Pensión y ahorros personales.",
-      "contactos": [
-        { "id": 1, "nombre": "Elena Ruiz", "telefono": "555-777-888", "relacion": "Hija" }
-      ]
-    },
-    {
-      "id": 17,
-      "nombre": "Rosa López",
-      "edad": 77,
-      "telefono": "888-999-000",
-      "email": "rosa@example.com",
-      "direccion": "Calle Planeta 1414",
-      "estado": "Activo",
-      "descripcion": "Paciente con Alzheimer en fase moderada.",
-      "fechaNacimiento": "1947-12-05",
-      "dni": "33445566Q",
-      "numTarjetaSanitaria": "TS33445566",
-      "zona": "Zona Q",
-      "situacionPersonal": "Vive con su hijo, quien es su cuidador principal.",
-      "situacionSanitaria": "Alzheimer, requiere medicación y seguimiento neurológico.",
-      "situacionHabitacion": "Vivienda adaptada para seguridad.",
-      "autonomiaPersonal": "Dependiente para la mayoría de actividades.",
-      "situacionEconomica": "Apoyo familiar y pensión.",
-      "contactos": [
-        { "id": 1, "nombre": "Carlos López", "telefono": "888-000-111", "relacion": "Hijo" }
-      ]
-    },
-    {
-      "id": 18,
-      "nombre": "Javier Gómez",
-      "edad": 72,
-      "telefono": "333-444-555",
-      "email": "javier@example.com",
-      "direccion": "Calle Galaxia 1515",
-      "estado": "Activo",
-      "descripcion": "Paciente con artritis reumatoide.",
-      "fechaNacimiento": "1952-07-15",
-      "dni": "11223344R",
-      "numTarjetaSanitaria": "TS11223344",
-      "zona": "Zona R",
-      "situacionPersonal": "Vive con su pareja, ambos se apoyan mutuamente.",
-      "situacionSanitaria": "Artritis reumatoide, tratamiento biológico.",
-      "situacionHabitacion": "Vivienda con adaptaciones para movilidad.",
-      "autonomiaPersonal": "Requiere ayuda para tareas que implican movilidad.",
-      "situacionEconomica": "Pensión y apoyo mutuo con su pareja.",
-      "contactos": [
-        { "id": 1, "nombre": "Lucía Gómez", "telefono": "333-555-666", "relacion": "Pareja" }
+      "fullName": "Isabel Martínez Ruiz",
+      "birthDate": "1955-08-22",
+      "fullAddress": "Plaza del Sol 7, 46002 Valencia",
+      "dni": "23456789C",
+      "healthCardNumber": "SALUD234567",
+      "phone": "+34 600 543 210",
+      "email": "isabel.martinez@email.com",
+      "zoneId": 3,
+      "personalFamilySituation": "Divorciada, vive con su hermana",
+      "healthSituation": "Osteoporosis, problemas de visión",
+      "housingSituation": "Piso alquilado, tercera planta con ascensor",
+      "personalAutonomy": "Independiente con algunas limitaciones",
+      "economicSituation": "Pensión modesta, ayuda familiar ocasional",
+      "operatorId": 3,
+      "contactPeople": [
+        {
+          "id": 5,
+          "firstName": "Luisa",
+          "lastName": "Martínez Ruiz",
+          "phone": "+34 600 432 109",
+          "relationship": "Hermana"
+        },
+        {
+          "id": 6,
+          "firstName": "Miguel",
+          "lastName": "Sánchez Martínez",
+          "phone": "+34 600 321 098",
+          "relationship": "Hijo"
+        }
       ]
     }
   ]

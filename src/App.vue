@@ -12,12 +12,16 @@ export default defineComponent({
 </script>
 
 <template>
-  <header>
-    <h1>ConectaSalud</h1>
-  </header>
-
-  <AppMenu></AppMenu>
-  <AppFooter></AppFooter>
+  <div class="app-container">
+    <header class="app-header">
+      <h1 class="app-title">ConectaSalud</h1>
+      <AppMenu />
+    </header>
+    <main class="app-content">
+      <RouterView />
+    </main>
+    <AppFooter />
+  </div>
 </template>
 
 <style>
@@ -41,5 +45,37 @@ h1 {
   font-size: 32px;
   font-weight: bold;
   margin-bottom: 10px;
+}
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f7fa;
+}
+
+.app-header {
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 2rem;
+}
+
+.app-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #3498db;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.app-content {
+  flex-grow: 1;
+  padding: 2rem;
 }
 </style>
