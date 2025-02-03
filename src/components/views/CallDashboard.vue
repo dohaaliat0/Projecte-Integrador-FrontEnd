@@ -6,7 +6,7 @@
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Llamadas</h5>
             <div class="header-actions">
-              <button @click="toggleAddCall" class="btn btn-primary btn-sm" style="background-color: white; border-color: white; color: white">
+              <button @click="toggleAddCall" class="btn" style="background-color: white; border-color: white; color: white">
                 <i class="fas fa-plus" style="color: #007bff; background-color: white"></i>
               </button>
             </div>
@@ -136,7 +136,7 @@
 <script>
 import { mapActions, mapState } from "pinia";
 import { useCounterStore } from "@/stores/index.js";
-import AddCall from './AddCall.vue';
+import AddCall from '../utils/AddCall.vue';
 
 export default {
   components: {

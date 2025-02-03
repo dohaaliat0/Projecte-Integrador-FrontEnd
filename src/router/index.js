@@ -5,7 +5,7 @@ import PatientsView from "@/components/views/PatientsView.vue";
 import CallDashboard from "@/components/views/CallDashboard.vue";
 import PatientView from "@/components/views/PatientView.vue";
 import ReportView from '@/components/views/ReportView.vue'
-import AddCall from '@/components/views/AddCall.vue'
+import AddCall from '@/components/utils/AddCall.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

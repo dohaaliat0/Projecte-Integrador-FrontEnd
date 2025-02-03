@@ -1,6 +1,6 @@
 <template>
   <div class="card h-100">
-          <div class="card-header bg-primary text-white">
+          <div class="card-header bg-primary text-white" style="border-radius: 0.75rem 0.75rem 0 0">
             <h5 class="card-title mb-0">Añadir Nueva Llamada</h5>
           </div>
           <div class="card-body">
