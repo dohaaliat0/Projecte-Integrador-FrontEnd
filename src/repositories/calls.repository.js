@@ -1,53 +1,97 @@
-const server = import.meta.env.VITE_URL_API
+import { useAuthStore } from "@/stores/auth.js";
+
+const server = import.meta.env.VITE_URL_API;
 
 export default class CallsRepository {
   async getAllCalls() {
-    const response = await fetch(server + '/calls')
-    if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`
-    }
-    return await response.json()
-  }
+    const authStore = useAuthStore();
+    const token = authStore.token;
 
-  async getCallById(idCall) {
-    const response = await fetch(server + '/calls/' + idCall)
+    const response = await fetch(server + "/calls", {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
     if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`
+      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
     }
-    return await response.json()
+
+    return await response.json();
   }
 
   async addCall(call) {
-    const response = await fetch(server + '/calls', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const authStore = useAuthStore();
+    const token = authStore.token;
+
+    const response = await fetch(server + "/calls", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
       body: JSON.stringify(call)
-    })
+    });
+
     if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`
+      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
     }
-    return await response.json()
+
+    return await response.json();
+  }
+
+  async getCallById(idCall) {
+    const authStore = useAuthStore();
+    const token = authStore.token;
+
+    const response = await fetch(server + "/calls/" + idCall, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
+    }
+
+    return await response.json();
   }
 
   async removeCall(idCall) {
-    const response = await fetch(server + '/calls/' + idCall, { method: 'DELETE' })
+    const authStore = useAuthStore();
+    const token = authStore.token;
+
+    const response = await fetch(server + "/calls/" + idCall, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
     if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`
+      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
     }
-    return await response.json()
+
+    return await response.json();
   }
 
   async changeCall(call) {
-    const response = await fetch(server + '/calls/' + call.id, {
-      method: 'PUT',
-      body: JSON.stringify(call),
+    const authStore = useAuthStore();
+    const token = authStore.token;
+
+    const response = await fetch(server + "/calls/" + call.id, {
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(call)
+    });
+
     if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`
+      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
     }
-    return await response.json()
+
+    return await response.json();
   }
 }

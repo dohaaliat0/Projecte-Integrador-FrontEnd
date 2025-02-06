@@ -1,7 +1,7 @@
 <template>
   <div class="report-container">
     <div class="container py-5">
-      <h1 class="report-title text-center mb-5">Generación de Informes</h1>
+      <h1 class="add-patient-title text-center mb-5">Generación de Informes</h1>
 
       <div class="card report-form">
         <div class="card-body">
@@ -99,7 +99,7 @@ export default {
   padding: 2rem 0;
 }
 
-.report-title {
+.add-patient-title {
   color: #2c3e50;
   font-size: 2.5rem;
   font-weight: bold;

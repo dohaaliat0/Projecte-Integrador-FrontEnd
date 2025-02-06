@@ -1,6 +1,13 @@
 <template>
   <div class="container" style="margin-top: 20px">
-    <div class="team-single">
+    <div v-if="isLoading" class="text-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Cargando...</span>
+      </div>
+      <p>Cargando información del paciente...</p>
+    </div>
+
+    <div v-else class="team-single">
       <div class="row">
         <div class="col-lg-4 col-md-5 xs-margin-30px-bottom">
           <div class="team-single-img text-center">
@@ -130,10 +137,10 @@
               </ul>
             </div>
 
-            <div v-if="patient.contactPeople && patient.contactPeople.length" style="margin-bottom: 50px">
+            <div v-if="patient.contactPersons && patient.contactPersons.length" style="margin-bottom: 50px">
               <h5 class="font-size24">Personas de Contacto</h5>
               <ul class="list-group">
-                <li v-for="contact in patient.contactPeople" :key="contact.id" class="list-group-item">
+                <li v-for="contact in patient.contactPersons" :key="contact.id" class="list-group-item">
                   <strong>{{ contact.firstName }} {{ contact.lastName }}</strong> - {{ contact.relationship }} - 📞 {{ contact.phone }}
                 </li>
               </ul>
@@ -153,15 +160,17 @@ export default {
   props: ['id'],
   data() {
     return {
-      patient: {}
+      patient: {},
+      isLoading: true
     }
   },
   async mounted() {
     if (this.id) {
       const repositoryPatients = new PatientsRepository()
       const response = await repositoryPatients.getPatientById(this.id);
-      if (response[0]) {
-        this.patient = response[0];
+      if (response.data.id) {
+        this.isLoading = false
+        this.patient = response.data;
       } else {
         this.$router.push('/patients');
       }

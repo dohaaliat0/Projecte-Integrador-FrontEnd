@@ -1,50 +1,92 @@
-const server = import.meta.env.VITE_URL_API
+import { useAuthStore } from "@/stores/auth.js";
+
+const server = import.meta.env.VITE_URL_API;
 
 export default class PatientsRepository {
   async getAllPatients() {
-    const response = await fetch(server + '/patients')
+    const authStore = useAuthStore();
+    const token = authStore.token;
+
+    const response = await fetch(server + "/patients", {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
     if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`
+      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
     }
-    return await response.json()
+    return await response.json();
   }
 
   async getPatientById(idPatient) {
-    const response = await fetch(server + '/patients?id=' + idPatient)
+    const authStore = useAuthStore();
+    const token = authStore.token;
+
+    const response = await fetch(server + "/patients/" + idPatient, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
     if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`
+      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
     }
-    return await response.json()
+    return await response.json();
   }
 
   async addPatient(patient) {
-    const response = await fetch(server + '/patients', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const authStore = useAuthStore();
+    const token = authStore.token;
+
+    const response = await fetch(server + "/patients", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
       body: JSON.stringify(patient)
-    })
-    return response.json()
+    });
+
+    if (!response.ok) {
+      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
+    }
+    return await response.json();
   }
 
   async removePatient(idPatient) {
-    const response = await fetch(server + '/patients/' + idPatient, { method: 'DELETE' })
+    const authStore = useAuthStore();
+    const token = authStore.token;
+
+    const response = await fetch(server + "/patients/" + idPatient, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
     if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`
+      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
     }
-    return await response.json()
+    return await response.json();
   }
 
   async changePatient(patient) {
-    const response = await fetch(server + '/patients/' + patient.id, {
-      method: 'PUT',
-      body: JSON.stringify(patient),
+    const authStore = useAuthStore();
+    const token = authStore.token;
+
+    const response = await fetch(server + "/patients/" + patient.id, {
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(patient)
+    });
+
     if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`
+      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
     }
-    return await response.json()
+    return await response.json();
   }
 }

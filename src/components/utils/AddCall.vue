@@ -88,11 +88,7 @@ export default {
   methods: {
     ...mapActions(useCounterStore, ['loadPatients']),
     submitCall() {
-      // Here you would typically dispatch an action to add the call
-      // For now, we'll just log the call data
       console.log('Call data:', this.call);
-      // this.addCall(this.call);
-      // Reset form after submission
       this.resetForm();
     },
     resetForm() {

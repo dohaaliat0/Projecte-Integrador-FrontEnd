@@ -1,6 +1,13 @@
 <template>
   <div class="container-fluid py-4">
-    <div class="row justify-content-center mb-5">
+    <div v-if="isLoading" class="text-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Cargando...</span>
+      </div>
+      <p>Cargando pacientes...</p>
+    </div>
+
+    <div v-else class="row justify-content-center mb-5">
       <div class="col-12 col-md-8 col-lg-6">
         <div class="card-body">
           <div class="input-group input-group-lg">
@@ -16,6 +23,13 @@
               placeholder="Buscar pacientes por nombre, email o teléfono"
               style="border-left: none; box-shadow: none;"
             >
+            <button
+              @click="$router.push('/patients/add')"
+              class="btn btn-light ml-3 add-patient-btn"
+              title="Añadir Paciente"
+            >
+              <i class="fas fa-plus"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -73,7 +87,7 @@
       </div>
     </div>
 
-    <div v-if="filteredPatients.length === 0" class="text-center mt-5">
+    <div v-if="!isLoading && filteredPatients.length === 0" class="text-center mt-5">
       <div class="text-muted">
         <i class="fas fa-search fa-3x mb-3"></i>
         <h4>No se encontraron pacientes</h4>
@@ -109,7 +123,7 @@ export default {
       searchTerm: '',
       showDeleteDialog: false,
       patientToDelete: null,
-      isLoading: false
+      isLoading: true
     }
   },
   computed: {
@@ -128,16 +142,10 @@ export default {
     }
   },
   async mounted() {
-    try {
-      this.isLoading = true
-      if (this.patients.length === 0) {
-        await this.loadPatients()
-      }
-    } catch (error) {
-      console.error('Error al cargar los pacientes:', error)
-    } finally {
-      this.isLoading = false
+    if (this.patients.length === 0) {
+      await this.loadPatients()
     }
+    this.isLoading = false;
   },
   methods: {
     ...mapActions(useCounterStore, ['loadPatients']),
@@ -168,10 +176,6 @@ export default {
       this.patientToDelete = null
     },
 
-    handleSearchInput() {
-      this.searchTerm = this.searchTerm.trim()
-    },
-
     calculateAge(birthDate) {
       const today = new Date()
       const birthDateObj = new Date(birthDate)
@@ -184,11 +188,6 @@ export default {
 
       return age
     }
-  },
-
-  beforeDestroy() {
-    this.showDeleteDialog = false
-    this.patientToDelete = null
   }
 }
 </script>
@@ -222,7 +221,6 @@ export default {
   transform: scaleX(1);
 }
 
-/* Estilos para el buscador */
 .input-group-text {
   border-radius: 10px 0 0 10px !important;
   border: 1px solid #ced4da;
@@ -243,7 +241,6 @@ export default {
   font-size: 1.2rem;
 }
 
-/* Estilos para los botones */
 .btn-light {
   background: rgba(255, 255, 255, 0.9);
   border: none;
@@ -255,13 +252,6 @@ export default {
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* Estilos para los badges */
-.badge {
-  font-weight: 500;
-  font-size: 0.85em;
-}
-
-/* Animaciones */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -277,25 +267,44 @@ export default {
   animation: fadeIn 0.3s ease-out forwards;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .card-body {
     padding: 1rem;
   }
-
-  .badge {
-    font-size: 0.75em;
-  }
 }
 
-/* Loading states */
 .patient-card.loading {
   pointer-events: none;
   opacity: 0.7;
 }
 
-/* Empty state */
 .text-muted i {
   opacity: 0.5;
+}
+
+.add-patient-btn {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background: #fff;
+  border: 1px solid #dee2e6;
+}
+
+.add-patient-btn:hover {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+}
+
+.input-group {
+  flex: 1;
+  margin-right: 10px;
 }
 </style>

@@ -1,7 +1,7 @@
 {
   "calls": [
     {
-      "id": 1,
+      "id": "1",
       "patientId": 1,
       "operatorId": 1,
       "details": "El paciente solicitó información sobre sus próximas citas médicas.",
@@ -20,7 +20,7 @@
       }
     },
     {
-      "id": 2,
+      "id": "2",
       "patientId": 2,
       "operatorId": 2,
       "details": "Llamada de seguimiento programada para verificar el estado del paciente después de su última consulta.",
@@ -40,7 +40,7 @@
       }
     },
     {
-      "id": 3,
+      "id": "3",
       "patientId": 3,
       "operatorId": null,
       "details": "El paciente reportó una caída en su domicilio. Se activó el protocolo de emergencia.",
@@ -56,7 +56,7 @@
       }
     },
     {
-      "id": 4,
+      "id": "4",
       "patientId": 1,
       "operatorId": 3,
       "details": "Llamada de seguimiento para verificar la evolución del paciente después de su última visita al médico.",
@@ -75,7 +75,7 @@
       }
     },
     {
-      "id": 5,
+      "id": "5",
       "patientId": 4,
       "operatorId": 1,
       "details": "Se contactó al paciente en respuesta a una alerta de medicación no tomada.",
@@ -95,7 +95,7 @@
       }
     },
     {
-      "id": 6,
+      "id": "6",
       "patientId": 2,
       "operatorId": null,
       "details": "El paciente solicitó información sobre los efectos secundarios de su nueva medicación.",
@@ -111,7 +111,7 @@
       }
     },
     {
-      "id": 7,
+      "id": "7",
       "patientId": 5,
       "operatorId": 2,
       "details": "Llamada programada para recordar al paciente su próxima cita médica.",
@@ -131,7 +131,7 @@
       }
     },
     {
-      "id": 8,
+      "id": "8",
       "patientId": 3,
       "operatorId": 3,
       "details": "Seguimiento después de la emergencia reportada. El paciente se encuentra estable.",
@@ -151,7 +151,7 @@
       }
     },
     {
-      "id": 9,
+      "id": "9",
       "patientId": 4,
       "operatorId": null,
       "details": "El paciente activó el botón de emergencia por error. No se requirió intervención.",
@@ -167,7 +167,7 @@
       }
     },
     {
-      "id": 10,
+      "id": "10",
       "patientId": 5,
       "operatorId": 1,
       "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
@@ -185,83 +185,777 @@
         "type": "ALERT_RESPONSE",
         "alertId": 2
       }
+    },
+    {
+      "id": "11",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Paco Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Roberto Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "EMERGENCY",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
+    },
+    {
+      "id": "12",
+      "patientId": 5,
+      "operatorId": 1,
+      "details": "Se contactó al paciente en respuesta a una alerta de inactividad prolongada.",
+      "dateTime": "2023-05-24T11:15:00Z",
+      "patient": {
+        "id": 5,
+        "fullName": "Roberto Gómez Torres"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Carlos Operador"
+      },
+      "incoming": false,
+      "outgoingCall": {
+        "type": "ALERT_RESPONSE",
+        "alertId": 2
+      }
     }
   ],
   "patients": [
     {
-      "id": 1,
-      "fullName": "María González Pérez",
-      "birthDate": "1950-05-15",
-      "fullAddress": "Calle Mayor 123, 28001 Madrid",
-      "dni": "12345678A",
-      "healthCardNumber": "SALUD123456",
-      "phone": "+34 600 123 456",
-      "email": "maria.gonzalez@email.com",
-      "zoneId": 1,
-      "personalFamilySituation": "Viuda, vive sola. Tiene dos hijos que viven en otra ciudad.",
-      "healthSituation": "Hipertensión controlada, artritis leve",
-      "housingSituation": "Piso propio, primer piso sin ascensor",
-      "personalAutonomy": "Independiente para actividades básicas, necesita ayuda para tareas complejas",
-      "economicSituation": "Pensión de jubilación, situación económica estable",
-      "operatorId": 1,
-      "contactPeople": [
-        {
-          "id": 1,
-          "firstName": "Juan",
-          "lastName": "González Martínez",
-          "phone": "+34 600 234 567",
-          "relationship": "Hijo"
-        },
-        {
-          "id": 2,
-          "firstName": "Ana",
-          "lastName": "González Martínez",
-          "phone": "+34 600 345 678",
-          "relationship": "Hija"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "fullName": "Antonio Fernández López",
-      "birthDate": "1945-11-30",
-      "fullAddress": "Avenida de la Constitución 45, 41001 Sevilla",
-      "dni": "87654321B",
-      "healthCardNumber": "SALUD654321",
-      "phone": "+34 600 987 654",
-      "email": "antonio.fernandez@email.com",
-      "zoneId": 2,
-      "personalFamilySituation": "Casado, vive con su esposa",
-      "healthSituation": "Diabetes tipo 2, problemas de movilidad",
-      "housingSituation": "Casa propia adaptada, planta baja",
-      "personalAutonomy": "Necesita ayuda para movilidad y algunas actividades diarias",
-      "economicSituation": "Pensión de jubilación, algunos ahorros",
-      "operatorId": 2,
-      "contactPeople": [
-        {
-          "id": 3,
-          "firstName": "Carmen",
-          "lastName": "López García",
-          "phone": "+34 600 876 543",
-          "relationship": "Esposa"
-        },
-        {
-          "id": 4,
-          "firstName": "Pedro",
-          "lastName": "Fernández López",
-          "phone": "+34 600 765 432",
-          "relationship": "Hijo"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "fullName": "Isabel Martínez Ruiz",
+      "id": "3",
+      "fullName": "Isabel Martínez Rui",
       "birthDate": "1955-08-22",
       "fullAddress": "Plaza del Sol 7, 46002 Valencia",
       "dni": "23456789C",
       "healthCardNumber": "SALUD234567",
-      "phone": "+34 600 543 210",
+      "phone": "600543210",
       "email": "isabel.martinez@email.com",
       "zoneId": 3,
       "personalFamilySituation": "Divorciada, vive con su hermana",
@@ -284,6 +978,336 @@
           "lastName": "Sánchez Martínez",
           "phone": "+34 600 321 098",
           "relationship": "Hijo"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "fullName": "Manuel Rodríguez Santos",
+      "birthDate": "1948-03-12",
+      "fullAddress": "Calle San Juan 34, 15001 A Coruña",
+      "dni": "34567890D",
+      "healthCardNumber": "SALUD345678",
+      "phone": "+34 600 111 222",
+      "email": "manuel.rodriguez@email.com",
+      "zoneId": 1,
+      "personalFamilySituation": "Viudo, vive con su hija menor",
+      "healthSituation": "Cardiopatía estable, colesterol alto",
+      "housingSituation": "Piso propio, segundo piso con ascensor",
+      "personalAutonomy": "Independiente para la mayoría de actividades",
+      "economicSituation": "Pensión de jubilación y pequeña pensión de viudedad",
+      "operatorId": 1,
+      "contactPeople": [
+        {
+          "id": 7,
+          "firstName": "Laura",
+          "lastName": "Rodríguez Vega",
+          "phone": "+34 600 222 333",
+          "relationship": "Hija"
+        },
+        {
+          "id": 8,
+          "firstName": "Carlos",
+          "lastName": "Rodríguez Vega",
+          "phone": "+34 600 333 444",
+          "relationship": "Hijo"
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "fullName": "Carmen López Navarro",
+      "birthDate": "1953-07-25",
+      "fullAddress": "Avenida Principal 78, 50001 Zaragoza",
+      "dni": "45678901E",
+      "healthCardNumber": "SALUD456789",
+      "phone": "+34 600 444 555",
+      "email": "carmen.lopez@email.com",
+      "zoneId": 2,
+      "personalFamilySituation": "Casada, vive con su esposo que también es dependiente",
+      "healthSituation": "Artritis reumatoide, hipertensión",
+      "housingSituation": "Piso adaptado en propiedad, planta baja",
+      "personalAutonomy": "Necesita ayuda para algunas actividades cotidianas",
+      "economicSituation": "Pensión de invalidez, apoyo económico familiar",
+      "operatorId": 2,
+      "contactPeople": [
+        {
+          "id": 9,
+          "firstName": "José",
+          "lastName": "García Ruiz",
+          "phone": "+34 600 555 666",
+          "relationship": "Esposo"
+        },
+        {
+          "id": 10,
+          "firstName": "Marina",
+          "lastName": "García López",
+          "phone": "+34 600 666 777",
+          "relationship": "Hija"
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "fullName": "Francisco Moreno Jiménez",
+      "birthDate": "1951-12-03",
+      "fullAddress": "Calle del Pino 12, 29001 Málaga",
+      "dni": "56789012F",
+      "healthCardNumber": "SALUD567890",
+      "phone": "+34 600 777 888",
+      "email": "francisco.moreno@email.com",
+      "zoneId": 3,
+      "personalFamilySituation": "Casado, vive con esposa y hijo menor",
+      "healthSituation": "EPOC, problemas de audición",
+      "housingSituation": "Casa unifamiliar adaptada",
+      "personalAutonomy": "Independiente con supervisión",
+      "economicSituation": "Pensión de jubilación, propiedades en alquiler",
+      "operatorId": 3,
+      "contactPeople": [
+        {
+          "id": 11,
+          "firstName": "María",
+          "lastName": "Sánchez Pérez",
+          "phone": "+34 600 888 999",
+          "relationship": "Esposa"
+        },
+        {
+          "id": 12,
+          "firstName": "David",
+          "lastName": "Moreno Sánchez",
+          "phone": "+34 600 999 000",
+          "relationship": "Hijo"
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "fullName": "Pilar Gómez Torres",
+      "birthDate": "1947-09-18",
+      "fullAddress": "Plaza Mayor 5, 47001 Valladolid",
+      "dni": "67890123G",
+      "healthCardNumber": "SALUD678901",
+      "phone": "+34 600 123 124",
+      "email": "pilar.gomez@email.com",
+      "zoneId": 1,
+      "personalFamilySituation": "Viuda, vive sola con apoyo diario de cuidadora",
+      "healthSituation": "Parkinson en fase inicial, depresión controlada",
+      "housingSituation": "Piso propio, cuarto piso con ascensor",
+      "personalAutonomy": "Necesita ayuda para actividades instrumentales",
+      "economicSituation": "Pensión de jubilación y viudedad, ahorros",
+      "operatorId": 1,
+      "contactPeople": [
+        {
+          "id": 13,
+          "firstName": "Elena",
+          "lastName": "Martín Gómez",
+          "phone": "+34 600 124 125",
+          "relationship": "Hija"
+        },
+        {
+          "id": 14,
+          "firstName": "Rosa",
+          "lastName": "García López",
+          "phone": "+34 600 125 126",
+          "relationship": "Cuidadora"
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "fullName": "José Luis Ruiz Morales",
+      "birthDate": "1949-04-30",
+      "fullAddress": "Calle Nueva 23, 18001 Granada",
+      "dni": "78901234H",
+      "healthCardNumber": "SALUD789012",
+      "phone": "+34 600 126 127",
+      "email": "joseluis.ruiz@email.com",
+      "zoneId": 2,
+      "personalFamilySituation": "Soltero, vive con hermana mayor",
+      "healthSituation": "Diabetes tipo 2, problemas circulatorios",
+      "housingSituation": "Casa compartida, planta baja",
+      "personalAutonomy": "Independiente con algunas limitaciones",
+      "economicSituation": "Pensión no contributiva, ayuda familiar",
+      "operatorId": 2,
+      "contactPeople": [
+        {
+          "id": 15,
+          "firstName": "Teresa",
+          "lastName": "Ruiz Morales",
+          "phone": "+34 600 127 128",
+          "relationship": "Hermana"
+        },
+        {
+          "id": 16,
+          "firstName": "Antonio",
+          "lastName": "Ruiz Sánchez",
+          "phone": "+34 600 128 129",
+          "relationship": "Sobrino"
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "fullName": "Ana María Sanz Ortiz",
+      "birthDate": "1952-01-15",
+      "fullAddress": "Avenida del Mar 45, 03001 Alicante",
+      "dni": "89012345I",
+      "healthCardNumber": "SALUD890123",
+      "phone": "+34 600 129 130",
+      "email": "anamaria.sanz@email.com",
+      "zoneId": 3,
+      "personalFamilySituation": "Divorciada, vive sola",
+      "healthSituation": "Fibromialgia, ansiedad controlada",
+      "housingSituation": "Piso alquilado, primera planta sin ascensor",
+      "personalAutonomy": "Independiente con dificultades ocasionales",
+      "economicSituation": "Pensión de invalidez, trabajo parcial",
+      "operatorId": 3,
+      "contactPeople": [
+        {
+          "id": 17,
+          "firstName": "Pablo",
+          "lastName": "Sanz Ortiz",
+          "phone": "+34 600 130 131",
+          "relationship": "Hermano"
+        },
+        {
+          "id": 18,
+          "firstName": "Sara",
+          "lastName": "López Sanz",
+          "phone": "+34 600 131 132",
+          "relationship": "Hija"
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "fullName": "Roberto Díaz Castro",
+      "birthDate": "1954-06-28",
+      "fullAddress": "Calle del Carmen 67, 33001 Oviedo",
+      "dni": "90123456J",
+      "healthCardNumber": "SALUD901234",
+      "phone": "+34 600 132 133",
+      "email": "roberto.diaz@email.com",
+      "zoneId": 1,
+      "personalFamilySituation": "Casado, vive con esposa",
+      "healthSituation": "Problemas cardíacos, artrosis",
+      "housingSituation": "Casa propia adaptada, urbanización",
+      "personalAutonomy": "Necesita ayuda para algunas actividades",
+      "economicSituation": "Pensión de jubilación anticipada",
+      "operatorId": 1,
+      "contactPeople": [
+        {
+          "id": 19,
+          "firstName": "María José",
+          "lastName": "López Vega",
+          "phone": "+34 600 133 134",
+          "relationship": "Esposa"
+        },
+        {
+          "id": 20,
+          "firstName": "Alberto",
+          "lastName": "Díaz López",
+          "phone": "+34 600 134 135",
+          "relationship": "Hijo"
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "fullName": "Mercedes Torres Gil",
+      "birthDate": "1956-11-09",
+      "fullAddress": "Plaza España 3, 07001 Palma de Mallorca",
+      "dni": "01234567K",
+      "healthCardNumber": "SALUD012345",
+      "phone": "+34 600 135 136",
+      "email": "mercedes.torres@email.com",
+      "zoneId": 2,
+      "personalFamilySituation": "Viuda, vive con hijo mayor",
+      "healthSituation": "Osteoporosis severa, hipertensión",
+      "housingSituation": "Piso compartido, tercera planta con ascensor",
+      "personalAutonomy": "Semidependiente",
+      "economicSituation": "Pensión de viudedad, ayuda familiar",
+      "operatorId": 2,
+      "contactPeople": [
+        {
+          "id": 21,
+          "firstName": "Jorge",
+          "lastName": "Martínez Torres",
+          "phone": "+34 600 136 137",
+          "relationship": "Hijo"
+        },
+        {
+          "id": 22,
+          "firstName": "Lucía",
+          "lastName": "Martínez Torres",
+          "phone": "+34 600 137 138",
+          "relationship": "Hija"
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "fullName": "Fernando Vega Romero",
+      "birthDate": "1946-02-14",
+      "fullAddress": "Calle Real 89, 39001 Santander",
+      "dni": "12345678L",
+      "healthCardNumber": "SALUD123456",
+      "phone": "+34 600 138 139",
+      "email": "fernando.vega@email.com",
+      "zoneId": 3,
+      "personalFamilySituation": "Viudo, vive con cuidadora interna",
+      "healthSituation": "Alzheimer inicial, diabetes controlada",
+      "housingSituation": "Chalet adaptado, una planta",
+      "personalAutonomy": "Necesita supervisión constante",
+      "economicSituation": "Pensión alta, inversiones",
+      "operatorId": 3,
+      "contactPeople": [
+        {
+          "id": 23,
+          "firstName": "Patricia",
+          "lastName": "Vega Santos",
+          "phone": "+34 600 139 140",
+          "relationship": "Hija"
+        },
+        {
+          "id": 24,
+          "firstName": "Carmen",
+          "lastName": "López García",
+          "phone": "+34 600 140 141",
+          "relationship": "Cuidadora"
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "fullName": "Dolores Navarro Ruiz",
+      "birthDate": "1957-08-05",
+      "fullAddress": "Avenida Libertad 56, 30001 Murcia",
+      "dni": "23456789M",
+      "healthCardNumber": "SALUD234567",
+      "phone": "+34 600 141 142",
+      "email": "dolores.navarro@email.com",
+      "zoneId": 1,
+      "personalFamilySituation": "Casada, vive con esposo",
+      "healthSituation": "Artritis reumatoide, depresión",
+      "housingSituation": "Piso adaptado, segundo piso con ascensor",
+      "personalAutonomy": "Independiente con ayudas técnicas",
+      "economicSituation": "Pensión contributiva, ahorros",
+      "operatorId": 1,
+      "contactPeople": [
+        {
+          "id": 25,
+          "firstName": "Juan",
+          "lastName": "Pérez Martín",
+          "phone": "+34 600 142 143",
+          "relationship": "Esposo"
+        },
+        {
+          "id": 26,
+          "firstName": "María",
+          "lastName": "Pérez Navarro",
+          "phone": "+34 600 143 144",
+          "relationship": "Hija"
         }
       ]
     }

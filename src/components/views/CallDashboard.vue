@@ -1,133 +1,173 @@
 <template>
   <div class="dashboard-container">
-    <div class="row g-3">
-      <div :class="selectedCall || showAddCall ? 'col-xl-8' : 'col-xl-12'">
-        <div class="card h-100">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="card-title mb-0">Llamadas</h5>
-            <div class="header-actions">
-              <button @click="toggleAddCall" class="btn" style="background-color: white; border-color: white; color: white">
-                <i class="fas fa-plus" style="color: #007bff; background-color: white"></i>
+    <div v-if="isLoading" class="text-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Cargando...</span>
+      </div>
+      <p>Cargando llamadas...</p>
+    </div>
+
+    <div v-else>
+      <div class="row justify-content-center mb-5">
+        <div class="col-12 col-md-8 col-lg-6">
+          <div class="card-body">
+            <div class="input-group input-group-lg">
+              <div class="input-group-prepend">
+                <span class="input-group-text bg-white border-right-0">
+                  <i class="fas fa-search text-primary"></i>
+                </span>
+              </div>
+              <input
+                v-model="searchTerm"
+                type="text"
+                class="form-control border-left-0 pl-0"
+                placeholder="Buscar llamadas por nombre de pacientes"
+                style="border-left: none; box-shadow: none;"
+              >
+              <button
+                @click="toggleAddCall"
+                class="btn btn-light ml-3 add-call-btn"
+                title="Añadir Llamada"
+              >
+                <i class="fas fa-plus"></i>
               </button>
             </div>
           </div>
-          <div class="card-body p-0">
-            <div class="table-responsive">
-              <table class="table table-hover align-middle">
-                <thead class="table-light">
-                <tr>
-                  <th class="ps-4">#</th>
-                  <th>Tipo de Llamada</th>
-                  <th>Paciente</th>
-                  <th>Fecha y Hora</th>
-                  <th>Operador</th>
-                  <th class="text-center">Tipo</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr
-                  v-for="call in calls"
-                  :key="call.id"
-                  @click="selectCall(call)"
-                  class="call-row"
-                >
-                  <td class="ps-4">{{ call.id }}</td>
-                  <td>
-                    <div class="d-flex align-items-center">
-                      <i :class="['fas', 'fa-phone-alt', call.incoming ? 'text-primary' : 'text-danger', 'me-2']" style="margin-right: 5px"></i>
-                      {{ call.incoming ? 'Entrante' : 'Saliente' }}
-                    </div>
-                  </td>
-                  <td>{{ call.patient.fullName }}</td>
-                  <td>{{ formatDateTime(call.dateTime) }}</td>
-                  <td>
-                    <div class="d-flex align-items-center" v-if="call.operator">
-                      <div class="rounded-circle me-2"
-                           style="width: 32px; height: 32px; background-color: #007bff; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; margin-right: 5px;">
-                        {{ call.operator.name.charAt(0).toUpperCase() }}
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div :class="selectedCall || showAddCall ? 'col-xl-8' : 'col-xl-12'">
+          <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Llamadas</h5>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                  <thead class="table-light">
+                  <tr>
+                    <th class="ps-4">#</th>
+                    <th>Tipo de Llamada</th>
+                    <th>Paciente</th>
+                    <th>Fecha y Hora</th>
+                    <th>Operador</th>
+                    <th class="text-center">Tipo</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr
+                    v-for="call in filteredPatients"
+                    :key="call.id"
+                    @click="selectCall(call)"
+                    class="call-row"
+                  >
+                    <td class="ps-4">{{ call.id }}</td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <i :class="['fas', 'fa-phone-alt', call.incoming ? 'text-primary' : 'text-danger', 'me-2']" style="margin-right: 5px"></i>
+                        {{ call.incoming ? 'Entrante' : 'Saliente' }}
                       </div>
-                      {{ call.operator.name }}
-                    </div>
-                    <span v-else>-</span>
-                  </td>
-                  <td class="text-center">
+                    </td>
+                    <td>{{ call.patient.fullName }}</td>
+                    <td>{{ formatDateTime(call.dateTime) }}</td>
+                    <td>
+                      <div class="d-flex align-items-center" v-if="call.operator">
+                        <div class="rounded-circle me-2"
+                             style="width: 32px; height: 32px; background-color: #007bff; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; margin-right: 5px;">
+                          {{ call.operator.name.charAt(0).toUpperCase() }}
+                        </div>
+                        {{ call.operator.name }}
+                      </div>
+                      <span v-else>-</span>
+                    </td>
+                    <td class="text-center">
                     <span
                       class="badge rounded-pill"
                       :class="getCallTypeBadgeClass(call)"
                     >
                       {{ getCallTypeLabel(call) }}
                     </span>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-xl-4" v-if="selectedCall">
-        <div class="card h-100">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="card-title mb-0">Detalles de Llamada</h5>
-            <button @click="selectedCall = null" class="btn btn-sm btn-link" style="color: red; font-size: 1.2rem">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-          <div class="card-body">
-            <div class="text-center mb-4" v-if="selectedCall.operator">
-              <img
-                src="/assets/user-icon.webp"
-                class="rounded-circle mb-3 shadow-sm"
-                width="80"
-                height="80"
-                alt="Operador"
-              >
-              <h6 class="mb-0">{{ selectedCall.operator.name }}</h6>
-              <small class="text-muted">Operador</small>
-            </div>
-
-            <div class="details-section">
-              <h6 class="details-title">Información de la Llamada</h6>
-              <div class="details-grid">
-                <div class="detail-item">
-                  <span class="detail-label">ID de Llamada</span>
-                  <span class="detail-value">#{{ selectedCall.id }}</span>
-                </div>
-                <div class="detail-item">
-                  <span class="detail-label">Tipo</span>
-                  <span class="detail-value">{{ selectedCall.incoming ? 'Entrante' : 'Saliente' }}</span>
-                </div>
-                <div class="detail-item">
-                  <span class="detail-label">Paciente</span>
-                  <span class="detail-value">{{ selectedCall.patient.fullName }}</span>
-                </div>
-                <div class="detail-item">
-                  <span class="detail-label">Fecha y Hora</span>
-                  <span class="detail-value">{{ formatDateTime(selectedCall.dateTime) }}</span>
-                </div>
-                <div class="detail-item">
-                  <span class="detail-label">Tipo Específico</span>
-                  <span
-                    class="badge rounded-pill"
-                    :class="getCallTypeBadgeClass(selectedCall)"
-                  >
-                    {{ getCallTypeLabel(selectedCall) }}
-                  </span>
-                </div>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
+          </div>
+        </div>
 
-            <div class="details-section mt-4">
-              <h6 class="details-title">Detalles</h6>
-              <p class="text-muted mb-0">{{ selectedCall.details || 'Sin detalles' }}</p>
+        <div class="col-xl-4" v-if="selectedCall">
+          <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Detalles de Llamada</h5>
+              <button @click="selectedCall = null" class="btn btn-sm btn-link" style="color: red; font-size: 1.2rem">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <div class="card-body">
+              <div class="text-center mb-4" v-if="selectedCall.operator">
+                <img
+                  src="/assets/user-icon.webp"
+                  class="rounded-circle mb-3 shadow-sm"
+                  width="80"
+                  height="80"
+                  alt="Operador"
+                >
+                <h6 class="mb-0">{{ selectedCall.operator.name }}</h6>
+                <small class="text-muted">Operador</small>
+              </div>
+
+              <div class="details-section">
+                <h6 class="details-title">Información de la Llamada</h6>
+                <div class="details-grid">
+                  <div class="detail-item">
+                    <span class="detail-label">ID de Llamada</span>
+                    <span class="detail-value">#{{ selectedCall.id }}</span>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">Tipo</span>
+                    <span class="detail-value">{{ selectedCall.incoming ? 'Entrante' : 'Saliente' }}</span>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">Paciente</span>
+                    <span class="detail-value">{{ selectedCall.patient.fullName }}</span>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">Fecha y Hora</span>
+                    <span class="detail-value">{{ formatDateTime(selectedCall.dateTime) }}</span>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">Tipo Específico</span>
+                    <span
+                      class="badge rounded-pill"
+                      :class="getCallTypeBadgeClass(selectedCall)"
+                    >
+                    {{ getCallTypeLabel(selectedCall) }}
+                  </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="details-section mt-4">
+                <h6 class="details-title">Detalles</h6>
+                <p class="text-muted mb-0">{{ selectedCall.details || 'Sin detalles' }}</p>
+              </div>
             </div>
           </div>
         </div>
+
+        <div class="col-xl-4" v-if="showAddCall">
+          <AddCall @call-added="handleCallAdded" />
+        </div>
       </div>
 
-      <div class="col-xl-4" v-if="showAddCall">
-        <AddCall @call-added="handleCallAdded" />
+      <div v-if="!isLoading && filteredPatients.length === 0" class="text-center mt-5">
+        <div class="text-muted">
+          <i class="fas fa-search fa-3x mb-3"></i>
+          <h4>No se encontraron pacientes</h4>
+          <p>Intenta con otros términos de búsqueda</p>
+        </div>
       </div>
     </div>
   </div>
@@ -144,56 +184,36 @@ export default {
   },
   computed: {
     ...mapState(useCounterStore, ["calls"]),
+    filteredPatients() {
+      const searchTermLower = this.searchTerm.toLowerCase().trim()
+      return this.calls.filter(call =>
+        call.patient.fullName.toLowerCase().includes(searchTermLower)
+      )
+    },
   },
   data() {
     return {
       selectedCall: null,
-      showAddCall: false
+      showAddCall: false,
+      searchTerm: '',
+      isLoading: true
     };
   },
   async mounted() {
     if (this.calls.length === 0) {
       await this.loadCalls()
     }
+
+    this.isLoading = false;
   },
   methods: {
-    ...mapActions(useCounterStore, ["loadCalls"]),
+    ...mapActions(useCounterStore, ["loadCalls", "getCallTypeLabel", "getCallTypeBadgeClass"]),
     selectCall(call) {
       this.selectedCall = call;
       this.showAddCall = false;
     },
     formatDateTime(dateTime) {
       return new Date(dateTime).toLocaleString();
-    },
-    getCallTypeBadgeClass(call) {
-      if (call.incoming) {
-        return {
-          'bg-info': call.incomingCall.type === 'INFORMATION',
-          'bg-warning': call.incomingCall.type === 'EMERGENCY',
-          'bg-success': call.incomingCall.type === 'FOLLOW_UP'
-        };
-      } else {
-        return {
-          'bg-primary': call.outgoingCall.type === 'SCHEDULED',
-          'bg-danger': call.outgoingCall.type === 'ALERT_RESPONSE'
-        };
-      }
-    },
-    getCallTypeLabel(call) {
-      if (call.incoming) {
-        switch (call.incomingCall.type) {
-          case 'INFORMATION': return 'Información';
-          case 'EMERGENCY': return 'Emergencia';
-          case 'FOLLOW_UP': return 'Seguimiento';
-          default: return 'Desconocido';
-        }
-      } else {
-        switch (call.outgoingCall.type) {
-          case 'SCHEDULED': return 'Programada';
-          case 'ALERT_RESPONSE': return 'Respuesta a Alerta';
-          default: return 'Desconocido';
-        }
-      }
     },
     toggleAddCall() {
       this.showAddCall = !this.showAddCall;
@@ -235,6 +255,26 @@ export default {
 .card-title {
   color: #344767;
   font-weight: 600;
+}
+
+.input-group-text {
+  border-radius: 10px 0 0 10px !important;
+  border: 1px solid #ced4da;
+}
+
+.input-group .form-control {
+  border-radius: 0 10px 10px 0 !important;
+  border: 1px solid #ced4da;
+  font-size: 1rem;
+}
+
+.input-group .form-control:focus {
+  box-shadow: none;
+  border-color: #80bdff;
+}
+
+.input-group-text .fas {
+  font-size: 1.2rem;
 }
 
 .table {
@@ -347,5 +387,34 @@ export default {
 
 .col-xl-4 {
   animation: fadeIn 0.3s ease-out;
+}
+
+.row > div {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.add-call-btn {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background: #fff;
+  border: 1px solid #dee2e6;
+}
+
+.add-call-btn:hover {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+}
+.input-group {
+  flex: 1;
+  margin-right: 10px;
 }
 </style>
