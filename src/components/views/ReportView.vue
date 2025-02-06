@@ -1,212 +1,358 @@
 <template>
-  <div class="report-container">
-    <div class="container py-5">
-      <h1 class="add-patient-title text-center mb-5">Generación de Informes</h1>
-
-      <div class="card report-form">
-        <div class="card-body">
-          <form @submit.prevent="generateReport">
-            <div class="form-group">
-              <label for="report-type">Tipo de Informe</label>
-              <select id="report-type" v-model="selectedReport" class="form-control custom-select">
-                <option value="emergencies">Actuaciones por emergencias</option>
-                <option value="patients">Listado de pacientes</option>
-                <option value="scheduled-calls">Llamadas previstas</option>
-                <option value="completed-calls">Llamadas realizadas</option>
-                <option value="call-history">Histórico de llamadas por beneficiario</option>
-              </select>
+  <div class="reports-page">
+    <div class="container-fluid">
+      <div class="row">
+        <div :class="{'col-md-5': showPreview, 'col-md-12': !showPreview}">
+          <div class="content-wrapper">
+            <div class="header-section mb-4">
+              <h1 class="report-title">Generación de Informes</h1>
+              <p class="text-muted">Seleccione el tipo de informe y el rango de fechas</p>
             </div>
 
-            <div class="form-group">
-              <label for="date">Fecha</label>
-              <input id="date" v-model="filters.date" type="date" class="form-control">
+            <div class="card report-form">
+              <div class="card-body">
+                <form @submit.prevent="generateReport">
+                  <div class="form-group mb-4">
+                    <label class="form-label">
+                      <i class="fas fa-file-alt me-2" style="margin-right: 5px"></i>
+                      Tipo de Informe
+                    </label>
+                    <select
+                      v-model="selectedReport"
+                      class="form-select select-custom"
+                    >
+                      <option value="emergencies">Informe de Emergencias</option>
+                      <option value="socials">Informe Social</option>
+                      <option value="monitorings">Informe de Seguimientos</option>
+                    </select>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group mb-4">
+                        <label class="form-label">
+                          <i class="fas fa-calendar me-2" style="margin-right: 5px"></i>
+                          Fecha Inicio
+                        </label>
+                        <input
+                          type="date"
+                          v-model="dateRange.startDate"
+                          class="form-control"
+                        >
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group mb-4">
+                        <label class="form-label">
+                          <i class="fas fa-calendar-alt me-2" style="margin-right: 5px"></i>
+                          Fecha Fin
+                        </label>
+                        <input
+                          type="date"
+                          v-model="dateRange.endDate"
+                          class="form-control"
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="action-buttons">
+                    <button
+                      type="submit"
+                      class="btn btn-primary btn-lg w-100"
+                      :disabled="isLoading"
+                    >
+                      <div class="d-flex align-items-center justify-content-center">
+                        <i class="fas fa-sync fa-spin me-2" v-if="isLoading" style="margin-right: 5px"></i>
+                        <i class="fas fa-file-pdf me-2" v-else style="margin-right: 5px"></i>
+                        {{ isLoading ? 'Generando...' : 'Generar Informe' }}
+                      </div>
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
 
-            <div class="form-group">
-              <label for="type">Tipo</label>
-              <input id="type" v-model="filters.type" type="text" class="form-control">
+            <div
+              v-if="error"
+              class="alert alert-danger mt-4 d-flex align-items-center"
+              role="alert"
+            >
+              <i class="fas fa-exclamation-circle me-2"></i>
+              <div>{{ error }}</div>
             </div>
-
-            <div class="form-group">
-              <label for="zone">Zona</label>
-              <input id="zone" v-model="filters.zone" type="text" class="form-control">
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-block generate-btn" :disabled="isLoading">
-              <span class="btn-text">{{ isLoading ? 'Generando...' : 'Generar Informe' }}</span>
-              <span class="btn-icon">
-                <i class="fas fa-file-alt"></i>
-              </span>
-            </button>
-          </form>
+          </div>
         </div>
-      </div>
 
-      <div v-if="error" class="alert alert-danger mt-4" role="alert">
-        <strong>Error!</strong> {{ error }}
-      </div>
+        <div v-if="showPreview" class="col-md-7">
+          <div class="preview-wrapper">
+            <div class="preview-header">
+              <h3 class="preview-title">Vista Previa del Informe</h3>
+              <div class="preview-actions">
+                <button
+                  @click="handleDownload"
+                  class="btn btn-success"
+                  v-if="reportUrl"
+                >
+                  <i class="fas fa-download me-2"></i>
+                  Descargar PDF
+                </button>
+              </div>
+            </div>
 
-      <div v-if="reportUrl" class="text-center mt-4">
-        <a :href="reportUrl" target="_blank" class="btn btn-success download-btn">
-          <span class="btn-text">Descargar Informe</span>
-          <span class="btn-icon">
-            <i class="fas fa-download"></i>
-          </span>
-        </a>
+            <div class="preview-container">
+              <div v-if="isLoading" class="preview-loading">
+                <div class="spinner-border text-primary" role="status"></div>
+                <span class="visually-hidden" style="margin-left: 10px">Generando vista previa...</span>
+              </div>
+
+              <VuePdfEmbed
+                v-if="reportUrl"
+                :source="reportUrl"
+                :page="1"
+                :style="{ width: '100%', height: '100%' }"
+                class="pdf-viewer"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import ReportsRepository from '@/repositories/reports.repository.js'
+import ReportsRepository from '@/repositories/reports.repository'
+import VuePdfEmbed from 'vue-pdf-embed'
 
 export default {
-  name: 'ReportView',
+  components: {
+    VuePdfEmbed
+  },
   data() {
     return {
       selectedReport: 'emergencies',
-      filters: {
-        date: '',
-        type: '',
-        zone: ''
+      dateRange: {
+        startDate: '',
+        endDate: ''
       },
       isLoading: false,
       error: null,
-      reportUrl: null
+      reportUrl: null,
+      errors: {}
+    }
+  },
+  computed: {
+    showPreview() {
+      return this.isLoading || this.reportUrl
     }
   },
   methods: {
     async generateReport() {
+      this.isLoading = true
+
+      if (this.reportUrl) {
+        URL.revokeObjectURL(this.reportUrl)
+        this.reportUrl = null
+      }
+
       try {
-        const reportsRepository = new ReportsRepository();
-        const response = await reportsRepository.generateReport(this.selectedReport, this.filters);
-        this.reportUrl = URL.createObjectURL(response);
-      } catch (error) {
-        this.error = error.toString();
+        const reportsRepository = new ReportsRepository()
+        const response = await reportsRepository.getReport(
+          this.selectedReport,
+          this.dateRange.startDate,
+          this.dateRange.endDate
+        )
+        console.log(response)
+        this.reportUrl = URL.createObjectURL(response)
+      } catch (e) {
+        this.error = 'Error al generar el informe'
+      } finally {
+        this.isLoading = false
+      }
+    },
+    handleDownload() {
+      if (this.reportUrl) {
+        const link = document.createElement('a')
+        link.href = this.reportUrl
+        link.download = `informe_${this.selectedReport}_${this.dateRange.startDate}_${this.dateRange.endDate}.pdf`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
       }
     }
-  },
-  mounted() {
-    console.log('Componente de informes montado')
   }
 }
 </script>
 
 <style scoped>
-.report-container {
+.reports-page {
   min-height: 100vh;
-  padding: 2rem 0;
+  background-color: #f8f9fa;
+  padding: 2rem;
 }
 
-.add-patient-title {
+.content-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header-section {
+  text-align: center;
+}
+
+.report-title {
   color: #2c3e50;
   font-size: 2.5rem;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-  margin-bottom: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
 .report-form {
-  background-color: #ffffff;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  background: white;
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
 
 .report-form:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
 
-.form-group label {
+.form-label {
   font-weight: 600;
-  color: #34495e;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
 }
 
-.form-control {
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+.form-control, .form-select {
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background-color: #fff;
 }
 
-.form-control:focus {
+.form-control:focus, .form-select:focus {
   border-color: #3498db;
-  box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
-.generate-btn, .download-btn {
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
+.select-custom {
+  width: 100%;
+  height: auto;
+  padding-right: 2.5rem;
+}
+
+.action-buttons {
+  margin-top: 2rem;
+}
+
+.btn {
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
   font-weight: 600;
+  transition: all 0.3s ease;
 }
 
-.generate-btn {
+.btn-primary {
   background-color: #3498db;
   border-color: #3498db;
 }
 
-.download-btn {
+.btn-primary:hover:not(:disabled) {
+  background-color: #2980b9;
+  border-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+.btn-success {
   background-color: #2ecc71;
   border-color: #2ecc71;
-  animation: pulse 2s infinite;
 }
 
-.generate-btn:hover, .download-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+.preview-wrapper {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: calc(100vh - 4rem);
+  margin-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.btn-text {
+.preview-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.preview-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.preview-container {
+  flex: 1;
   position: relative;
-  z-index: 2;
+  overflow: auto;
+  border-radius: 0 0 16px 16px;
+  background-color: #f8f9fa;
+  padding: 2rem;
 }
 
-.btn-icon {
-  margin-left: 8px;
+.pdf-viewer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-.generate-btn::after, .download-btn::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 300px;
-  height: 300px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  transition: all 0.5s ease;
-}
-
-.generate-btn:hover::after, .download-btn:hover::after {
-  transform: translate(-50%, -50%) scale(1);
-}
-
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(46, 204, 113, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
-  }
+.pdf-viewer :deep(embed) {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
 }
 
 .alert {
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+@media (max-width: 768px) {
+  .reports-page {
+    padding: 1rem;
+  }
 
-.alert, .download-btn {
-  animation: fadeIn 0.5s ease-out;
+  .preview-wrapper {
+    margin-left: 0;
+    margin-top: 1rem;
+    height: 500px;
+  }
+
+  .report-title {
+    font-size: 2rem;
+  }
+
+  .preview-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
 }
 </style>
