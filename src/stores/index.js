@@ -3,6 +3,7 @@ import PatientsRepository from "@/repositories/patients.repository.js";
 import CallsRepository from "@/repositories/calls.repository.js";
 import OperatorsRepository from '@/repositories/operators.repository.js'
 import ZonesRepository from '@/repositories/zones.repository.js'
+import LanguagesRepository from '@/repositories/languages.repository.js'
 
 export const useCounterStore = defineStore("counter", {
   state(){
@@ -10,7 +11,8 @@ export const useCounterStore = defineStore("counter", {
       patients: [],
       calls: [],
       operators: [],
-      zones: []
+      zones: [],
+      languages: []
     }
   },
   getters: {
@@ -36,7 +38,11 @@ export const useCounterStore = defineStore("counter", {
       const repositoryZones = new ZonesRepository();
       const response = await repositoryZones.getAllZones();
       this.zones = response.data
-      console.log(this.zones)
+    },
+    async loadLanguages() {
+      const repositoryLanguages = new LanguagesRepository();
+      const response = await repositoryLanguages.getAllLanguages();
+      this.languages = response.data
     },
     getCallTypeLabel(call) {
       if (call.incomingCall !== null) {

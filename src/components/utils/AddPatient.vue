@@ -103,7 +103,24 @@
                   >
                   <div class="invalid-feedback">{{ validationErrors.email }}</div>
                 </div>
+              </div>
 
+              <div>
+                <label for="languages">Idiomas</label>
+                <SearchableSelect
+                  v-model="form.languages"
+                  :options="languages"
+                  placeholder="Seleccionar idiomas"
+                  :invalid="!!validationErrors.languages"
+                  multiple
+                />
+                <div class="invalid-feedback">{{ validationErrors.languages }}</div>
+              </div>
+              <div class="section-title d-flex align-items-center mb-4 mt-4">
+                <i class="fas fa-info-circle text-primary mr-2"></i>
+                <h6 class="mb-0">Información Adicional</h6>
+              </div>
+              <div class="d-flex">
                 <div class="col-md-6 mb-3">
                   <label for="zoneId">Zona</label>
                   <SearchableSelect
@@ -125,11 +142,6 @@
                   />
                   <div class="invalid-feedback">{{ validationErrors.operatorId }}</div>
                 </div>
-              </div>
-
-              <div class="section-title d-flex align-items-center mb-4 mt-4">
-                <i class="fas fa-info-circle text-primary mr-2"></i>
-                <h6 class="mb-0">Información Adicional</h6>
               </div>
 
               <div class="row" style="z-index: 0">
@@ -323,7 +335,7 @@ import SearchableSelect from '@/components/utils/SearchableSelect.vue'
 export default {
   props: ['id'],
   computed: {
-    ...mapState(useCounterStore, ['operators', 'zones']),
+    ...mapState(useCounterStore, ['operators', 'zones', ['languages']]),
   },
   components: {
     SearchableSelect
@@ -367,10 +379,11 @@ export default {
     this.initializeValidationSchema()
     await this.loadOperators()
     await this.loadZones()
+    await this.loadLanguages()
   },
 
   methods: {
-    ...mapActions(useCounterStore, ['loadOperators', 'loadZones']),
+    ...mapActions(useCounterStore, ['loadOperators', 'loadZones', 'loadLanguages']),
     addContact() {
       this.form.contactPersons.push({
         firstName: '',
