@@ -25,7 +25,7 @@
           :class="{ 'selected': option.id === modelValue }"
           @click="selectOption(option)"
         >
-          {{ option.name }}
+          {{ getOptionText(option) }}
         </div>
         <div v-if="filteredOptions.length === 0" class="no-results">
           No se encontraron resultados
@@ -65,16 +65,19 @@ export default {
   computed: {
     filteredOptions() {
       return this.options.filter(option =>
-        option.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+        this.getOptionText(option).toLowerCase().includes(this.searchQuery.toLowerCase())
       )
     },
     selectedText() {
       if (!this.modelValue) return this.placeholder
       const selected = this.options.find(option => option.id === this.modelValue)
-      return selected ? selected.name : this.placeholder
+      return selected ? this.getOptionText(selected) : this.placeholder
     }
   },
   methods: {
+    getOptionText(option) {
+      return option.title || option.fullName || option.name || ''
+    },
     toggleDropdown() {
       this.isOpen = !this.isOpen
       if (this.isOpen) {

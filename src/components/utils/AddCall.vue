@@ -1,133 +1,239 @@
 <template>
   <div class="card h-100">
-          <div class="card-header bg-primary text-white" style="border-radius: 0.75rem 0.75rem 0 0">
-            <h5 class="card-title mb-0">Añadir Nueva Llamada</h5>
-          </div>
-          <div class="card-body">
-            <form @submit.prevent="submitCall">
-              <div class="form-group">
-                <label for="callType">Tipo de Llamada</label>
-                <select v-model="call.incoming" class="form-control" id="callType" required>
-                  <option :value="true">Entrante</option>
-                  <option :value="false">Saliente</option>
-                </select>
-              </div>
+    <div class="card-header bg-primary text-white" style="border-radius: 0.75rem 0.75rem 0 0">
+      <h5 class="card-title mb-0">Añadir Nueva Llamada</h5>
+    </div>
+    <div class="card-body">
+      <form @submit.prevent="submitCall">
+        <div class="form-group">
+          <label for="callType">Tipo de Llamada</label>
+          <select v-model="callType" class="form-control" id="callType" required>
+            <option value="incoming">Entrante</option>
+            <option value="outgoing">Saliente</option>
+          </select>
+        </div>
 
-              <div class="form-group">
-                <label for="patientId">Paciente</label>
-                <select v-model="call.patientId" class="form-control" id="patientId" required>
-                  <option v-for="patient in patients" :key="patient.id" :value="patient.id">
-                    {{ patient.fullName }}
-                  </option>
-                </select>
-              </div>
+        <div class="form-group">
+          <label for="patientId">Paciente</label>
+          <SearchableSelect
+            v-model="call.patientId"
+            :options="patients"
+            placeholder="Seleccionar paciente"
+            multiple
+          />
+        </div>
 
-              <div class="form-group">
-                <label for="operatorId">Operador</label>
-                <select v-model="call.operatorId" class="form-control" id="operatorId">
-                  <option value="">Sin operador asignado</option>
-                  <option v-for="operator in operators" :key="operator.id" :value="operator.id">
-                    {{ operator.name }}
-                  </option>
-                </select>
-              </div>
+        <div class="form-group">
+          <label for="patientId">Operador</label>
+          <SearchableSelect
+            v-model="call.operatorId"
+            :options="operators"
+            placeholder="Seleccionar operador"
+            multiple
+          />
+        </div>
 
-              <div class="form-group">
-                <label for="dateTime">Fecha y Hora</label>
-                <input v-model="call.dateTime" type="datetime-local" class="form-control" id="dateTime" required>
-              </div>
+        <div class="form-group">
+          <label for="dateTime">Fecha y Hora</label>
+          <input
+            v-model="call.dateTime"
+            type="datetime-local"
+            class="form-control"
+            id="dateTime"
+            required
+          />
+        </div>
 
-              <div class="form-group" v-if="call.incoming !== null">
-                <label for="callSubtype">Subtipo de Llamada</label>
-                <select v-model="call.subtype" class="form-control" id="callSubtype" required>
-                  <option v-if="call.incoming" value="INFORMATION">Información</option>
-                  <option v-if="call.incoming" value="EMERGENCY">Emergencia</option>
-                  <option v-if="call.incoming" value="FOLLOW_UP">Seguimiento</option>
-                  <option v-if="!call.incoming" value="SCHEDULED">Programada</option>
-                  <option v-if="!call.incoming" value="ALERT_RESPONSE">Respuesta a Alerta</option>
-                </select>
-              </div>
+        <div v-if="callType === 'incoming'" class="form-group">
+          <label for="incomingCallType">Tipo de Llamada Entrante</label>
+          <select
+            v-model="call.incomingCall.type"
+            class="form-control"
+            id="incomingCallType"
+            required
+          >
+            <option v-for="type in incomingCallTypes" :key="type" :value="type">
+              {{ type }}
+            </option>
+          </select>
+        </div>
 
-              <div class="form-group" v-if="!call.incoming && call.subtype === 'ALERT_RESPONSE'">
-                <label for="alertId">ID de Alerta</label>
-                <input v-model="call.alertId" type="number" class="form-control" id="alertId">
-              </div>
+        <div v-if="callType === 'incoming'" class="form-group">
+          <label for="emergencyLevel">Nivel de Emergencia</label>
+          <select
+            v-model="call.incomingCall.emergencyLevel"
+            class="form-control"
+            id="emergencyLevel"
+            required
+          >
+            <option v-for="level in [1, 2, 3, 4, 5]" :key="level" :value="level">
+              {{ level }}
+            </option>
+          </select>
+        </div>
 
-              <div class="form-group">
-                <label for="details">Detalles de la Llamada</label>
-                <textarea v-model="call.details" class="form-control" id="details" rows="3"></textarea>
-              </div>
+        <div v-if="callType === 'outgoing'" class="form-group">
+          <label for="outgoingCallType">Tipo de Llamada Saliente</label>
+          <select
+            v-model="call.outgoingCall.type"
+            class="form-control"
+            id="outgoingCallType"
+            required
+          >
+            <option v-for="type in outgoingCallTypes" :key="type" :value="type">
+              {{ type }}
+            </option>
+          </select>
+        </div>
 
-              <button type="submit" class="btn btn-primary btn-block mt-4">Guardar Llamada</button>
-            </form>
-          </div>
+        <div v-if="callType === 'outgoing'" class="form-group">
+          <label for="alertId">Alerta (opcional)</label>
+          <SearchableSelect
+            v-model="call.outgoingCall.alertId"
+            :options="alerts"
+            placeholder="Seleccionar alerta"
+            multiple
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="details">Detalles de la Llamada</label>
+          <textarea
+            v-model="call.details"
+            class="form-control"
+            id="details"
+            rows="3"
+            required
+          ></textarea>
+        </div>
+
+        <div v-if="errors.length" class="alert alert-danger">
+          <ul>
+            <li v-for="error in errors" :key="error">{{ error }}</li>
+          </ul>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block mt-4" :disabled="isSubmitting">
+          {{ isSubmitting ? 'Guardando...' : 'Guardar Llamada' }}
+        </button>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'pinia';
-import { useCounterStore } from '@/stores/index.js';
+import { mapState, mapActions } from 'pinia'
+import { useCounterStore } from '@/stores/index.js'
+import { IncomingCallsType, OutgoingCallsType } from '../enums/callTypes.js'
+import CallsRepository from '@/repositories/calls.repository.js'
+import SearchableSelect from '@/components/utils/SearchableSelect.vue'
 
 export default {
+  components: { SearchableSelect },
   data() {
     return {
+      callType: 'incoming',
       call: {
-        incoming: null,
         patientId: '',
         operatorId: '',
         dateTime: '',
-        subtype: '',
-        alertId: null,
-        details: ''
-      }
-    };
+        details: '',
+        incomingCall: {
+          type: '',
+          emergencyLevel: 1
+        },
+        outgoingCall: {
+          type: '',
+          alertId: null
+        }
+      },
+      errors: [],
+      isSubmitting: false,
+      incomingCallTypes: IncomingCallsType.values(),
+      outgoingCallTypes: OutgoingCallsType.values()
+    }
   },
   computed: {
-    ...mapState(useCounterStore, ['patients', 'operators'])
+    ...mapState(useCounterStore, ['patients', 'operators', 'calls', 'alerts'])
   },
   methods: {
-    ...mapActions(useCounterStore, ['loadPatients']),
-    submitCall() {
-      console.log('Call data:', this.call);
-      this.resetForm();
+    ...mapActions(useCounterStore, ['loadPatients', 'loadOperators', 'loadAlerts']),
+    async submitCall() {
+      this.errors = []
+      this.isSubmitting = true
+
+      try {
+        const callData = {
+          patientId: this.call.patientId,
+          operatorId: this.call.operatorId,
+          dateTime: this.call.dateTime,
+          details: this.call.details
+        }
+
+        if (this.callType === 'incoming') {
+          callData.incomingCall = this.call.incomingCall
+        } else {
+          callData.outgoingCall = this.call.outgoingCall
+        }
+
+        const callsRepository = new CallsRepository()
+        const response = await callsRepository.addCall(callData)
+        this.calls.push(response.data)
+        this.resetForm()
+      } catch (error) {
+        console.error('Error creating call:', error)
+      } finally {
+        this.isSubmitting = false
+      }
     },
     resetForm() {
+      this.callType = 'incoming'
       this.call = {
-        incoming: null,
         patientId: '',
         operatorId: '',
         dateTime: '',
-        subtype: '',
-        alertId: null,
-        details: ''
-      };
+        details: '',
+        incomingCall: {
+          type: '',
+          emergencyLevel: 1
+        },
+        outgoingCall: {
+          type: '',
+          alertId: null
+        }
+      }
+      this.errors = []
     }
   },
   async mounted() {
     try {
-      this.isLoading = true
       if (this.patients.length === 0) {
         await this.loadPatients()
       }
-      if (this.patients.length === 0) {
-        await this.loadPatients()
+      if (this.alerts.length === 0) {
+        await this.loadAlerts()
+      }
+      if (this.operators.length === 0) {
+        await this.loadOperators()
       }
     } catch (error) {
-      console.error('Error al cargar los pacientes:', error)
-    } finally {
-      this.isLoading = false
+      console.error('Error loading patients:', error)
     }
-  },
-};
+  }
+}
 </script>
 
 <style scoped>
 .card {
-  border-radius: 0.75rem 0.75rem 0 0;
-  transition: all 0.3s ease-in-out;
+  border: none;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  transition: all 0.2s ease;
 }
+
 .card:hover {
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
 .card-header {
@@ -137,6 +243,8 @@ export default {
 
 .form-control {
   border-radius: 0.25rem;
+  border: 1px solid #ced4da;
+  padding: 0.5rem 0.75rem;
 }
 
 .form-control:focus {
@@ -158,14 +266,7 @@ export default {
 label {
   font-weight: 500;
   margin-bottom: 0.5rem;
-}
-
-.card {
-  border: none;
-  border-radius: 0.75rem;
-  background: #ffffff;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-  transition: all 0.2s ease;
+  color: #344767;
 }
 
 @media (max-width: 768px) {

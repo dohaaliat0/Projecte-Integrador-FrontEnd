@@ -44,16 +44,8 @@
         </span>
       </div>
 
-      <div class="flex-row">
-        <span class="span" @click="recuperarContrasena">¿Olvidaste tu contraseña?</span>
-      </div>
-
       <button class="button-submit" type="submit">Iniciar Sesión</button>
 
-      <p class="p">
-        ¿No tienes cuenta?
-        <span class="span" @click="signup">Regístrate</span>
-      </p>
       <p class="p line">O con</p>
 
       <div class="flex-row">
@@ -113,12 +105,6 @@ export default {
     },
     alternarContrasena() {
       this.showPassword = !this.showPassword;
-    },
-    recuperarContrasena() {
-      console.log("Recuperar contraseña");
-    },
-    signup() {
-      console.log("Ir a registro");
     },
     loginConGoogle() {
       console.log("Iniciar sesión con Google");

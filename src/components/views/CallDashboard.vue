@@ -8,7 +8,7 @@
     </div>
 
     <div v-else>
-      <div class="row justify-content-center mb-5">
+      <div v-if="!idPatient" class="row justify-content-center mb-5">
         <div class="col-12 col-md-8 col-lg-6">
           <div class="card-body">
             <div class="input-group input-group-lg">
@@ -57,7 +57,7 @@
                   </thead>
                   <tbody>
                   <tr
-                    v-for="call in filteredPatients"
+                    v-for="call in paginatedCalls"
                     :key="call.id"
                     @click="selectCall(call)"
                     class="call-row"
@@ -82,12 +82,12 @@
                       <span v-else>-</span>
                     </td>
                     <td class="text-center">
-                    <span
-                      class="badge rounded-pill"
-                      :class="getCallTypeBadgeClass(call)"
-                    >
-                      {{ getCallTypeLabel(call) }}
-                    </span>
+                        <span
+                          class="badge rounded-pill"
+                          :class="getCallTypeBadgeClass(call)"
+                        >
+                          {{ getCallTypeLabel(call) }}
+                        </span>
                     </td>
                   </tr>
                   </tbody>
@@ -153,6 +153,32 @@
                 <h6 class="details-title">Detalles</h6>
                 <p class="text-muted mb-0">{{ selectedCall.details || 'Sin detalles' }}</p>
               </div>
+
+              <div v-if="selectedCall.outgoingCall && selectedCall.outgoingCall.alert" class="details-section mt-4">
+                <h6 class="details-title">Información de Alerta</h6>
+                <div class="details-grid">
+                  <div class="detail-item">
+                    <span class="detail-label">ID de Alerta</span>
+                    <span class="detail-value">#{{ selectedCall.outgoingCall.alert.id }}</span>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">Tipo de Alerta</span>
+                    <span class="detail-value">{{ selectedCall.outgoingCall.alert.type }}</span>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">Fecha de Alerta</span>
+                    <span class="detail-value">{{ formatDateTime(selectedCall.outgoingCall.alert.date) }}</span>
+                  </div>
+                </div>
+                <div class="detail-item description-item mt-3">
+                  <span class="detail-label">Descripción</span>
+                  <div class="detail-value description-value">
+                    <p>
+                      {{ selectedCall.outgoingCall.alert.description }}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -169,6 +195,47 @@
           <p>Intenta con otros términos de búsqueda</p>
         </div>
       </div>
+
+      <div class="pagination-container mt-4">
+        <nav class="pagination" role="navigation" aria-label="pagination">
+          <button
+            class="pagination-button"
+            :disabled="currentPage === 1"
+            @click="changePage(currentPage - 1)"
+            aria-label="Previous page"
+          >
+            <i class="fas fa-chevron-left"></i>
+          </button>
+
+          <button
+            v-for="pageNumber in getDisplayedPageNumbers()"
+            :key="pageNumber"
+            @click="changePage(pageNumber)"
+            :class="['pagination-button', { 'is-current': pageNumber === currentPage }]"
+            :aria-label="`Page ${pageNumber}`"
+            :aria-current="pageNumber === currentPage ? 'page' : undefined"
+          >
+            {{ pageNumber }}
+          </button>
+
+          <button
+            v-if="showEllipsisEnd()"
+            class="pagination-ellipsis"
+            disabled
+          >
+            <span>&hellip;</span>
+          </button>
+
+          <button
+            class="pagination-button"
+            :disabled="currentPage === getTotalPages()"
+            @click="changePage(currentPage + 1)"
+            aria-label="Next page"
+          >
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </nav>
+      </div>
     </div>
   </div>
 </template>
@@ -179,6 +246,7 @@ import { useCounterStore } from "@/stores/index.js";
 import AddCall from '../utils/AddCall.vue';
 
 export default {
+  props: ['idPatient'],
   components: {
     AddCall
   },
@@ -186,28 +254,38 @@ export default {
     ...mapState(useCounterStore, ["calls"]),
     filteredPatients() {
       const searchTermLower = this.searchTerm.toLowerCase().trim()
-      return this.calls.filter(call =>
+      return this.allCalls.filter(call =>
         call.patient.fullName.toLowerCase().includes(searchTermLower)
       )
     },
+    paginatedCalls() {
+      return this.getPaginatedCalls()
+    }
   },
   data() {
     return {
       selectedCall: null,
       showAddCall: false,
       searchTerm: '',
-      isLoading: true
+      isLoading: true,
+      allCalls: [],
+      currentPage: 1,
+      itemsPerPage: 10
     };
   },
   async mounted() {
-    if (this.calls.length === 0) {
-      await this.loadCalls()
+    if (this.idPatient) {
+      this.allCalls = await this.loadCallsByPatient(this.idPatient)
+    } else {
+      if (this.calls.length === 0) {
+        await this.loadCalls()
+      }
+      this.allCalls = this.calls
     }
-
     this.isLoading = false;
   },
   methods: {
-    ...mapActions(useCounterStore, ["loadCalls", "getCallTypeLabel", "getCallTypeBadgeClass"]),
+    ...mapActions(useCounterStore, ["loadCalls", "getCallTypeLabel", "getCallTypeBadgeClass", "loadCallsByPatient"]),
     selectCall(call) {
       this.selectedCall = call;
       this.showAddCall = false;
@@ -219,9 +297,61 @@ export default {
       this.showAddCall = !this.showAddCall;
       this.selectedCall = null;
     },
-    handleCallAdded() {
+    async handleCallAdded() {
+      this.isLoading = true
       this.showAddCall = false;
-      this.loadCalls();
+      await this.loadCalls();
+      this.isLoading = false
+    },
+    getTotalPages() {
+      return Math.ceil(this.filteredPatients.length / this.itemsPerPage)
+    },
+    changePage(page) {
+      if (page >= 1 && page <= this.getTotalPages()) {
+        this.currentPage = page
+      }
+    },
+    getDisplayedPageNumbers() {
+      const displayed = []
+      const totalDisplayed = 5
+      const totalPages = this.getTotalPages()
+
+      if (totalPages <= totalDisplayed) {
+        return Array.from({ length: totalPages }, (_, i) => i + 1)
+      }
+
+      displayed.push(1)
+
+      let start = Math.max(2, this.currentPage - Math.floor(totalDisplayed / 2))
+      let end = Math.min(totalPages - 1, start + totalDisplayed - 3)
+
+      if (end === totalPages - 1) {
+        start = Math.max(2, end - totalDisplayed + 3)
+      }
+
+      if (start > 2) {
+        displayed.push('...')
+      }
+
+      for (let i = start; i <= end; i++) {
+        displayed.push(i)
+      }
+
+      if (end < totalPages - 1) {
+        displayed.push('...')
+      }
+
+      displayed.push(totalPages)
+
+      return displayed
+    },
+    showEllipsisEnd() {
+      return this.getTotalPages() > 5 && !this.getDisplayedPageNumbers().includes(this.getTotalPages() - 1)
+    },
+    getPaginatedCalls() {
+      const start = (this.currentPage - 1) * this.itemsPerPage
+      const end = start + this.itemsPerPage
+      return this.filteredPatients.slice(start, end)
     }
   }
 };
@@ -416,5 +546,78 @@ export default {
 .input-group {
   flex: 1;
   margin-right: 10px;
+}
+
+.description-value {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.description-item {
+  flex-direction: column;
+  align-items: flex-start !important;
+}
+
+.btn-link {
+  font-size: 0.875rem;
+  padding: 0;
+  vertical-align: baseline;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  padding: 0.5rem;
+}
+
+.pagination-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0 0.25rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #4b5563;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-button:hover {
+  background-color: #f3f4f6;
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-button.is-current {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+.pagination-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0 0.25rem;
+  font-weight: 500;
+  color: #4b5563;
 }
 </style>

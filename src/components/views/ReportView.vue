@@ -23,7 +23,7 @@
                     >
                       <option value="emergencies">Informe de Emergencias</option>
                       <option value="socials">Informe Social</option>
-                      <option value="monitorings">Informe de Seguimientos</option>
+                      <option value="monitoring">Informe de Seguimientos</option>
                     </select>
                   </div>
 
@@ -163,7 +163,7 @@ export default {
           this.dateRange.startDate,
           this.dateRange.endDate
         )
-        console.log(response)
+
         this.reportUrl = URL.createObjectURL(response)
       } catch (e) {
         this.error = 'Error al generar el informe'

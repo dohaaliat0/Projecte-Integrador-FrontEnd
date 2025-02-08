@@ -1311,5 +1311,83 @@
         }
       ]
     }
+  ],
+  "alerts": [
+    {
+      "id": 1,
+      "type": "medication",
+      "title": "Daily Medication Reminder",
+      "description": "Take blood pressure medication",
+      "isActive": true,
+      "isRecurring": true,
+      "date": "2024-02-07",
+      "endDate": "2024-03-07",
+      "time": "09:00",
+      "dayOfWeek": "monday",
+      "patient": {
+        "id": 1,
+        "fullName": "John Smith",
+        "avatar": "/placeholder.svg?height=32&width=32"
+      },
+      "operator": {
+        "id": 1,
+        "name": "Sarah Johnson",
+        "avatar": "/placeholder.svg?height=32&width=32"
+      },
+      "zone": {
+        "id": 1,
+        "name": "North Zone"
+      }
+    },
+    {
+      "id": 2,
+      "type": "emergency_followup",
+      "title": "Emergency Follow-up Check",
+      "description": "Follow up on recent emergency room visit",
+      "isActive": true,
+      "isRecurring": false,
+      "date": "2024-02-08",
+      "time": "14:30",
+      "patient": {
+        "id": 2,
+        "fullName": "Maria Garcia",
+        "avatar": "/placeholder.svg?height=32&width=32"
+      },
+      "operator": {
+        "id": 2,
+        "name": "David Wilson",
+        "avatar": "/placeholder.svg?height=32&width=32"
+      },
+      "zone": {
+        "id": 2,
+        "name": "South Zone"
+      }
+    },
+    {
+      "id": 3,
+      "type": "heat_wave",
+      "title": "Heat Wave Alert",
+      "description": "Check on patient during extreme temperatures",
+      "isActive": true,
+      "isRecurring": true,
+      "date": "2024-02-07",
+      "endDate": "2024-02-14",
+      "time": "11:00",
+      "dayOfWeek": "monday",
+      "patient": {
+        "id": 3,
+        "fullName": "Robert Taylor",
+        "avatar": "/placeholder.svg?height=32&width=32"
+      },
+      "operator": {
+        "id": 3,
+        "name": "Emily Brown",
+        "avatar": "/placeholder.svg?height=32&width=32"
+      },
+      "zone": {
+        "id": 1,
+        "name": "North Zone"
+      }
+    }
   ]
 }

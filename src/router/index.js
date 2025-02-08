@@ -8,6 +8,7 @@ import PatientView from "@/components/views/PatientView.vue";
 import ReportView from '@/components/views/ReportView.vue'
 import AddPatient from '@/components/utils/AddPatient.vue'
 import CalendarView from '@/components/views/CalendarView.vue'
+import AlertsDashboard from '@/components/views/AlertsDashboard.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -54,9 +55,29 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/call-management',
-      name: 'call-management',
+      path: '/calls',
+      name: 'calls',
       component: CallDashboard,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/calls/patient/:idPatient',
+      name: 'callsPatient',
+      component: CallDashboard,
+      props: true,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/alerts',
+      name: 'alerts',
+      component: AlertsDashboard,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/alerts/patient/:idPatient',
+      name: 'alertsPatient',
+      component: AlertsDashboard,
+      props: true,
       meta: { requiresAuth: true }
     },
     {

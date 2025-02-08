@@ -11,12 +11,21 @@
       </RouterLink>
 
       <RouterLink
-        to="/call-management"
+        to="/calls"
         class="menu-item"
-        :class="{ 'menu-item-active': $route.name === 'call-management' }"
+        :class="{ 'menu-item-active': $route.name === 'calls' }"
       >
         <span class="menu-icon fas fa-phone-alt"></span>
         <span class="menu-text">Llamadas</span>
+      </RouterLink>
+
+      <RouterLink
+        to="/alerts"
+        class="menu-item"
+        :class="{ 'menu-item-active': $route.name === 'alerts' }"
+      >
+        <span class="menu-icon fas fa-exclamation-triangle"></span>
+        <span class="menu-text">Alertas</span>
       </RouterLink>
 
       <RouterLink

@@ -2,12 +2,12 @@ import { useAuthStore } from "@/stores/auth.js";
 
 const server = import.meta.env.VITE_URL_API;
 
-export default class CallsRepository {
-  async getAllCalls() {
+export default class AlertsRepository {
+  async getAllAlerts() {
     const authStore = useAuthStore();
     const token = authStore.token;
 
-    const response = await fetch(server + "/calls", {
+    const response = await fetch(server + "/alerts", {
       headers: {
         "Authorization": `Bearer ${token}`
       }
@@ -20,34 +20,17 @@ export default class CallsRepository {
     return await response.json();
   }
 
-  async getAllCallsByPatient(idPatient) {
+  async addAlert(alert) {
     const authStore = useAuthStore();
     const token = authStore.token;
 
-    const response = await fetch(server + "/patients/" + idPatient + "/calls", {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    });
-
-    if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
-    }
-
-    return await response.json();
-  }
-
-  async addCall(call) {
-    const authStore = useAuthStore();
-    const token = authStore.token;
-
-    const response = await fetch(server + "/calls", {
+    const response = await fetch(server + "/alerts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify(call)
+      body: JSON.stringify(alert)
     });
 
     if (!response.ok) {
@@ -57,11 +40,11 @@ export default class CallsRepository {
     return await response.json();
   }
 
-  async getCallById(idCall) {
+  async getCallById(idAlert) {
     const authStore = useAuthStore();
     const token = authStore.token;
 
-    const response = await fetch(server + "/calls/" + idCall, {
+    const response = await fetch(server + "/alerts/" + idAlert, {
       headers: {
         "Authorization": `Bearer ${token}`
       }
@@ -74,11 +57,11 @@ export default class CallsRepository {
     return await response.json();
   }
 
-  async removeCall(idCall) {
+  async removeCall(idAlert) {
     const authStore = useAuthStore();
     const token = authStore.token;
 
-    const response = await fetch(server + "/calls/" + idCall, {
+    const response = await fetch(server + "/alerts/" + idAlert, {
       method: "DELETE",
       headers: {
         "Authorization": `Bearer ${token}`
@@ -92,17 +75,17 @@ export default class CallsRepository {
     return await response.json();
   }
 
-  async changeCall(call) {
+  async changeCall(alert) {
     const authStore = useAuthStore();
     const token = authStore.token;
 
-    const response = await fetch(server + "/calls/" + call.id, {
+    const response = await fetch(server + "/alerts/" + alert.id, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify(call)
+      body: JSON.stringify(alert)
     });
 
     if (!response.ok) {

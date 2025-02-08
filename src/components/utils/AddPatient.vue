@@ -493,10 +493,18 @@ export default {
     async submitForm() {
       if (await this.validateForm()) {
         this.isSubmitting = true
+        const formData = { ...this.form }
+
+        if (formData.languages && Array.isArray(formData.languages)) {
+          formData.languages = formData.languages.map(lang =>
+            typeof lang === 'object' ? lang.name : lang
+          );
+        }
+
         if (this.id) {
           try {
             const patientsRepository = new PatientsRepository()
-            await patientsRepository.changePatient(this.form)
+            await patientsRepository.changePatient(formData)
             this.$router.push('/patients')
           } catch (error) {
             if (error.response?.data?.errors) {
@@ -510,7 +518,7 @@ export default {
         } else {
           try {
             const patientsRepository = new PatientsRepository()
-            await patientsRepository.addPatient(this.form)
+            await patientsRepository.addPatient(formData)
             this.$router.push('/patients')
           } catch (error) {
             if (error.response?.data?.errors) {
@@ -522,7 +530,6 @@ export default {
             this.isSubmitting = false
           }
         }
-
       }
     },
 

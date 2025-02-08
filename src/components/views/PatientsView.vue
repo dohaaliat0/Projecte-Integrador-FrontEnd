@@ -36,7 +36,7 @@
     </div>
 
     <div class="row">
-      <div class="col-12 col-md-6 col-lg-4 mb-4" v-for="patient in filteredPatients" :key="patient.id">
+      <div class="col-12 col-md-6 col-lg-4 mb-4" v-for="patient in paginatedPatients" :key="patient.id">
         <div
           class="card h-100 shadow-sm cursor-pointer patient-card"
           @click="$router.push('/patient/' + patient.id)"
@@ -68,6 +68,20 @@
 
             <div class="position-absolute" style="right: 10px; bottom: 10px">
               <button
+                @click.stop="$router.push('/calls/patient/' + patient.id)"
+                class="btn btn-light btn-sm"
+                title="Lista de llamadas"
+              >
+                <i class="fas fa-phone text-primary"></i>
+              </button>
+              <button
+                @click.stop="$router.push('/alerts/patient/' + patient.id)"
+                class="btn btn-light btn-sm"
+                title="Lista de alertes"
+              >
+                <i class="fas fa-exclamation-triangle text-primary"></i>
+              </button>
+              <button
                 @click.stop="$router.push('/patients/edit/' + patient.id)"
                 class="btn btn-light btn-sm mr-2"
                 title="Editar"
@@ -85,6 +99,47 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div v-if="!isLoading" class="pagination-container mt-4">
+      <nav class="pagination" role="navigation" aria-label="pagination">
+        <button
+          class="pagination-button"
+          :disabled="currentPage === 1"
+          @click="changePage(currentPage - 1)"
+          aria-label="Previous page"
+        >
+          <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <button
+          v-for="pageNumber in getDisplayedPageNumbers()"
+          :key="pageNumber"
+          @click="changePage(pageNumber)"
+          :class="['pagination-button', { 'is-current': pageNumber === currentPage }]"
+          :aria-label="`Page ${pageNumber}`"
+          :aria-current="pageNumber === currentPage ? 'page' : undefined"
+        >
+          {{ pageNumber }}
+        </button>
+
+        <button
+          v-if="showEllipsisEnd()"
+          class="pagination-ellipsis"
+          disabled
+        >
+          <span>&hellip;</span>
+        </button>
+
+        <button
+          class="pagination-button"
+          :disabled="currentPage === getTotalPages()"
+          @click="changePage(currentPage + 1)"
+          aria-label="Next page"
+        >
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </nav>
     </div>
 
     <div v-if="!isLoading && filteredPatients.length === 0" class="text-center mt-5">
@@ -123,7 +178,9 @@ export default {
       searchTerm: '',
       showDeleteDialog: false,
       patientToDelete: null,
-      isLoading: true
+      isLoading: true,
+      currentPage: 1,
+      itemsPerPage: 12
     }
   },
   computed: {
@@ -135,6 +192,11 @@ export default {
         patient.email.toLowerCase().includes(searchTermLower) ||
         patient.phone.includes(searchTermLower)
       )
+    },
+    paginatedPatients() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.filteredPatients.slice(start, end);
     },
     deleteMessage() {
       if (!this.patientToDelete) return ''
@@ -187,6 +249,51 @@ export default {
       }
 
       return age
+    },
+    getTotalPages() {
+      return Math.ceil(this.filteredPatients.length / this.itemsPerPage);
+    },
+    changePage(page) {
+      if (page >= 1 && page <= this.getTotalPages()) {
+        this.currentPage = page
+      }
+    },
+    getDisplayedPageNumbers() {
+      const displayed = []
+      const totalDisplayed = 5
+      const totalPages = this.getTotalPages()
+
+      if (totalPages <= totalDisplayed) {
+        return Array.from({ length: totalPages }, (_, i) => i + 1)
+      }
+
+      displayed.push(1)
+
+      let start = Math.max(2, this.currentPage - Math.floor(totalDisplayed / 2))
+      let end = Math.min(totalPages - 1, start + totalDisplayed - 3)
+
+      if (end === totalPages - 1) {
+        start = Math.max(2, end - totalDisplayed + 3)
+      }
+
+      if (start > 2) {
+        displayed.push('...')
+      }
+
+      for (let i = start; i <= end; i++) {
+        displayed.push(i)
+      }
+
+      if (end < totalPages - 1) {
+        displayed.push('...')
+      }
+
+      displayed.push(totalPages)
+
+      return displayed
+    },
+    showEllipsisEnd() {
+      return this.getTotalPages() > 5 && !this.getDisplayedPageNumbers().includes(this.getTotalPages() - 1)
     }
   }
 }
@@ -306,5 +413,62 @@ export default {
 .input-group {
   flex: 1;
   margin-right: 10px;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  padding: 0.5rem;
+}
+
+.pagination-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0 0.25rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #4b5563;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-button:hover {
+  background-color: #f3f4f6;
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-button.is-current {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+.pagination-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0 0.25rem;
+  font-weight: 500;
+  color: #4b5563;
 }
 </style>

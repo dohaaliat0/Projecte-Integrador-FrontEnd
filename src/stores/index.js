@@ -4,6 +4,7 @@ import CallsRepository from "@/repositories/calls.repository.js";
 import OperatorsRepository from '@/repositories/operators.repository.js'
 import ZonesRepository from '@/repositories/zones.repository.js'
 import LanguagesRepository from '@/repositories/languages.repository.js'
+import AlertsRepository from '@/repositories/alerts.repository.js'
 
 export const useCounterStore = defineStore("counter", {
   state(){
@@ -12,17 +13,25 @@ export const useCounterStore = defineStore("counter", {
       calls: [],
       operators: [],
       zones: [],
-      languages: []
+      languages: [],
+      alerts: []
     }
   },
+
   getters: {
     getPatientById: (state) => (id) => state.patients.find((item) => item.id == id)
   },
+
   actions: {
     async loadCalls() {
       const repositoryModules = new CallsRepository();
       const response = await repositoryModules.getAllCalls();
       this.calls = response.data
+    },
+    async loadCallsByPatient(idPatient) {
+      const repositoryModules = new CallsRepository();
+      const response = await repositoryModules.getAllCallsByPatient(idPatient);
+      return response.data
     },
     async loadPatients() {
       const repositoryModules = new PatientsRepository();
@@ -43,6 +52,11 @@ export const useCounterStore = defineStore("counter", {
       const repositoryLanguages = new LanguagesRepository();
       const response = await repositoryLanguages.getAllLanguages();
       this.languages = response.data
+    },
+    async loadAlerts() {
+      const repositoryAlerts = new AlertsRepository();
+      const response = await repositoryAlerts.getAllAlerts();
+      this.alerts = response.data
     },
     getCallTypeLabel(call) {
       if (call.incomingCall !== null) {
