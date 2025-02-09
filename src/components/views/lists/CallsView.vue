@@ -22,8 +22,8 @@
                 type="text"
                 class="form-control border-left-0 pl-0"
                 placeholder="Buscar llamadas por nombre de pacientes"
-                style="border-left: none; box-shadow: none;"
-              >
+                style="border-left: none; box-shadow: none"
+              />
               <button
                 @click="toggleAddCall"
                 class="btn btn-light ml-3 add-call-btn"
@@ -46,50 +46,80 @@
               <div class="table-responsive">
                 <table class="table table-hover align-middle">
                   <thead class="table-light">
-                  <tr>
-                    <th class="ps-4">#</th>
-                    <th>Tipo de Llamada</th>
-                    <th>Paciente</th>
-                    <th>Fecha y Hora</th>
-                    <th>Operador</th>
-                    <th class="text-center">Tipo</th>
-                  </tr>
+                    <tr>
+                      <th class="ps-4">#</th>
+                      <th>Tipo de Llamada</th>
+                      <th>Paciente</th>
+                      <th>Fecha y Hora</th>
+                      <th>Operador</th>
+                      <th class="text-center">Tipo</th>
+                      <th class="text-center">Acciones</th>
+                    </tr>
                   </thead>
                   <tbody>
-                  <tr
-                    v-for="call in paginatedCalls"
-                    :key="call.id"
-                    @click="selectCall(call)"
-                    class="call-row"
-                  >
-                    <td class="ps-4">{{ call.id }}</td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <i :class="['fas', 'fa-phone-alt', call.incoming ? 'text-primary' : 'text-danger', 'me-2']" style="margin-right: 5px"></i>
-                        {{ call.incoming ? 'Entrante' : 'Saliente' }}
-                      </div>
-                    </td>
-                    <td>{{ call.patient.fullName }}</td>
-                    <td>{{ formatDateTime(call.dateTime) }}</td>
-                    <td>
-                      <div class="d-flex align-items-center" v-if="call.operator">
-                        <div class="rounded-circle me-2"
-                             style="width: 32px; height: 32px; background-color: #007bff; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; margin-right: 5px;">
-                          {{ call.operator.name.charAt(0).toUpperCase() }}
+                    <tr v-for="call in paginatedCalls" :key="call.id" class="call-row">
+                      <td class="ps-4">{{ call.id }}</td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <i
+                            :class="[
+                              'fas',
+                              'fa-phone-alt',
+                              call.incoming ? 'text-primary' : 'text-danger',
+                              'me-2'
+                            ]"
+                            style="margin-right: 5px"
+                          ></i>
+                          {{ call.incoming ? 'Entrante' : 'Saliente' }}
                         </div>
-                        {{ call.operator.name }}
-                      </div>
-                      <span v-else>-</span>
-                    </td>
-                    <td class="text-center">
-                        <span
-                          class="badge rounded-pill"
-                          :class="getCallTypeBadgeClass(call)"
-                        >
+                      </td>
+                      <td>{{ call.patient.fullName }}</td>
+                      <td>{{ formatDateTime(call.dateTime) }}</td>
+                      <td>
+                        <div class="d-flex align-items-center" v-if="call.operator">
+                          <div
+                            class="rounded-circle me-2"
+                            style="
+                              width: 32px;
+                              height: 32px;
+                              background-color: #007bff;
+                              display: flex;
+                              justify-content: center;
+                              align-items: center;
+                              color: white;
+                              font-weight: bold;
+                              margin-right: 5px;
+                            "
+                          >
+                            {{ call.operator.name.charAt(0).toUpperCase() }}
+                          </div>
+                          {{ call.operator.name }}
+                        </div>
+                        <span v-else>-</span>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge rounded-pill" :class="getCallTypeBadgeClass(call)">
                           {{ getCallTypeLabel(call) }}
                         </span>
-                    </td>
-                  </tr>
+                      </td>
+                      <td class="text-center">
+                        <button
+                          @click.stop="editCall(call)"
+                          class="btn btn-sm btn-link p-0 me-2"
+                          title="Editar"
+                          style="margin-right: 5px"
+                        >
+                          <i class="fas fa-pencil text-primary"></i>
+                        </button>
+                        <button
+                          @click="deleteCall(call)"
+                          class="btn btn-sm btn-link p-0 me-2"
+                          title="Eliminar"
+                        >
+                          <i class="fas fa-trash-alt text-danger"></i>
+                        </button>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -101,7 +131,11 @@
           <div class="card h-100">
             <div class="card-header d-flex justify-content-between align-items-center">
               <h5 class="card-title mb-0">Detalles de Llamada</h5>
-              <button @click="selectedCall = null" class="btn btn-sm btn-link" style="color: red; font-size: 1.2rem">
+              <button
+                @click="selectedCall = null"
+                class="btn btn-sm btn-link"
+                style="color: red; font-size: 1.2rem"
+              >
                 <i class="fas fa-times"></i>
               </button>
             </div>
@@ -113,7 +147,7 @@
                   width="80"
                   height="80"
                   alt="Operador"
-                >
+                />
                 <h6 class="mb-0">{{ selectedCall.operator.name }}</h6>
                 <small class="text-muted">Operador</small>
               </div>
@@ -127,7 +161,9 @@
                   </div>
                   <div class="detail-item">
                     <span class="detail-label">Tipo</span>
-                    <span class="detail-value">{{ selectedCall.incoming ? 'Entrante' : 'Saliente' }}</span>
+                    <span class="detail-value">{{
+                      selectedCall.incoming ? 'Entrante' : 'Saliente'
+                    }}</span>
                   </div>
                   <div class="detail-item">
                     <span class="detail-label">Paciente</span>
@@ -139,12 +175,9 @@
                   </div>
                   <div class="detail-item">
                     <span class="detail-label">Tipo Específico</span>
-                    <span
-                      class="badge rounded-pill"
-                      :class="getCallTypeBadgeClass(selectedCall)"
-                    >
-                    {{ getCallTypeLabel(selectedCall) }}
-                  </span>
+                    <span class="badge rounded-pill" :class="getCallTypeBadgeClass(selectedCall)">
+                      {{ getCallTypeLabel(selectedCall) }}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -154,7 +187,10 @@
                 <p class="text-muted mb-0">{{ selectedCall.details || 'Sin detalles' }}</p>
               </div>
 
-              <div v-if="selectedCall.outgoingCall && selectedCall.outgoingCall.alert" class="details-section mt-4">
+              <div
+                v-if="selectedCall.outgoingCall && selectedCall.outgoingCall.alert"
+                class="details-section mt-4"
+              >
                 <h6 class="details-title">Información de Alerta</h6>
                 <div class="details-grid">
                   <div class="detail-item">
@@ -167,7 +203,9 @@
                   </div>
                   <div class="detail-item">
                     <span class="detail-label">Fecha de Alerta</span>
-                    <span class="detail-value">{{ formatDateTime(selectedCall.outgoingCall.alert.date) }}</span>
+                    <span class="detail-value">{{
+                      formatDateTime(selectedCall.outgoingCall.alert.date)
+                    }}</span>
                   </div>
                 </div>
                 <div class="detail-item description-item mt-3">
@@ -184,19 +222,15 @@
         </div>
 
         <div class="col-xl-4" v-if="showAddCall">
-          <AddCall @call-added="handleCallAdded" />
+          <AddCall
+            :editCall="editingCall"
+            @call-added="handleCallAdded"
+            @call-updated="handleCallUpdated"
+          />
         </div>
       </div>
 
-      <div v-if="!isLoading && filteredPatients.length === 0" class="text-center mt-5">
-        <div class="text-muted">
-          <i class="fas fa-search fa-3x mb-3"></i>
-          <h4>No se encontraron pacientes</h4>
-          <p>Intenta con otros términos de búsqueda</p>
-        </div>
-      </div>
-
-      <div class="pagination-container mt-4">
+      <div v-if="!isLoading" class="pagination-container mt-4">
         <nav class="pagination" role="navigation" aria-label="pagination">
           <button
             class="pagination-button"
@@ -218,11 +252,7 @@
             {{ pageNumber }}
           </button>
 
-          <button
-            v-if="showEllipsisEnd()"
-            class="pagination-ellipsis"
-            disabled
-          >
+          <button v-if="showEllipsisEnd()" class="pagination-ellipsis" disabled>
             <span>&hellip;</span>
           </button>
 
@@ -237,24 +267,37 @@
         </nav>
       </div>
     </div>
+    <ConfirmDialog
+      :show="showDeleteDialog"
+      title="Eliminar Paciente"
+      :message="'¿Seguro que quieres eliminar esta llamda?'"
+      type="danger"
+      confirm-text="Eliminar"
+      cancel-text="Cancelar"
+      @confirm="confirmDelete"
+      @cancel="cancelDelete"
+    />
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from "pinia";
-import { useCounterStore } from "@/stores/index.js";
-import AddCall from '../utils/AddCall.vue';
+import { mapActions, mapState } from 'pinia'
+import { useCounterStore } from '@/stores/index.js'
+import AddCall from '../adds/AddCall.vue'
+import ConfirmDialog from '@/components/utils/ConfirmDialog.vue'
+import PatientsRepository from '@/repositories/patients.repository.js'
 
 export default {
   props: ['idPatient'],
   components: {
+    ConfirmDialog,
     AddCall
   },
   computed: {
-    ...mapState(useCounterStore, ["calls"]),
-    filteredPatients() {
+    ...mapState(useCounterStore, ['calls']),
+    filteredCalls() {
       const searchTermLower = this.searchTerm.toLowerCase().trim()
-      return this.allCalls.filter(call =>
+      return this.allCalls.filter((call) =>
         call.patient.fullName.toLowerCase().includes(searchTermLower)
       )
     },
@@ -266,12 +309,15 @@ export default {
     return {
       selectedCall: null,
       showAddCall: false,
+      editingCall: null,
       searchTerm: '',
       isLoading: true,
       allCalls: [],
       currentPage: 1,
-      itemsPerPage: 10
-    };
+      itemsPerPage: 10,
+      showDeleteDialog: false,
+      patientToDelete: null
+    }
   },
   async mounted() {
     if (this.idPatient) {
@@ -282,29 +328,62 @@ export default {
       }
       this.allCalls = this.calls
     }
-    this.isLoading = false;
+    this.isLoading = false
   },
   methods: {
-    ...mapActions(useCounterStore, ["loadCalls", "getCallTypeLabel", "getCallTypeBadgeClass", "loadCallsByPatient"]),
+    ...mapActions(useCounterStore, [
+      'loadCalls',
+      'getCallTypeLabel',
+      'getCallTypeBadgeClass',
+      'loadCallsByPatient',
+      'deleteCallFromStore'
+    ]),
     selectCall(call) {
-      this.selectedCall = call;
-      this.showAddCall = false;
+      this.selectedCall = call
+      this.showAddCall = false
     },
     formatDateTime(dateTime) {
-      return new Date(dateTime).toLocaleString();
+      return new Date(dateTime).toLocaleString()
     },
     toggleAddCall() {
-      this.showAddCall = !this.showAddCall;
-      this.selectedCall = null;
+      this.showAddCall = !this.showAddCall
+      this.selectedCall = null
+      this.editingCall = null
     },
-    async handleCallAdded() {
-      this.isLoading = true
-      this.showAddCall = false;
-      await this.loadCalls();
-      this.isLoading = false
+    editCall(call) {
+      this.editingCall = call
+      this.showAddCall = true
+      this.selectedCall = null
+    },
+    async deleteCall(call) {
+      if (confirm(`¿Estás seguro de que quieres eliminar esta llamada?`)) {
+        try {
+          await this.deleteCallFromStore(call.id)
+          this.allCalls = this.allCalls.filter((c) => c.id !== call.id)
+        } catch (error) {
+          console.error('Error al eliminar la llamada:', error)
+          alert('Hubo un error al eliminar la llamada. Por favor, inténtalo de nuevo.')
+        }
+      }
+    },
+    async handleCallAdded(call) {
+      this.showAddCall = false
+      this.selectedCall = null
+      this.editingCall = null
+      await this.loadCalls()
+      this.allCalls = this.calls
+    },
+    async handleCallUpdated(updatedCall) {
+      this.showAddCall = false
+      this.selectedCall = null
+      this.editingCall = null
+      const index = this.allCalls.findIndex((c) => c.id === updatedCall.id)
+      if (index !== -1) {
+        this.allCalls[index] = updatedCall
+      }
     },
     getTotalPages() {
-      return Math.ceil(this.filteredPatients.length / this.itemsPerPage)
+      return Math.ceil(this.filteredCalls.length / this.itemsPerPage)
     },
     changePage(page) {
       if (page >= 1 && page <= this.getTotalPages()) {
@@ -346,15 +425,38 @@ export default {
       return displayed
     },
     showEllipsisEnd() {
-      return this.getTotalPages() > 5 && !this.getDisplayedPageNumbers().includes(this.getTotalPages() - 1)
+      return (
+        this.getTotalPages() > 5 &&
+        !this.getDisplayedPageNumbers().includes(this.getTotalPages() - 1)
+      )
     },
     getPaginatedCalls() {
       const start = (this.currentPage - 1) * this.itemsPerPage
       const end = start + this.itemsPerPage
-      return this.filteredPatients.slice(start, end)
-    }
+      return this.filteredCalls.slice(start, end)
+    },
+    deletePatient(patient) {
+      this.patientToDelete = patient
+      this.showDeleteDialog = true
+    },
+
+    async confirmDelete() {
+      try {
+        this.isLoading = true
+        const repositoryPatients = new PatientsRepository()
+        await repositoryPatients.removePatient(this.patientToDelete.id)
+        await this.loadPatients()
+        this.$emit('patient-deleted', this.patientToDelete.id)
+      } catch (error) {
+        console.error('Error al eliminar el paciente:', error)
+      } finally {
+        this.isLoading = false
+        this.showDeleteDialog = false
+        this.patientToDelete = null
+      }
+    },
   }
-};
+}
 </script>
 
 <style scoped>
@@ -470,6 +572,29 @@ export default {
   color: #344767;
 }
 
+.btn-outline-primary,
+.btn-outline-danger {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-danger:hover {
+  color: #fff;
+}
+
+.btn-outline-primary:hover {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
 @media (max-width: 768px) {
   .dashboard-container {
     padding: 1rem;
@@ -543,6 +668,7 @@ export default {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
 }
+
 .input-group {
   flex: 1;
   margin-right: 10px;
@@ -575,7 +701,9 @@ export default {
   align-items: center;
   background-color: #fff;
   border-radius: 0.5rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
   padding: 0.5rem;
 }
 

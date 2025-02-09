@@ -1,9 +1,9 @@
 <template>
   <div class="card h-100">
     <div class="card-header d-flex justify-content-between align-items-center">
-      <h5 class="card-title mb-0">Nueva Alerta</h5>
+      <h5 class="card-title mb-0">{{ editingAlert ? 'Editar Alerta' : 'Nueva Alerta' }}</h5>
       <button
-        @click="$emit('alert-added')"
+        @click="$emit('close')"
         class="btn btn-sm btn-link"
         style="color: red; font-size: 1.2rem"
       >
@@ -19,7 +19,7 @@
 
         <div class="mb-3">
           <label for="type" class="form-label">Tipo de Alerta *</label>
-          <select v-model="form.type" class="form-select" id="type" required>
+          <select v-model="form.type" class="form-select" id="type" style="width: 100%" required>
             <option value="">Seleccionar tipo</option>
             <option v-for="(label, value) in alertTypes" :key="value" :value="value">
               {{ label }}
@@ -118,10 +118,12 @@
         </div>
 
         <div class="d-flex justify-content-end gap-2">
-          <button type="button" class="btn btn-outline-secondary" @click="$emit('alert-added')">
+          <button type="button" class="btn btn-outline-secondary" @click="$emit('close')">
             Cancelar
           </button>
-          <button type="submit" class="btn btn-primary">Crear Alerta</button>
+          <button type="submit" class="btn btn-primary">
+            {{ editingAlert ? 'Actualizar Alerta' : 'Crear Alerta' }}
+          </button>
         </div>
       </form>
     </div>
@@ -137,6 +139,12 @@ import SearchableSelect from '@/components/utils/SearchableSelect.vue'
 export default {
   components: {
     SearchableSelect
+  },
+  props: {
+    editingAlert: {
+      type: Object,
+      default: null
+    }
   },
   computed: {
     ...mapState(useCounterStore, ['patients', 'operators', 'zones']),
@@ -191,6 +199,20 @@ export default {
         this.form.dayOfWeek = newDays.join(', ')
       },
       deep: true
+    },
+    editingAlert: {
+      immediate: true,
+      handler(newVal) {
+        if (newVal) {
+          this.form = { ...newVal };
+          this.form.isRecurring = newVal.isRecurring === 1;
+          this.selectedDays = newVal.dayOfWeek ? newVal.dayOfWeek.split(', ') : [];
+          this.form.date = this.formatDate(newVal.date);
+          this.form.time = this.formatTime(newVal.time);
+        } else {
+          this.resetForm();
+        }
+      }
     }
   },
 
@@ -207,11 +229,49 @@ export default {
           endDate: this.form.isRecurring ? this.form.endDate : null
         }
 
-        await repositoryAlerts.addAlert(alertData)
-        this.$emit('alert-added')
+        let response;
+        if (this.editingAlert) {
+          console.log(alertData)
+          response = await repositoryAlerts.changeCall(alertData);
+          this.$emit('alert-updated', response.data);
+        } else {
+          response = await repositoryAlerts.addAlert(alertData);
+          this.$emit('alert-added', response.data);
+        }
+
+        this.$emit('close');
       } catch (error) {
-        console.error('Error al crear la alerta:', error)
+        console.error('Error al guardar la alerta:', error)
       }
+    },
+
+    resetForm() {
+      this.form = {
+        title: '',
+        type: '',
+        operatorId: null,
+        patientId: null,
+        zoneId: null,
+        isActive: 1,
+        date: '',
+        time: '',
+        isRecurring: false,
+        endDate: null,
+        dayOfWeek: null,
+        description: ''
+      };
+      this.selectedDays = [];
+    },
+
+    formatDate(dateString) {
+      if (!dateString) return '';
+      const date = new Date(dateString);
+      return date.toISOString().split('T')[0];
+    },
+
+    formatTime(timeString) {
+      if (!timeString) return '';
+      return timeString.substring(0, 5);
     }
   },
 
@@ -260,5 +320,26 @@ export default {
 .form-check-input:checked {
   background-color: #007bff;
   border-color: #007bff;
+}
+
+.card {
+  border: none;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.card-header {
+  background-color: transparent;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.btn-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.btn-link:hover {
+  color: inherit;
+  text-decoration: none;
 }
 </style>

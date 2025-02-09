@@ -1,5 +1,4 @@
-```vue type="vue" project="AlertsDashboard" file="AlertsDashboard.vue"
-[v0-no-op-code-block-prefix]<template>
+<template>
   <div class="dashboard-container">
     <div v-if="isLoading" class="text-center">
       <div class="spinner-border text-primary" role="status">
@@ -9,7 +8,7 @@
     </div>
 
     <div v-else>
-      <div v-if="!idPatient" class="row justify-content-center mb-5">
+      <div class="row justify-content-center mb-5">
         <div class="col-12 col-md-8 col-lg-6">
           <div class="card-body">
             <div class="input-group input-group-lg">
@@ -38,10 +37,27 @@
       </div>
 
       <div class="row g-3">
-        <div :class="selectedAlert || showAddAlert ? 'col-xl-8' : 'col-xl-12'">
+        <div class="col-xl-4">
+          <VCalendar
+            style="width: 100%"
+            :attributes="calendarAttributes"
+            @dayclick="onDateSelect"
+          />
+          <div v-if="selectedAlert" class="mt-4 d-flex justify-content-center gap-3">
+            <button class="btn btn-action btn-edit">
+              <i class="fas fa-edit me-2"></i>
+              Editar
+            </button>
+            <button class="btn btn-action btn-delete">
+              <i class="fas fa-trash-alt me-2"></i>
+              Eliminar
+            </button>
+          </div>
+        </div>
+        <div :class="showAddAlert ? 'col-xl-5' : 'col-xl-8'">
           <div class="card h-100">
             <div class="card-header d-flex justify-content-between align-items-center">
-              <h5 class="card-title mb-0">Alertas</h5>
+              <h5 class="card-title mb-0">Alertas del {{ formatDate(selectedDate) }}</h5>
             </div>
             <div class="card-body p-0">
               <div class="table-responsive">
@@ -51,7 +67,7 @@
                     <th class="ps-4">#</th>
                     <th>Título</th>
                     <th>Paciente</th>
-                    <th>Fecha y Hora</th>
+                    <th>Hora</th>
                     <th>Operador</th>
                     <th class="text-center">Tipo</th>
                     <th class="text-center">Estado</th>
@@ -59,7 +75,7 @@
                   </thead>
                   <tbody>
                   <tr
-                    v-for="alert in filteredAlerts"
+                    v-for="alert in getPaginatedAlerts()"
                     :key="alert.id"
                     @click="selectAlert(alert)"
                     class="alert-row"
@@ -70,10 +86,6 @@
                     </td>
                     <td>
                       <div class="d-flex align-items-center" v-if="alert.patient">
-                        <div class="rounded-circle me-2"
-                             style="width: 32px; height: 32px; background-color: #007bff; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; margin-right: 5px;">
-                          {{ alert.patient.fullName.charAt(0).toUpperCase() }}
-                        </div>
                         {{ alert.patient.fullName }}
                       </div>
                       <span v-else class="text-muted">Sin paciente asignado</span>
@@ -81,10 +93,6 @@
                     <td>{{ formatDateTime(alert.date, alert.time) }}</td>
                     <td>
                       <div class="d-flex align-items-center" v-if="alert.operator">
-                        <div class="rounded-circle me-2"
-                             style="width: 32px; height: 32px; background-color: #007bff; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; margin-right: 5px;">
-                          {{ alert.operator.name.charAt(0).toUpperCase() }}
-                        </div>
                         {{ alert.operator.name }}
                       </div>
                     </td>
@@ -112,92 +120,17 @@
           </div>
         </div>
 
-        <div class="col-xl-4" v-if="selectedAlert">
-          <div class="card h-100">
-            <div class="card-header d-flex justify-content-between align-items-center">
-              <h5 class="card-title mb-0">Detalles de Alerta</h5>
-              <button @click="selectedAlert = null" class="btn btn-sm btn-link" style="color: red; font-size: 1.2rem">
-                <i class="fas fa-times"></i>
-              </button>
-            </div>
-            <div class="card-body">
-              <div class="text-center mb-4" v-if="selectedAlert.operator">
-                <div
-                  class="rounded-circle mx-auto mb-3 shadow-sm d-flex align-items-center justify-content-center"
-                  style="width: 80px; height: 80px; background-color: #007bff; color: white; font-size: 2rem;"
-                >
-                  {{ selectedAlert.operator.name.charAt(0).toUpperCase() }}
-                </div>
-                <h6 class="mb-0">{{ selectedAlert.operator.name }}</h6>
-                <small class="text-muted">Operador</small>
-              </div>
-
-              <div class="details-section">
-                <h6 class="details-title">Información de la Alerta</h6>
-                <div class="details-grid">
-                  <div class="detail-item">
-                    <span class="detail-label">ID de Alerta</span>
-                    <span class="detail-value">#{{ selectedAlert.id }}</span>
-                  </div>
-                  <div class="detail-item">
-                    <span class="detail-label">Título</span>
-                    <span class="detail-value">{{ selectedAlert.title }}</span>
-                  </div>
-                  <div class="detail-item">
-                    <span class="detail-label">Paciente</span>
-                    <span class="detail-value" v-if="selectedAlert.patient">
-                      {{ selectedAlert.patient.fullName }}
-                    </span>
-                    <span class="detail-value text-muted" v-else>Sin paciente asignado</span>
-                  </div>
-                  <div class="detail-item">
-                    <span class="detail-label">Fecha y Hora</span>
-                    <span class="detail-value">{{ formatDateTime(selectedAlert.date, selectedAlert.time) }}</span>
-                  </div>
-                  <div class="detail-item">
-                    <span class="detail-label">Tipo</span>
-                    <span
-                      class="badge rounded-pill"
-                      :class="getAlertTypeBadgeClass(selectedAlert.type)"
-                    >
-                      {{ getAlertTypeLabel(selectedAlert.type) }}
-                    </span>
-                  </div>
-                  <div class="detail-item" v-if="selectedAlert.zone">
-                    <span class="detail-label">Zona</span>
-                    <span class="detail-value">{{ selectedAlert.zone.name }}</span>
-                  </div>
-                  <div class="detail-item" v-if="selectedAlert.isRecurring">
-                    <span class="detail-label">Fecha de finalización</span>
-                    <span class="detail-value">{{ formatDateTime(selectedAlert.endDate, '00:00:00') }}</span>
-                  </div>
-                  <div class="detail-item" v-if="selectedAlert.isRecurring && selectedAlert.dayOfWeek">
-                    <span class="detail-label">Días de recurrencia</span>
-                    <span class="detail-value">{{ formatRecurringDays(selectedAlert.dayOfWeek) }}</span>
-                  </div>
-                  <div class="detail-item">
-                    <span class="detail-label">Recurrente</span>
-                    <span class="badge rounded-pill bg-info">
-                      {{ selectedAlert.isRecurring ? 'Sí' : 'No' }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="details-section mt-4">
-                <h6 class="details-title">Descripción</h6>
-                <p class="text-muted mb-0">{{ selectedAlert.description }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-xl-4" v-if="showAddAlert">
-          <AddAlert @alert-added="handleAlertAdded" />
+        <div class="col-xl-3" v-if="showAddAlert">
+          <AddAlert
+            :editingAlert="editingAlert"
+            @alert-added="handleAlertAdded"
+            @alert-updated="handleAlertUpdated"
+            @close="closeAddAlert"
+          />
         </div>
       </div>
 
-      <div v-if="!isLoading" class="pagination-container mt-4">
+      <div v-if="!isLoading && selectedDate" class="pagination-container mt-4">
         <nav class="pagination" role="navigation" aria-label="pagination">
           <button
             class="pagination-button"
@@ -242,102 +175,109 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "pinia";
-import AddAlert from '@/components/utils/AddAlert.vue'
-import { useCounterStore } from '@/stores/index.js'
+import { mapState, mapActions } from 'pinia';
+import { useCounterStore } from '@/stores/index.js';
+import { Calendar } from 'v-calendar';
+import 'v-calendar/dist/style.css';
+import AddAlert from '@/components/views/adds/AddAlert.vue'
 
 export default {
-  props: ['idPatient'],
+  name: 'AlertsCalendarView',
   components: {
+    VCalendar: Calendar,
     AddAlert
   },
-
   data() {
     return {
+      selectedDate: null,
       selectedAlert: null,
+      editingAlert: null,
       showAddAlert: false,
       searchTerm: '',
       isLoading: true,
       allAlerts: [],
       currentPage: 1,
       itemsPerPage: 5
-    }
+    };
   },
   computed: {
-    ...mapState(useCounterStore, ["alerts"]),
+    ...mapState(useCounterStore, ['alerts']),
     filteredAlerts() {
-      const searchTermLower = this.searchTerm.toLowerCase().trim()
+      if (!this.selectedDate) return [];
+      const searchTermLower = this.searchTerm.toLowerCase().trim();
       return this.allAlerts.filter(alert => {
-        if (!searchTermLower) return true
-        return alert.patient && alert.patient.fullName.toLowerCase().includes(searchTermLower)
-      })
+        const alertDate = new Date(alert.date);
+        const dateMatch = (
+          alertDate.getDate() === this.selectedDate.getDate() &&
+          alertDate.getMonth() === this.selectedDate.getMonth() &&
+          alertDate.getFullYear() === this.selectedDate.getFullYear()
+        );
+        const searchMatch = !searchTermLower || (alert.patient && alert.patient.fullName.toLowerCase().includes(searchTermLower));
+        return dateMatch && searchMatch;
+      });
+    },
+    calendarAttributes() {
+      const groupedAlerts = this.groupAlertsByDate();
+      return Object.entries(groupedAlerts).map(([dateString, alerts]) => ({
+        dates: new Date(dateString),
+        dot: this.getAlertTypeDotClass(alerts[0])
+      }));
     }
   },
   methods: {
-    ...mapActions(useCounterStore, ["loadAlerts"]),
-    selectAlert(alert) {
-      this.selectedAlert = alert
-      this.showAddAlert = false
+    ...mapActions(useCounterStore, ['loadAlerts', 'getAlertTypeBadgeClass', 'getAlertTypeLabel', 'formatRecurringDays']),
+    formatDate(date) {
+      if (!date) return '';
+      return date.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     },
-
     formatDateTime(date, time) {
-      const datetime = new Date(`${date}T${time}`)
-      return datetime.toLocaleString()
+      const datetime = new Date(`${date}T${time}`);
+      return datetime.toLocaleString();
     },
-
+    onDateSelect(date) {
+      this.selectedDate = date.date;
+      this.selectedAlert = null;
+      this.showAddAlert = false;
+      this.currentPage = 1;
+    },
+    selectAlert(alert) {
+      this.selectedAlert = alert;
+      this.showAddAlert = false;
+    },
     toggleAddAlert() {
-      this.showAddAlert = !this.showAddAlert
-      this.selectedAlert = null
+      this.showAddAlert = !this.showAddAlert;
+      this.selectedAlert = null;
+      this.editingAlert = null;
     },
-
-    handleAlertAdded() {
-      this.showAddAlert = false
-      this.loadAlerts()
+    closeAddAlert() {
+      this.showAddAlert = false;
+      this.editingAlert = null;
     },
-
-    getAlertTypeBadgeClass(type) {
-      const classes = {
-        medication: 'bg-primary',
-        special: 'bg-dark',
-        emergency_followup: 'bg-danger',
-        grief_process: 'bg-purple',
-        hospital_discharge: 'bg-success',
-        temporary_suspension: 'bg-info',
-        return_home: 'bg-secondary',
-        heat_wave: 'bg-warning',
-        vaccinations: 'bg-teal'
+    handleAlertAdded(newAlert) {
+      this.showAddAlert = false;
+      this.editingAlert = null;
+      this.loadAlerts();
+    },
+    handleAlertUpdated(updatedAlert) {
+      this.showAddAlert = false;
+      this.editingAlert = null;
+      const index = this.allAlerts.findIndex(a => a.id === updatedAlert.id);
+      if (index !== -1) {
+        this.allAlerts[index] = updatedAlert;
       }
-      return classes[type] || 'bg-secondary'
+      this.loadAlerts();
     },
-
-    getAlertTypeLabel(type) {
-      const labels = {
-        medication: 'Alerta de medicación',
-        special: 'Alerta especial',
-        emergency_followup: 'Seguimiento de emergencia',
-        grief_process: 'Seguimiento proceso de duelo',
-        hospital_discharge: 'Seguimiento alta hospitalaria',
-        temporary_suspension: 'Suspensión temporal del servicio',
-        return_home: 'Retorno a domicilio',
-        heat_wave: 'Alerta ola de calor',
-        vaccinations: 'Vacunaciones preventivas'
-      }
-      return labels[type] || type
-    },
-    formatRecurringDays(dayOfWeek) {
-      if (!dayOfWeek) return '';
-      const daysMap = {
-        'Monday': 'Lunes',
-        'Tuesday': 'Martes',
-        'Wednesday': 'Miércoles',
-        'Thursday': 'Jueves',
-        'Friday': 'Viernes',
-        'Saturday': 'Sábado',
-        'Sunday': 'Domingo'
-      };
-      return dayOfWeek.split(', ')
-        .map(day => daysMap[day] || day)
-        .join(', ');
+    groupAlertsByDate() {
+      const grouped = {};
+      this.allAlerts.forEach(alert => {
+        const dateString = new Date(alert.date).toDateString();
+        if (!grouped[dateString]) {
+          grouped[dateString] = [alert];
+        } else {
+          grouped[dateString].push(alert);
+        }
+      });
+      return grouped;
     },
     getPaginatedAlerts() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
@@ -389,23 +329,30 @@ export default {
     },
     showEllipsisEnd() {
       return this.getTotalPages() > 5 && !this.getDisplayedPageNumbers().includes(this.getTotalPages() - 1);
+    },
+    getAlertTypeDotClass(alert) {
+      const classes = {
+        medication: 'bg-primary',
+        special: 'bg-dark',
+        emergency_followup: 'bg-danger',
+        grief_process: 'bg-purple',
+        hospital_discharge: 'bg-success',
+        temporary_suspension: 'bg-info',
+        return_home: 'bg-secondary',
+        heat_wave: 'bg-warning',
+        vaccinations: 'bg-teal'
+      };
+      return classes[alert.type] || 'bg-secondary';
     }
   },
-
   async mounted() {
     if (this.alerts.length === 0) {
-      await this.loadAlerts()
+      await this.loadAlerts();
     }
-
-    if (this.idPatient) {
-      this.allAlerts = this.alerts.filter(item => item?.patient?.id == this.idPatient);
-    } else {
-      this.allAlerts = this.alerts
-    }
-
-    this.isLoading = false
+    this.allAlerts = this.alerts;
+    this.isLoading = false;
   }
-}
+};
 </script>
 
 <style scoped>
@@ -468,7 +415,6 @@ export default {
 .table td {
   padding: 1rem;
   vertical-align: middle;
-  white-space: normal;
 }
 
 .alert-row {
@@ -485,78 +431,39 @@ export default {
   font-weight: 500;
 }
 
-.details-section {
-  background-color: #f8f9fa;
-  border-radius: 0.5rem;
-  padding: 1.25rem;
-  margin-bottom: 1rem;
-}
-
-.details-title {
-  color: #344767;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.details-grid {
-  display: grid;
-  gap: 1rem;
-}
-
-.detail-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.detail-label {
-  color: #6c757d;
+.btn-action {
+  padding: 0.5rem 1rem;
   font-size: 0.875rem;
-  min-width: 40%;
-}
-
-.detail-value {
   font-weight: 500;
-  color: #344767;
-  word-break: break-word;
-  text-align: right;
-  max-width: 60%;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+  background-color: #f8f9fa;
+  color: #495057;
+  border: 1px solid #ced4da;
 }
 
-.add-alert-btn {
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  background: #fff;
-  border: 1px solid #dee2e6;
+.btn-edit {
+  color: #0d6efd;
 }
 
-.add-alert-btn:hover {
-  background: #007bff;
-  color: white;
-  border-color: #007bff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+.btn-delete {
+  color: #dc3545;
 }
 
-@media (max-width: 768px) {
-  .dashboard-container {
-    padding: 1rem;
-  }
+.btn-action:hover {
+  background-color: #e9ecef;
+}
 
-  .card-header {
-    padding: 1rem;
-  }
+.btn-edit:hover {
+  color: #0a58ca;
+}
 
-  .table td,
-  .table th {
-    padding: 0.75rem;
-  }
+.btn-delete:hover {
+  color: #b02a37;
+}
+
+.gap-3 {
+  gap: 1rem;
 }
 
 .pagination-container {
@@ -614,5 +521,47 @@ export default {
   margin: 0 0.25rem;
   font-weight: 500;
   color: #4b5563;
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+
+  .card-header {
+    padding: 1rem;
+  }
+
+  .table td,
+  .table th {
+    padding: 0.75rem;
+  }
+
+  .btn-action {
+    margin-bottom: 30px;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+}
+
+.add-alert-btn {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background: #fff;
+  border: 1px solid #dee2e6;
+}
+
+.add-alert-btn:hover {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
 }
 </style>

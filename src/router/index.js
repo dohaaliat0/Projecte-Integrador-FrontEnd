@@ -2,13 +2,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.js'
 import AppAbout from '../components/views/AppAbout.vue'
 import Login from "@/components/views/Login.vue";
-import PatientsView from "@/components/views/PatientsView.vue";
-import CallDashboard from "@/components/views/CallDashboard.vue";
-import PatientView from "@/components/views/PatientView.vue";
-import ReportView from '@/components/views/ReportView.vue'
-import AddPatient from '@/components/utils/AddPatient.vue'
-import CalendarView from '@/components/views/CalendarView.vue'
-import AlertsDashboard from '@/components/views/AlertsDashboard.vue'
+import PatientsView from "@/components/views/lists/PatientsView.vue";
+import CallsView from "@/components/views/lists/CallsView.vue";
+import PatientView from "@/components/views/items/PatientView.vue";
+import ReportsView from '@/components/views/lists/ReportsView.vue'
+import AddPatient from '@/components/views/adds/AddPatient.vue'
+import CalendarView from '@/components/views/items/CalendarView.vue'
+import AlertsView from '@/components/views/lists/AlertsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -57,26 +57,26 @@ const router = createRouter({
     {
       path: '/calls',
       name: 'calls',
-      component: CallDashboard,
+      component: CallsView,
       meta: { requiresAuth: true }
     },
     {
       path: '/calls/patient/:idPatient',
       name: 'callsPatient',
-      component: CallDashboard,
+      component: CallsView,
       props: true,
       meta: { requiresAuth: true }
     },
     {
       path: '/alerts',
       name: 'alerts',
-      component: AlertsDashboard,
+      component: AlertsView,
       meta: { requiresAuth: true }
     },
     {
       path: '/alerts/patient/:idPatient',
       name: 'alertsPatient',
-      component: AlertsDashboard,
+      component: AlertsView,
       props: true,
       meta: { requiresAuth: true }
     },
@@ -89,7 +89,7 @@ const router = createRouter({
     {
       path: '/reports',
       name: 'reports',
-      component: ReportView,
+      component: ReportsView,
       meta: { requiresAuth: true }
     },
   ]

@@ -1,6 +1,6 @@
 <script>
 import AppFooter from '@/components/views/AppFooter.vue'
-import AppMenu from '@/components/utils/AppMenu.vue'
+import AppMenu from '@/components/views/items/AppMenu.vue'
 import { defineComponent } from 'vue'
 
 export default defineComponent({

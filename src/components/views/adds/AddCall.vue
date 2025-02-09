@@ -1,7 +1,7 @@
 <template>
   <div class="card h-100">
     <div class="card-header bg-primary text-white" style="border-radius: 0.75rem 0.75rem 0 0">
-      <h5 class="card-title mb-0">Añadir Nueva Llamada</h5>
+      <h5 class="card-title mb-0">{{ isEditing ? 'Editar Llamada' : 'Añadir Nueva Llamada' }}</h5>
     </div>
     <div class="card-body">
       <form @submit.prevent="submitCall">
@@ -19,24 +19,22 @@
             v-model="call.patientId"
             :options="patients"
             placeholder="Seleccionar paciente"
-            multiple
           />
         </div>
 
         <div class="form-group">
-          <label for="patientId">Operador</label>
+          <label for="operatorId">Operador</label>
           <SearchableSelect
             v-model="call.operatorId"
             :options="operators"
             placeholder="Seleccionar operador"
-            multiple
           />
         </div>
 
         <div class="form-group">
           <label for="dateTime">Fecha y Hora</label>
           <input
-            v-model="call.dateTime"
+            v-model="formattedDateTime"
             type="datetime-local"
             class="form-control"
             id="dateTime"
@@ -92,7 +90,6 @@
             v-model="call.outgoingCall.alertId"
             :options="alerts"
             placeholder="Seleccionar alerta"
-            multiple
           />
         </div>
 
@@ -114,7 +111,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary btn-block mt-4" :disabled="isSubmitting">
-          {{ isSubmitting ? 'Guardando...' : 'Guardar Llamada' }}
+          {{ isSubmitting ? 'Guardando...' : (isEditing ? 'Actualizar Llamada' : 'Guardar Llamada') }}
         </button>
       </form>
     </div>
@@ -124,12 +121,18 @@
 <script>
 import { mapState, mapActions } from 'pinia'
 import { useCounterStore } from '@/stores/index.js'
-import { IncomingCallsType, OutgoingCallsType } from '../enums/callTypes.js'
+import { IncomingCallsType, OutgoingCallsType } from '../../enums/callTypes.js'
 import CallsRepository from '@/repositories/calls.repository.js'
 import SearchableSelect from '@/components/utils/SearchableSelect.vue'
 
 export default {
   components: { SearchableSelect },
+  props: {
+    editCall: {
+      type: Object,
+      default: null
+    }
+  },
   data() {
     return {
       callType: 'incoming',
@@ -154,7 +157,20 @@ export default {
     }
   },
   computed: {
-    ...mapState(useCounterStore, ['patients', 'operators', 'calls', 'alerts'])
+    ...mapState(useCounterStore, ['patients', 'operators', 'calls', 'alerts']),
+    isEditing() {
+      return !!this.editCall
+    },
+    formattedDateTime: {
+      get() {
+        if (!this.call.dateTime) return ''
+        const date = new Date(this.call.dateTime)
+        return date.toISOString().slice(0, 16)
+      },
+      set(value) {
+        this.call.dateTime = value ? new Date(value).toISOString() : ''
+      }
+    }
   },
   methods: {
     ...mapActions(useCounterStore, ['loadPatients', 'loadOperators', 'loadAlerts']),
@@ -177,11 +193,21 @@ export default {
         }
 
         const callsRepository = new CallsRepository()
-        const response = await callsRepository.addCall(callData)
-        this.calls.push(response.data)
+        let response
+
+        if (this.isEditing) {
+          callData.id = this.editCall.id
+          response = await callsRepository.changeCall(callData)
+        } else {
+          response = await callsRepository.addCall(callData)
+          this.calls.push(response.data)
+        }
+
+        this.$emit('call-added', response.data)
         this.resetForm()
       } catch (error) {
-        console.error('Error creating call:', error)
+        console.error('Error saving call:', error)
+        this.errors.push('Error al guardar la llamada. Por favor, inténtelo de nuevo.')
       } finally {
         this.isSubmitting = false
       }
@@ -203,7 +229,26 @@ export default {
         }
       }
       this.errors = []
-    }
+    },
+    populateForm() {
+      if (this.editCall) {
+        this.callType = this.editCall.incomingCall ? 'incoming' : 'outgoing'
+        this.call = {
+          patientId: this.editCall?.patient?.id,
+          operatorId: this.editCall?.operator?.id,
+          dateTime: this.editCall.dateTime ? new Date(this.editCall.dateTime).toISOString() : '',
+          details: this.editCall.details,
+          incomingCall: this.editCall.incomingCall ? {
+            type: this.editCall.incomingCall.type,
+            emergencyLevel: this.editCall.incomingCall.emergencyLevel
+          } : null,
+          outgoingCall: this.editCall.outgoingCall ? {
+            type: this.editCall.outgoingCall.type,
+            emergencyLevel: this.editCall.outgoingCall.emergencyLevel
+          } : null,
+        }
+      }
+    },
   },
   async mounted() {
     try {
@@ -216,8 +261,15 @@ export default {
       if (this.operators.length === 0) {
         await this.loadOperators()
       }
+      this.populateForm()
     } catch (error) {
-      console.error('Error loading patients:', error)
+      console.error('Error loading data:', error)
+    }
+  },
+  watch: {
+    editCall: {
+      handler: 'populateForm',
+      immediate: true
     }
   }
 }

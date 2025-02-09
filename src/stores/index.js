@@ -100,21 +100,49 @@ export const useCounterStore = defineStore("counter", {
         };
       }
     },
-    getCallTypeDotClass(call) {
-      if (call.incomingCall !== null) {
-        return {
-          'red': ['Social Emergencies', 'Health Emergencies', 'Loneliness or Distress Crisis', 'Unanswered Alarm'].includes(call.incomingCall.type),
-          'yellow': ['Notify Absences or Returns', 'Modify Personal Data', 'Accidental Calls', 'Request Information'].includes(call.incomingCall.type),
-          'blue': ['Suggestions, Complaints or Claims', 'Social Calls (to greet or talk with staff)', 'Register Medical Appointments from a Call', 'Other Types of Calls'].includes(call.incomingCall.type)
-        };
-      } else if (call.outgoingCall !== null) {
-        return {
-          'blue': call.outgoingCall.type === 'Follow-up after notice or hospitalization',
-          'green': call.outgoingCall.type === 'Check if person is okay',
-          'red': call.outgoingCall.type === 'Follow-up on activated alarm',
-          'yellow': call.outgoingCall.type === 'General unexpected emergencies'
-        };
+    getAlertTypeBadgeClass(type) {
+      const classes = {
+        medication: 'bg-primary',
+        special: 'bg-dark',
+        emergency_followup: 'bg-danger',
+        grief_process: 'bg-purple',
+        hospital_discharge: 'bg-success',
+        temporary_suspension: 'bg-info',
+        return_home: 'bg-secondary',
+        heat_wave: 'bg-warning',
+        vaccinations: 'bg-teal'
       }
-    }
+      return classes[type] || 'bg-secondary'
+    },
+
+    getAlertTypeLabel(type) {
+      const labels = {
+        medication: 'Alerta de medicación',
+        special: 'Alerta especial',
+        emergency_followup: 'Seguimiento de emergencia',
+        grief_process: 'Seguimiento proceso de duelo',
+        hospital_discharge: 'Seguimiento alta hospitalaria',
+        temporary_suspension: 'Suspensión temporal del servicio',
+        return_home: 'Retorno a domicilio',
+        heat_wave: 'Alerta ola de calor',
+        vaccinations: 'Vacunaciones preventivas'
+      }
+      return labels[type] || type
+    },
+    formatRecurringDays(dayOfWeek) {
+      if (!dayOfWeek) return '';
+      const daysMap = {
+        'Monday': 'Lunes',
+        'Tuesday': 'Martes',
+        'Wednesday': 'Miércoles',
+        'Thursday': 'Jueves',
+        'Friday': 'Viernes',
+        'Saturday': 'Sábado',
+        'Sunday': 'Domingo'
+      };
+      return dayOfWeek.split(', ')
+        .map(day => daysMap[day] || day)
+        .join(', ');
+    },
   }
 });

@@ -122,7 +122,7 @@
 </template>
 
 <script>
-import ReportsRepository from '@/repositories/reports.repository'
+import ReportsRepository from '@/repositories/reports.repository.js'
 import VuePdfEmbed from 'vue-pdf-embed'
 
 export default {
