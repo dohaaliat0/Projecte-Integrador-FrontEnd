@@ -64,7 +64,7 @@
             <span class="fas fa-cog"></span>
             Configuración
           </RouterLink>
-          <button @click="logout" class="dropdown-item">
+          <button @click="logoutAndRedirect" class="dropdown-item">
             <span class="fas fa-sign-out-alt"></span>
             Cerrar sesión
           </button>
@@ -97,7 +97,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(useAuthStore, ['logout', 'initializeAuth'])
+    ...mapActions(useAuthStore, ['logout', 'initializeAuth']),
+    logoutAndRedirect() {
+      this.logout()
+      this.$router.push('/login')
+    }
   },
   mounted() {
     this.initializeAuth()

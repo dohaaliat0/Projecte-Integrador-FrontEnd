@@ -7,7 +7,7 @@ export const useAuthStore = defineStore("auth", {
     token: null,
   }),
   getters: {
-    isAuthenticated: (state) => !!state.token,
+    isAuthenticated: (state) => !!state.token && !!state.user,
     userInitial: (state) => (state.user ? state.user.name.charAt(0).toUpperCase() : ""),
   },
   actions: {
@@ -28,6 +28,25 @@ export const useAuthStore = defineStore("auth", {
         console.error("Login error:", error)
         return false
       }
+    },
+    async loginWithGoogle() {
+      const authRepository = new AuthRepository()
+      const response = await authRepository.loginWithGoogle()
+
+      if (response) {
+        console.log(response.user)
+        if(response.token && response.user) {
+          this.token = response.token
+          this.user = response.user
+          localStorage.setItem("token", response.token)
+          localStorage.setItem("user", JSON.stringify(response.user))
+          return true
+        }
+
+      } else {
+        return false
+      }
+
     },
     logout() {
       this.user = null

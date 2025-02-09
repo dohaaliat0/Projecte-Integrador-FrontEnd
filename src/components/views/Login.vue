@@ -94,7 +94,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(useAuthStore, ['login']),
+    ...mapActions(useAuthStore, ['login', 'loginWithGoogle']),
     async loginSumit() {
       const response = await this.login(this.email, this.password)
       if (response) {
@@ -106,9 +106,14 @@ export default {
     alternarContrasena() {
       this.showPassword = !this.showPassword;
     },
-    loginConGoogle() {
-      console.log("Iniciar sesión con Google");
-    }
+    async loginConGoogle() {
+      const response = await this.loginWithGoogle()
+      if (response) {
+        this.$router.push('/patients')
+      } else {
+        alert('Error al inciar sesion')
+      }
+    },
   }
 };
 </script>
