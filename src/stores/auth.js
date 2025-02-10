@@ -5,6 +5,7 @@ export const useAuthStore = defineStore("auth", {
   state: () => ({
     user: null,
     token: null,
+    googleMessageError: '',
   }),
   getters: {
     isAuthenticated: (state) => !!state.token && !!state.user,
@@ -34,7 +35,11 @@ export const useAuthStore = defineStore("auth", {
       const response = await authRepository.loginWithGoogle()
 
       if (response) {
-        console.log(response.user)
+        if(response.error){
+          this.googleMessageError = response.error
+          return false
+        }
+
         if(response.token && response.user) {
           this.token = response.token
           this.user = response.user

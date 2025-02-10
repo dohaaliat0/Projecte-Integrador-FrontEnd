@@ -27,7 +27,7 @@ export default class AuthRepository {
       `width=${width},height=${height},top=${top},left=${left}`
     )
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       // const checkPopup = setInterval(() => {
       //   if (!authWindow || authWindow.closed) {
       //     clearInterval(checkPopup)
@@ -39,12 +39,14 @@ export default class AuthRepository {
         console.log(event.origin + ' ' + origin)
         if (event.origin !== origin) return
         console.log('message')
-        // clearInterval(checkPopup)
-        if (event.data.token) {
+        console.log(event.data.success)
+        // if(event.data.success){
           resolve(event.data)
-        } else {
-          reject(new Error('No se recibió el token'))
-        }
+        // }else{
+        //   reject(new Error(event.data.error ?? 'Error al iniciar sesión con Google'))
+        // }
+
+       
       })
     })
   }
