@@ -68,6 +68,13 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/calls/patient/:idPatient/type/:typeCall',
+      name: 'callsPatientAndType',
+      component: CallsView,
+      props: true,
+      meta: { requiresAuth: true }
+    },
+    {
       path: '/alerts',
       name: 'alerts',
       component: AlertsView,

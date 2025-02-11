@@ -79,7 +79,6 @@ import { mapActions, mapState } from 'pinia'
 import { useAuthStore } from '@/stores/auth.js'
 
 export default {
-  name: 'Login',
   data() {
     return {
       email: "",

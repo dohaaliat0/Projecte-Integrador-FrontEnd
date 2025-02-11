@@ -335,7 +335,10 @@ import SearchableSelect from '@/components/utils/SearchableSelect.vue'
 export default {
   props: ['id'],
   computed: {
-    ...mapState(useCounterStore, ['operators', 'zones', ['languages']]),
+    ...mapState(useCounterStore, ['operators', 'zones', 'languages']),
+    isEditing() {
+      return !!this.id;
+    }
   },
   components: {
     SearchableSelect
@@ -357,6 +360,7 @@ export default {
         personalAutonomy: '',
         economicSituation: '',
         operatorId: null,
+        languages: [],
         contactPersons: []
       },
       validationErrors: {},
@@ -366,14 +370,8 @@ export default {
   },
 
   async mounted() {
-    if (this.id) {
-      const patientRepository = new PatientsRepository()
-      const response = await patientRepository.getPatientById(this.id)
-      if (response.data.id) {
-        this.form = response.data
-      } else {
-        this.$router.push('/patients')
-      }
+    if (this.isEditing) {
+      await this.loadPatientData();
     }
 
     this.initializeValidationSchema()
@@ -384,6 +382,23 @@ export default {
 
   methods: {
     ...mapActions(useCounterStore, ['loadOperators', 'loadZones', 'loadLanguages']),
+
+    async loadPatientData() {
+      try {
+        const patientRepository = new PatientsRepository()
+        const response = await patientRepository.getPatientById(this.id)
+        if (response.data) {
+          this.form = { ...this.form, ...response.data };
+          // Ensure languages are in the correct format for the select component
+          this.form.languages = this.form.languages.map(lang => typeof lang === 'object' ? lang.name : lang);
+        } else {
+          this.$router.push('/patients')
+        }
+      } catch (error) {
+        console.error('Error loading patient data:', error)
+        this.$router.push('/patients')
+      }
+    },
     addContact() {
       this.form.contactPersons.push({
         firstName: '',
@@ -501,41 +516,33 @@ export default {
           );
         }
 
-        if (this.id) {
-          try {
-            const patientsRepository = new PatientsRepository()
-            await patientsRepository.changePatient(formData)
-            this.$router.push('/patients')
-          } catch (error) {
-            if (error.response?.data?.errors) {
-              this.handleServerErrors(error.response.data.errors)
-            } else {
-              console.error('Error al guardar el paciente:', error)
-            }
-          } finally {
-            this.isSubmitting = false
+        try {
+          const patientsRepository = new PatientsRepository()
+          let response;
+          if (this.isEditing) {
+            response = await patientsRepository.changePatient(this.id, formData)
+          } else {
+            response = await patientsRepository.addPatient(formData)
           }
-        } else {
-          try {
-            const patientsRepository = new PatientsRepository()
-            await patientsRepository.addPatient(formData)
+
+          if (response.success) {
             this.$router.push('/patients')
-          } catch (error) {
-            if (error.response?.data?.errors) {
-              this.handleServerErrors(error.response.data.errors)
-            } else {
-              console.error('Error al guardar el paciente:', error)
-            }
-          } finally {
-            this.isSubmitting = false
+          } else {
+            throw new Error(response.message || 'Error al guardar el paciente')
           }
+        } catch (error) {
+          console.error('Error al guardar el paciente:', error)
+          this.handleServerErrors(error.response?.data?.errors || { general: [error.message] })
+        } finally {
+          this.isSubmitting = false
         }
       }
     },
 
     handleServerErrors(errors) {
+      this.validationErrors = {}
       Object.keys(errors).forEach(key => {
-        this.validationErrors[key] = errors[key][0]
+        this.validationErrors[key] = Array.isArray(errors[key]) ? errors[key][0] : errors[key]
       })
     }
   }

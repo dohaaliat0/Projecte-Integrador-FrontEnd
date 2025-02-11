@@ -16,6 +16,16 @@
           <div class="bg-light-gray padding-30px-all text-center">
             <h4 class="font-size24">{{ patient.fullName }}</h4>
           </div>
+          <div class="mt-4 d-flex justify-content-center gap-3">
+            <button @click="$router.push('/calls/patient/' + patient.id + '/type/incomingCall')" class="btn btn-action btn-edit">
+              <i class="fas fa-phone me-2" style="margin-right: 3px"></i>
+              Entrantes
+            </button>
+            <button @click="$router.push('/calls/patient/' + patient.id + '/type/outgoingCall')" class="btn btn-action btn-delete">
+              <i class="fas fa-phone me-2" style="margin-right: 3px"></i>
+              Salientes
+            </button>
+          </div>
         </div>
 
         <div class="col-lg-8 col-md-7">
@@ -146,6 +156,14 @@
               </ul>
             </div>
 
+            <div v-if="patient.contactPersons && patient.contactPersons.length" style="margin-bottom: 50px">
+              <h5 class="font-size24">Idiomas</h5>
+              <ul class="list-group">
+                <li v-for="language in patient.languages" :key="language.id" class="list-group-item">
+                  <strong>{{ language.name }}</strong>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -224,5 +242,24 @@ body {
 }
 .text-lightred {
   color: #ff5722;
+}
+.btn-edit {
+  color: #42af20;
+}
+
+.btn-delete {
+  color: #dc3545;
+}
+
+.btn-action:hover {
+  background-color: #e9ecef;
+}
+
+.btn-edit:hover {
+  color: #328519;
+}
+
+.btn-delete:hover {
+  color: #b02a37;
 }
 </style>

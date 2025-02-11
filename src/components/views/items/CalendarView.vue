@@ -43,16 +43,6 @@
             :attributes="calendarAttributes"
             @dayclick="onDateSelect"
           />
-          <div v-if="selectedAlert" class="mt-4 d-flex justify-content-center gap-3">
-            <button class="btn btn-action btn-edit">
-              <i class="fas fa-edit me-2"></i>
-              Editar
-            </button>
-            <button class="btn btn-action btn-delete">
-              <i class="fas fa-trash-alt me-2"></i>
-              Eliminar
-            </button>
-          </div>
         </div>
         <div :class="showAddAlert ? 'col-xl-5' : 'col-xl-8'">
           <div class="card h-100">
@@ -440,26 +430,6 @@ export default {
   background-color: #f8f9fa;
   color: #495057;
   border: 1px solid #ced4da;
-}
-
-.btn-edit {
-  color: #0d6efd;
-}
-
-.btn-delete {
-  color: #dc3545;
-}
-
-.btn-action:hover {
-  background-color: #e9ecef;
-}
-
-.btn-edit:hover {
-  color: #0a58ca;
-}
-
-.btn-delete:hover {
-  color: #b02a37;
 }
 
 .gap-3 {

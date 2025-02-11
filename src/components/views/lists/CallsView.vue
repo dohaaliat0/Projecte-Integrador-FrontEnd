@@ -288,7 +288,7 @@ import ConfirmDialog from '@/components/utils/ConfirmDialog.vue'
 import PatientsRepository from '@/repositories/patients.repository.js'
 
 export default {
-  props: ['idPatient'],
+  props: ['idPatient', 'typeCall'],
   components: {
     ConfirmDialog,
     AddCall
@@ -322,6 +322,9 @@ export default {
   async mounted() {
     if (this.idPatient) {
       this.allCalls = await this.loadCallsByPatient(this.idPatient)
+      if (this.typeCall === 'outgoingCall' || this.typeCall === 'incomingCall'){
+        this.allCalls = this.allCalls.filter(item => !!item.outgoingCall && this.typeCall === 'outgoingCall')
+      }
     } else {
       if (this.calls.length === 0) {
         await this.loadCalls()
