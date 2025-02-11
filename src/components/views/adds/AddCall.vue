@@ -159,7 +159,7 @@ export default {
   computed: {
     ...mapState(useCounterStore, ['patients', 'operators', 'calls', 'alerts']),
     isEditing() {
-      return !!this.editCall
+      return !!this.editCall.dateTime
     },
     formattedDateTime: {
       get() {
@@ -195,7 +195,7 @@ export default {
         const callsRepository = new CallsRepository()
         let response
 
-        if (this.isEditing) {
+        if (this.isEditing.dateTime) {
           callData.id = this.editCall.id
           response = await callsRepository.changeCall(callData)
         } else {
@@ -234,7 +234,7 @@ export default {
       if (this.editCall) {
         this.callType = this.editCall.incomingCall ? 'incoming' : 'outgoing'
         this.call = {
-          patientId: this.editCall?.patient?.id,
+          patientId: this.editCall?.patientId || this.editCall?.patient?.id,
           operatorId: this.editCall?.operator?.id,
           dateTime: this.editCall.dateTime ? new Date(this.editCall.dateTime).toISOString() : '',
           details: this.editCall.details,

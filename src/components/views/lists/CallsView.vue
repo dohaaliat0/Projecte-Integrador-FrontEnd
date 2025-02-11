@@ -8,7 +8,7 @@
     </div>
 
     <div v-else>
-      <div v-if="!idPatient" class="row justify-content-center mb-5">
+      <div class="row justify-content-center mb-5">
         <div class="col-12 col-md-8 col-lg-6">
           <div class="card-body">
             <div class="input-group input-group-lg">
@@ -46,40 +46,40 @@
               <div class="table-responsive">
                 <table class="table table-hover align-middle">
                   <thead class="table-light">
-                    <tr>
-                      <th class="ps-4">#</th>
-                      <th>Tipo de Llamada</th>
-                      <th>Paciente</th>
-                      <th>Fecha y Hora</th>
-                      <th>Operador</th>
-                      <th class="text-center">Tipo</th>
-                      <th class="text-center">Acciones</th>
-                    </tr>
+                  <tr>
+                    <th class="ps-4">#</th>
+                    <th>Tipo de Llamada</th>
+                    <th>Paciente</th>
+                    <th>Fecha y Hora</th>
+                    <th>Operador</th>
+                    <th class="text-center">Tipo</th>
+                    <th class="text-center">Acciones</th>
+                  </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="call in paginatedCalls" :key="call.id" class="call-row">
-                      <td class="ps-4">{{ call.id }}</td>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <i
-                            :class="[
+                  <tr v-for="call in paginatedCalls" :key="call.id" class="call-row">
+                    <td class="ps-4">{{ call.id }}</td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <i
+                          :class="[
                               'fas',
                               'fa-phone-alt',
-                              call.incoming ? 'text-primary' : 'text-danger',
+                              call.incomingCall ? 'text-primary' : 'text-danger',
                               'me-2'
                             ]"
-                            style="margin-right: 5px"
-                          ></i>
-                          {{ call.incoming ? 'Entrante' : 'Saliente' }}
-                        </div>
-                      </td>
-                      <td>{{ call.patient.fullName }}</td>
-                      <td>{{ formatDateTime(call.dateTime) }}</td>
-                      <td>
-                        <div class="d-flex align-items-center" v-if="call.operator">
-                          <div
-                            class="rounded-circle me-2"
-                            style="
+                          style="margin-right: 5px"
+                        ></i>
+                        {{ call.incomingCall ? 'Entrante' : 'Saliente' }}
+                      </div>
+                    </td>
+                    <td>{{ call.patient.fullName }}</td>
+                    <td>{{ formatDateTime(call.dateTime) }}</td>
+                    <td>
+                      <div class="d-flex align-items-center" v-if="call.operator">
+                        <div
+                          class="rounded-circle me-2"
+                          style="
                               width: 32px;
                               height: 32px;
                               background-color: #007bff;
@@ -90,36 +90,36 @@
                               font-weight: bold;
                               margin-right: 5px;
                             "
-                          >
-                            {{ call.operator.name.charAt(0).toUpperCase() }}
-                          </div>
-                          {{ call.operator.name }}
+                        >
+                          {{ call.operator.name.charAt(0).toUpperCase() }}
                         </div>
-                        <span v-else>-</span>
-                      </td>
-                      <td class="text-center">
+                        {{ call.operator.name }}
+                      </div>
+                      <span v-else>-</span>
+                    </td>
+                    <td class="text-center">
                         <span class="badge rounded-pill" :class="getCallTypeBadgeClass(call)">
                           {{ getCallTypeLabel(call) }}
                         </span>
-                      </td>
-                      <td class="text-center">
-                        <button
-                          @click.stop="editCall(call)"
-                          class="btn btn-sm btn-link p-0 me-2"
-                          title="Editar"
-                          style="margin-right: 5px"
-                        >
-                          <i class="fas fa-pencil text-primary"></i>
-                        </button>
-                        <button
-                          @click="deleteCall(call)"
-                          class="btn btn-sm btn-link p-0 me-2"
-                          title="Eliminar"
-                        >
-                          <i class="fas fa-trash-alt text-danger"></i>
-                        </button>
-                      </td>
-                    </tr>
+                    </td>
+                    <td class="text-center">
+                      <button
+                        @click.stop="editCall(call)"
+                        class="btn btn-sm btn-link p-0 me-2"
+                        title="Editar"
+                        style="margin-right: 5px"
+                      >
+                        <i class="fas fa-pencil text-primary"></i>
+                      </button>
+                      <button
+                        @click="deleteCall(call)"
+                        class="btn btn-sm btn-link p-0 me-2"
+                        title="Eliminar"
+                      >
+                        <i class="fas fa-trash-alt text-danger"></i>
+                      </button>
+                    </td>
+                  </tr>
                   </tbody>
                 </table>
               </div>
@@ -162,8 +162,8 @@
                   <div class="detail-item">
                     <span class="detail-label">Tipo</span>
                     <span class="detail-value">{{
-                      selectedCall.incoming ? 'Entrante' : 'Saliente'
-                    }}</span>
+                        selectedCall.incoming ? 'Entrante' : 'Saliente'
+                      }}</span>
                   </div>
                   <div class="detail-item">
                     <span class="detail-label">Paciente</span>
@@ -204,8 +204,8 @@
                   <div class="detail-item">
                     <span class="detail-label">Fecha de Alerta</span>
                     <span class="detail-value">{{
-                      formatDateTime(selectedCall.outgoingCall.alert.date)
-                    }}</span>
+                        formatDateTime(selectedCall.outgoingCall.alert.date)
+                      }}</span>
                   </div>
                 </div>
                 <div class="detail-item description-item mt-3">
@@ -316,20 +316,32 @@ export default {
       currentPage: 1,
       itemsPerPage: 10,
       showDeleteDialog: false,
-      patientToDelete: null
+      patientToDelete: null,
+
     }
   },
   async mounted() {
     if (this.idPatient) {
-      this.allCalls = await this.loadCallsByPatient(this.idPatient)
-      if (this.typeCall === 'outgoingCall' || this.typeCall === 'incomingCall'){
-        this.allCalls = this.allCalls.filter(item => !!item.outgoingCall && this.typeCall === 'outgoingCall')
-      }
+      this.allCalls = await this.loadCallsByPatient(this.idPatient);
     } else {
       if (this.calls.length === 0) {
         await this.loadCalls()
       }
       this.allCalls = this.calls
+    }
+    if (this.typeCall) {
+      this.showAddCall = true;
+      if (this.typeCall === 'outgoingCall') {
+        this.editingCall = {
+          patientId: Number(this.idPatient),
+          outgoingCall: { type: '', emergencyLevel: 1 }
+        };
+      } else if (this.typeCall === 'incomingCall') {
+        this.editingCall = {
+          patientId: Number(this.idPatient),
+          incomingCall: { type: '', emergencyLevel: 1 }
+        };
+      }
     }
     this.isLoading = false
   },
@@ -438,11 +450,6 @@ export default {
       const end = start + this.itemsPerPage
       return this.filteredCalls.slice(start, end)
     },
-    deletePatient(patient) {
-      this.patientToDelete = patient
-      this.showDeleteDialog = true
-    },
-
     async confirmDelete() {
       try {
         this.isLoading = true

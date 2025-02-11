@@ -45,7 +45,10 @@ export default {
     },
     options: {
       type: Array,
-      required: true
+      required: true,
+      validator: function(value) {
+        return value.every(option => option && typeof option.id !== 'undefined')
+      }
     },
     placeholder: {
       type: String,
@@ -60,10 +63,12 @@ export default {
     return {
       isOpen: false,
       searchQuery: '',
+      initialValue: null
     }
   },
   computed: {
     filteredOptions() {
+      if (!this.options || this.options.length === 0) return []
       return this.options.filter(option =>
         this.getOptionText(option).toLowerCase().includes(this.searchQuery.toLowerCase())
       )
@@ -76,6 +81,7 @@ export default {
   },
   methods: {
     getOptionText(option) {
+      if (!option) return ''
       return option.title || option.fullName || option.name || ''
     },
     toggleDropdown() {
@@ -89,6 +95,10 @@ export default {
       }
     },
     selectOption(option) {
+      if (!option || typeof option.id === 'undefined') {
+        console.warn('SearchableSelect: Invalid option selected')
+        return
+      }
       this.$emit('update:modelValue', option.id)
       this.isOpen = false
       this.searchQuery = ''
@@ -99,10 +109,33 @@ export default {
         this.isOpen = false
         this.searchQuery = ''
       }
+    },
+    initializeValue() {
+      if (this.modelValue && this.options.length > 0) {
+        const found = this.options.find(option => option.id === this.modelValue)
+        if (!found) {
+          console.warn('SearchableSelect: Selected value not found in options')
+        }
+        this.initialValue = found ? found.id : null
+      }
+    }
+  },
+  watch: {
+    options: {
+      handler: 'initializeValue',
+      immediate: true
+    },
+    modelValue: {
+      handler(newVal) {
+        if (newVal !== this.initialValue) {
+          this.initializeValue()
+        }
+      }
     }
   },
   mounted() {
     document.addEventListener('click', this.handleClickOutside)
+    this.initializeValue()
   },
   beforeUnmount() {
     document.removeEventListener('click', this.handleClickOutside)
