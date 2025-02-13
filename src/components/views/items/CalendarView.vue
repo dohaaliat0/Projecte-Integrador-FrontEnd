@@ -42,6 +42,7 @@
             style="width: 100%"
             :attributes="calendarAttributes"
             @dayclick="onDateSelect"
+            :initial-date="selectedDate"
           />
         </div>
         <div :class="showAddAlert ? 'col-xl-5' : 'col-xl-8'">
@@ -179,6 +180,7 @@ export default {
   },
   data() {
     return {
+      dateNow:  new Date(),
       selectedDate: null,
       selectedAlert: null,
       editingAlert: null,
