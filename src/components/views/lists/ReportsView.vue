@@ -24,6 +24,13 @@
                       <option value="emergencies">Informe de Emergencias</option>
                       <option value="socials">Informe Social</option>
                       <option value="monitoring">Informe de Seguimientos</option>
+                      <option value="patients">Informe de Pacientes</option>
+                      <option value="scheduled-calls">Informe de Llamadas Programadas</option>
+                      <option value="done-calls">Informe de Llamadas Realizadas</option>
+                      <option v-for="patient in patients" :key="patient.id" :value="`patients/${patient.id}/history`">
+                        {{ patient.fullName }} ({{ patient.id }}) - Historial
+                      </option>
+
                     </select>
                   </div>
 
@@ -52,6 +59,43 @@
                           v-model="dateRange.endDate"
                           class="form-control"
                         >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group mb-4">
+                        <label class="form-label">
+                          <i class="fas fa-map-marker-alt me-2" style="margin-right: 5px"></i>
+                          Zona
+                        </label>
+                        <select
+                          v-model="zoneId"
+                          class="form-select select-custom"
+                        >
+                          <option value="">Seleccione una zona</option>
+                          <option v-for="zone in zones" :key="zone.id" :value="zone.id">
+                          {{ zone.name }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group mb-4">
+                        <label class="form-label">
+                          <i class="fas fa-user me-2" style="margin-right: 5px"></i>
+                          Paciente
+                        </label>
+                        <select
+                          v-model="patientId"
+                          class="form-select select-custom"
+                        >
+                          <option value="">Seleccione una zona</option>
+
+                          <option v-for="patient in patients" :key="patient.id" :value="patient.id">
+                          {{ patient.fullName }} {{ patient.id }}
+                          </option>
+                        </select>
                       </div>
                     </div>
                   </div>
@@ -122,6 +166,8 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'pinia';
+import {useCounterStore} from '@/stores/index'
 import ReportsRepository from '@/repositories/reports.repository.js'
 import VuePdfEmbed from 'vue-pdf-embed'
 
@@ -136,6 +182,8 @@ export default {
         startDate: '',
         endDate: ''
       },
+      patientId: '',
+      zoneId: '',
       isLoading: false,
       error: null,
       reportUrl: null,
@@ -143,11 +191,13 @@ export default {
     }
   },
   computed: {
+    ...mapState(useCounterStore, ['zones', 'patients']),
     showPreview() {
       return this.isLoading || this.reportUrl
     }
   },
   methods: {
+    ...mapActions(useCounterStore, ['loadZones', 'loadPatients']),
     async generateReport() {
       this.isLoading = true
 
@@ -161,7 +211,9 @@ export default {
         const response = await reportsRepository.getReport(
           this.selectedReport,
           this.dateRange.startDate,
-          this.dateRange.endDate
+          this.dateRange.endDate,
+          this.zoneId,
+          this.patientId
         )
 
         this.reportUrl = URL.createObjectURL(response)
@@ -181,7 +233,11 @@ export default {
         document.body.removeChild(link)
       }
     }
-  }
+  },
+  mounted() {
+    this.loadZones()
+    this.loadPatients()
+  },
 }
 </script>
 
