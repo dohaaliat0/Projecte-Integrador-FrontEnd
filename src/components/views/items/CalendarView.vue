@@ -1,180 +1,5 @@
 <template>
-  <!-- <div class="dashboard-container">
-    <div v-if="isLoading" class="text-center">
-      <div class="spinner-border text-primary" role="status">
-        <span class="sr-only">Cargando...</span>
-      </div>
-      <p>Cargando alertas...</p>
-    </div>
 
-    <div v-else>
-      <div class="row justify-content-center mb-5">
-        <div class="col-12 col-md-8 col-lg-6">
-          <div class="card-body">
-            <div class="input-group input-group-lg">
-              <div class="input-group-prepend">
-                <span class="input-group-text bg-white border-right-0">
-                  <i class="fas fa-search text-primary"></i>
-                </span>
-              </div>
-              <input
-                v-model="searchTerm"
-                type="text"
-                class="form-control border-left-0 pl-0"
-                placeholder="Buscar alertas por nombre de pacientes"
-                style="border-left: none; box-shadow: none;"
-              >
-              <button
-                @click="toggleAddAlert"
-                class="btn btn-light ml-3 add-alert-btn"
-                title="Añadir Alerta"
-              >
-                <i class="fas fa-plus"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row g-3">
-        <div class="col-xl-4">
-          <VCalendar
-            style="width: 100%"
-            :attributes="calendarAttributes"
-            @dayclick="onDateSelect"
-            :initial-date="selectedDate"
-          />
-
-
-        </div>
-        <div :class="showAddAlert || selectAlert ? 'col-xl-5' : 'col-xl-8'">
-          <div class="card h-100">
-            <div class="card-header d-flex justify-content-between align-items-center">
-              <h5 class="card-title mb-0">Alertas del {{ formatDate(selectedDate) }}</h5>
-            </div>
-            <div class="card-body p-0">
-              <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                  <thead class="table-light">
-                  <tr>
-                    <th class="ps-4">#</th>
-                    <th>Título</th>
-                    <th>Paciente</th>
-                    <th>Hora</th>
-                    <th>Operador</th>
-                    <th class="text-center">Tipo</th>
-                    <th class="text-center">Estado</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr
-                    v-for="alert in getPaginatedAlerts()"
-                    :key="alert.id"
-                    @click="selectAlert(alert)"
-                    class="alert-row"
-                  >
-                    <td class="ps-4">{{ alert.id }}</td>
-                    <td class="text-wrap" style="max-width: 200px;">
-                      <div class="text-truncate" :title="alert.title">{{ alert.title }}</div>
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center" v-if="alert.patient">
-                        {{ alert.patient.fullName }}
-                      </div>
-                      <span v-else class="text-muted">Sin paciente asignado</span>
-                    </td>
-                    <td>{{ formatDateTime(alert.date, alert.time) }}</td>
-                    <td>
-                      <div class="d-flex align-items-center" v-if="alert.operator">
-                        {{ alert.operator.name }}
-                      </div>
-                    </td>
-                    <td class="text-center">
-                        <span
-                          class="badge rounded-pill"
-                          :class="getAlertTypeBadgeClass(alert.type)"
-                        >
-                          {{ getAlertTypeLabel(alert.type) }}
-                        </span>
-                    </td>
-                    <td class="text-center">
-                        <span
-                          class="badge rounded-pill"
-                          :class="alert.isActive ? 'bg-success' : 'bg-secondary'"
-                        >
-                          {{ alert.isActive ? 'Activa' : 'Inactiva' }}
-                        </span>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-xl-3" v-if="showAddAlert">
-          <AddAlert
-            @alert-added="handleAlertAdded"
-            @close="closeAddAlert"
-          />
-
-
-        </div>
-        <div class="col-xl-3" v-else-if="selectedAlert">
-          edit
-          <AddAlert
-            :editingAlert="selectedAlert"
-            @alert-updated="handleAlertUpdated"
-            @close="closeAddAlert"
-          />
-
-
-        </div>
-      </div>
-
-      <div v-if="!isLoading && selectedDate" class="pagination-container mt-4">
-        <nav class="pagination" role="navigation" aria-label="pagination">
-          <button
-            class="pagination-button"
-            :disabled="currentPage === 1"
-            @click="changePage(currentPage - 1)"
-            aria-label="Previous page"
-          >
-            <i class="fas fa-chevron-left"></i>
-          </button>
-
-          <button
-            v-for="pageNumber in getDisplayedPageNumbers()"
-            :key="pageNumber"
-            @click="changePage(pageNumber)"
-            :class="['pagination-button', { 'is-current': pageNumber === currentPage }]"
-            :aria-label="`Page ${pageNumber}`"
-            :aria-current="pageNumber === currentPage ? 'page' : undefined"
-          >
-            {{ pageNumber }}
-          </button>
-
-          <button
-            v-if="showEllipsisEnd()"
-            class="pagination-ellipsis"
-            disabled
-          >
-            <span>&hellip;</span>
-          </button>
-
-          <button
-            class="pagination-button"
-            :disabled="currentPage === getTotalPages()"
-            @click="changePage(currentPage + 1)"
-            aria-label="Next page"
-          >
-            <i class="fas fa-chevron-right"></i>
-          </button>
-        </nav>
-      </div>
-    </div>
-  </div> -->
   <div class="dashboard-container">
     <div v-if="isLoading" class="text-center">
       <div class="spinner-border text-primary" role="status">
@@ -184,7 +9,7 @@
     </div>
 
     <div>
-      <div  v-if="!showAddAlert && !selectedAlert" class="row justify-content-center mb-5">
+      <div v-if="!showAddAlert && !selectedAlert" class="row justify-content-center mb-5">
         <div class="col-12 col-md-8 col-lg-6">
           <div class="card-body">
             <div class="input-group input-group-lg">
@@ -193,18 +18,9 @@
                   <i class="fas fa-search text-primary"></i>
                 </span>
               </div>
-              <input
-                v-model="searchTerm"
-                type="text"
-                class="form-control border-left-0 pl-0"
-                placeholder="Buscar alertas por nombre de pacientes"
-                style="border-left: none; box-shadow: none;"
-              >
-              <button
-                @click="toggleAddAlert"
-                class="btn btn-light ml-3 add-alert-btn"
-                title="Añadir Alerta"
-              >
+              <input v-model="searchTerm" type="text" class="form-control border-left-0 pl-0"
+                placeholder="Buscar alertas por nombre de pacientes" style="border-left: none; box-shadow: none;">
+              <button @click="toggleAddAlert" class="btn btn-light ml-3 add-alert-btn" title="Añadir Alerta">
                 <i class="fas fa-plus"></i>
               </button>
             </div>
@@ -217,8 +33,8 @@
 
         </div>
         <div :class="showAddAlert || selectedAlert ? 'col-xl-4' : 'col-xl-5'">
-          <VCalendar style="width: 100%" v-model:date="selectedDate" :attributes="calendarAttributes" @dayclick="onDateSelect"
-            :initial-date="selectedDate" />
+          <VCalendar style="width: 100%" v-model:date="selectedDate" :attributes="calendarAttributes"
+            @dayclick="onDateSelect" :initial-date="selectedDate" />
         </div>
         <div v-if="showAddAlert || selectedAlert" class="col-xl-4"></div>
 
@@ -308,31 +124,33 @@
         </div>
 
         <!-- Formulario -->
-        <div v-if="showAddAlert || selectedAlert" class="col-xl-4 mt-3">
+        <div v-if="showAddAlert || selectedAlert" class="col-xl-4 mt-3 pb-5">
           <AddAlert v-if="showAddAlert" @alert-added="handleAlertAdded" @close="closeAddAlert" />
           <AddAlert v-else :editingAlert="selectedAlert" @alert-updated="handleAlertUpdated" @close="closeAddAlert" />
 
-            <div class="d-flex justify-content-between mt-3">
-            <router-link
-              :to="{ name: 'callsNewWithAlert', params: { alertId: selectedAlert.id } }"
-              class="btn btn-primary d-flex align-items-center"
-            >
+            <div class="d-flex flex-column flex-md-row justify-content-end mt-3 gap-2 mr-2 text-md-right">
+            <div :class="idRelatedCall ? 'mr-md-2' : ''">
+              <router-link :to="{ name: 'callsNewWithAlert', params: { alertId: selectedAlert.id } }"
+              class="btn btn-primary d-flex align-items-center mb-2 mb-md-0">
               Nueva llamada con alerta
               <i class="fas fa-phone-alt ml-2"></i>
-            </router-link>
-            <router-link
-              v-if="idRelatedCall"
-              :to="{ name: 'edit call', params: { callId: idRelatedCall } }"
-              class="btn btn-secondary d-flex align-items-center"
-            >
+              </router-link>
+            </div>
+
+            <div>
+              <router-link v-if="idRelatedCall" :to="{ name: 'edit call', params: { callId: idRelatedCall } }"
+              class="btn btn-secondary d-flex align-items-center">
               Editar llamada relacionada
               <i class="fas fa-edit ml-2"></i>
-            </router-link>
+              </router-link>
             </div>
+            </div>
+
         </div>
       </div>
     </div>
   </div>
+
 
 </template>
 
@@ -352,7 +170,7 @@ export default {
   },
   data() {
     return {
-      dateNow:  new Date(),
+      dateNow: new Date(),
       selectedDate: null,
       selectedAlert: null,
       editingAlert: null,
@@ -402,12 +220,12 @@ export default {
     },
     onDateSelect(date) {
       this.selectedDate = date.date;
-      this.selectedAlert = null;
+      // this.selectedAlert = null;
       this.showAddAlert = false;
       this.currentPage = 1;
     },
     async selectAlert(alert) {
-      if(this.selectedAlert === alert) {
+      if (this.selectedAlert === alert) {
         this.selectedAlert = null;
       } else {
         this.selectedAlert = alert;
@@ -521,10 +339,10 @@ export default {
       const response = await this.callRepository.getCallByAlertId(this.selectedAlert.id);
 
 
-      if(response.data === undefined || response.data.length === 0){
+      if (response.data === undefined || response.data.length === 0) {
         console.log('No hay llamadas relacionadas' + response.data);
         return
-      } 
+      }
       console.log(response.data.length)
       this.idRelatedCall = response.data[0].callId;
     },
@@ -545,7 +363,7 @@ export default {
     }
 
   },
-  
+
 };
 </script>
 
@@ -554,6 +372,7 @@ export default {
   padding: 1.5rem;
   background-color: #f8f9fa;
   min-height: 100vh;
+  padding-bottom: 5rem;
 }
 
 .card {
@@ -700,6 +519,7 @@ export default {
 @media (max-width: 768px) {
   .dashboard-container {
     padding: 1rem;
+    padding-bottom: 5rem;
   }
 
   .card-header {

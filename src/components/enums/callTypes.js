@@ -1,4 +1,4 @@
-export const IncomingCallsType = {
+ const IncomingCallsType = {
   SOCIAL_EMERGENCY: "Social Emergencies",
   HEALTH_EMERGENCY: "Health Emergencies",
   LONELINESS_CRISIS: "Loneliness or Distress Crisis",
@@ -12,19 +12,22 @@ export const IncomingCallsType = {
   REGISTER_MEDICAL_APPOINTMENT: "Register Medical Appointments from a Call",
   OTHER_CALLS: "Other Types of Calls",
 
-  values() {
-    return Object.values(this)
-  },
+  
 }
 
-export const OutgoingCallsType = {
+ const OutgoingCallsType = {
   FOLLOW_UP_AFTER_NOTICE_OR_HOSPITALIZATION: "Follow-up after notice or hospitalization",
   CHECK_IF_PERSON_IS_OK: "Check if person is okay",
   FOLLOW_UP_ON_ACTIVATED_ALARM: "Follow-up on activated alarm",
   GENERAL_UNEXPECTED_EMERGENCIES: "General unexpected emergencies",
+  FOLLOW_UP_CALL_MEDICATION: "Follow-up call regarding medication",
 
-  values() {
-    return Object.values(this)
-  },
+  
 }
+
+function values(obj) {
+  return Object.keys(obj).map(key => obj[key]);
+}
+
+export { IncomingCallsType, OutgoingCallsType, values };
 

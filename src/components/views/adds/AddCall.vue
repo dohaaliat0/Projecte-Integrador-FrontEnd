@@ -121,9 +121,10 @@
 <script>
 import { mapState, mapActions } from 'pinia'
 import { useCounterStore } from '@/stores/index.js'
-import { IncomingCallsType, OutgoingCallsType } from '../../enums/callTypes.js'
+import { IncomingCallsType, OutgoingCallsType, values } from '../../enums/callTypes.js'
 import CallsRepository from '@/repositories/calls.repository.js'
 import SearchableSelect from '@/components/utils/SearchableSelect.vue'
+import { useAuthStore } from '@/stores/auth.js'
 
 export default {
   components: { SearchableSelect },
@@ -138,8 +139,8 @@ export default {
       callType: 'incoming',
       call: {
         patientId: '',
-        operatorId: '',
-        dateTime: '',
+        operatorId:'',
+        dateTime: new Date().toISOString().slice(0, 16),
         details: '',
         incomingCall: {
           type: '',
@@ -152,12 +153,13 @@ export default {
       },
       errors: [],
       isSubmitting: false,
-      incomingCallTypes: IncomingCallsType.values(),
-      outgoingCallTypes: OutgoingCallsType.values()
+      incomingCallTypes: values(IncomingCallsType),
+      outgoingCallTypes: values(OutgoingCallsType)
     }
   },
   computed: {
     ...mapState(useCounterStore, ['patients', 'operators', 'calls', 'alerts']),
+    ...mapState(useAuthStore, ['user']),
     isEditing() {
       return this.editCall && !!this.editCall.dateTime
     },
@@ -241,11 +243,17 @@ export default {
           incomingCall: this.editCall.incomingCall ? {
             type: this.editCall.incomingCall.type,
             emergencyLevel: this.editCall.incomingCall.emergencyLevel
-          } : null,
+          } : {
+            type: '',
+            emergencyLevel: 1
+          },
           outgoingCall: this.editCall.outgoingCall ? {
             type: this.editCall.outgoingCall.type,
             emergencyLevel: this.editCall.outgoingCall.emergencyLevel
-          } : null,
+          } : {
+            type: '',
+            alertId: this.editCall.alertId
+          },
         }
       }
     },
@@ -261,7 +269,13 @@ export default {
       if (this.operators.length === 0) {
         await this.loadOperators()
       }
+
       this.populateForm()
+      if (this.operators.some(operator => operator.id === this.user.id)) {
+        this.call.operatorId = this.user.id
+      }
+
+
     } catch (error) {
       console.error('Error loading data:', error)
     }
