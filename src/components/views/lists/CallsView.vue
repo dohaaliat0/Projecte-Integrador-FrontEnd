@@ -288,7 +288,7 @@ import ConfirmDialog from '@/components/utils/ConfirmDialog.vue'
 import PatientsRepository from '@/repositories/patients.repository.js'
 
 export default {
-  props: ['idPatient', 'typeCall'],
+  props: ['idPatient', 'typeCall', 'callId', 'alertId'],
   components: {
     ConfirmDialog,
     AddCall
@@ -343,7 +343,24 @@ export default {
         };
       }
     }
+
+    if (this.callId) {
+      this.editingCall = this.allCalls.find((call) => call.id === this.callId);
+      this.showAddCall = true;
+    }
+
+    if (this.alertId) {
+      const call = this.allCalls.find(record => record.outgoingCall?.alert?.id === Number(this.alertId));
+
+      if (call) {
+        this.editingCall = call;
+        this.showAddCall = true;
+      }
+    }
+
+
     this.isLoading = false
+
   },
   methods: {
     ...mapActions(useCounterStore, [

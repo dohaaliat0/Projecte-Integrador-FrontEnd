@@ -159,7 +159,7 @@ export default {
   computed: {
     ...mapState(useCounterStore, ['patients', 'operators', 'calls', 'alerts']),
     isEditing() {
-      return !!this.editCall.dateTime
+      return this.editCall && !!this.editCall.dateTime
     },
     formattedDateTime: {
       get() {

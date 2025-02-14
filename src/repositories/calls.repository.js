@@ -111,4 +111,20 @@ export default class CallsRepository {
 
     return await response.json();
   }
+
+  async getCallByAlertId(idAlert) {
+    const authStore = useAuthStore();
+    const token = authStore.token;
+
+    const response = await fetch(server + "/calls/alerts/" + idAlert, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok || response.success === false ) {
+      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
+    }
+    return await response.json();
+  }
 }

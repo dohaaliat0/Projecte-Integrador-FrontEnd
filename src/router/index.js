@@ -75,6 +75,20 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/calls/new-with-alert/:alertId',
+      name: 'callsNewWithAlert',
+      component: CallsView,
+      props: true,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/calls/edit/:callId',
+      name: 'edit call',
+      component: CallsView,
+      props: true,
+      meta: { requiresAuth: true }
+    },
+    {
       path: '/alerts',
       name: 'alerts',
       component: AlertsView,
