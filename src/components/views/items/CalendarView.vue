@@ -55,6 +55,7 @@
                       <th>Paciente</th>
                       <th>Hora</th>
                       <th>Operador</th>
+                      <th>Zona</th>
                       <th class="text-center">Tipo</th>
                       <th class="text-center">Estado</th>
                     </tr>
@@ -76,6 +77,14 @@
                       <td>
                         <div class="d-flex align-items-center" v-if="alert.operator">
                           {{ alert.operator.name }}
+                        </div>
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center" v-if="alert.zone">
+                          {{ alert.zone.name }}
+                        </div>
+                        <div v-else>
+                          N/A
                         </div>
                       </td>
                       <td class="text-center">
@@ -352,6 +361,7 @@ export default {
       await this.loadAlerts();
     }
     this.allAlerts = this.alerts;
+    console.log(this.allAlerts);
     this.isLoading = false;
 
     const today = new Date();

@@ -345,7 +345,9 @@ export default {
     }
 
     if (this.callId) {
-      this.editingCall = this.allCalls.find((call) => call.id === this.callId);
+      this.editingCall = this.allCalls.find((call) => call.id === Number(this.callId));
+      console.log(this.editingCall);
+
       this.showAddCall = true;
     }
 

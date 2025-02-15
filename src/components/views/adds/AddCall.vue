@@ -197,7 +197,7 @@ export default {
         const callsRepository = new CallsRepository()
         let response
 
-        if (this.isEditing.dateTime) {
+        if (this.isEditing) {
           callData.id = this.editCall.id
           response = await callsRepository.changeCall(callData)
         } else {
