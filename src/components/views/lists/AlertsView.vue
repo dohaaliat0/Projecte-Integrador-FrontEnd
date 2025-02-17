@@ -52,6 +52,7 @@
                     <th class="sortable" @click="sortBy('patient.fullName')">Paciente</th>
                     <th class="sortable" @click="sortBy('date')">Fecha y Hora</th>
                     <th class="sortable" @click="sortBy('operator.name')">Operador</th>
+                    <th class="sortable" @click="sortBy('zoneId')">Zona</th>
                     <th class="text-center sortable" @click="sortBy('type')">Tipo</th>
                     <th class="text-center sortable" @click="sortBy('isActive')">Estado</th>
                     <th class="text-center">Acciones</th>
@@ -74,7 +75,7 @@
                              style="width: 32px; height: 32px; background-color: #007bff; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; margin-right: 5px;">
                           {{ alert.patient.fullName.charAt(0).toUpperCase() }}
                         </div>
-                        {{ alert.patient.fullName }}
+                        <a :href="`/patient/${alert.patient.id}`">{{ alert.patient.fullName }}</a>
                       </div>
                       <span v-else class="text-muted">Sin paciente asignado</span>
                     </td>
@@ -87,6 +88,13 @@
                         </div>
                         {{ alert.operator.name }}
                       </div>
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center" v-if="alert.zone">
+
+                      {{ alert.zone.name }}
+                      </div>
+                      <span v-else class="text-muted">Sin zona asignada</span>
                     </td>
                     <td class="text-center">
                         <span

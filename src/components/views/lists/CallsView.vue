@@ -302,10 +302,10 @@ export default {
       )
     },
     sortedCalls() {
-      return this.filteredCalls.sort((a, b) => {
+      return [...this.filteredCalls].sort((a, b) => {
         let aValue = this.getSortValue(a, this.sortKey);
         let bValue = this.getSortValue(b, this.sortKey);
-
+    
         if (aValue < bValue) return -1 * this.sortOrder;
         if (aValue > bValue) return 1 * this.sortOrder;
         return 0;
