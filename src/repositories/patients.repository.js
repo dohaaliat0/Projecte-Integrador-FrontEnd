@@ -3,11 +3,11 @@ import { useAuthStore } from "@/stores/auth.js";
 const server = import.meta.env.VITE_URL_API;
 
 export default class PatientsRepository {
-  async getAllPatients() {
+  async getAllPatients(filter = "") {
     const authStore = useAuthStore();
     const token = authStore.token;
 
-    const response = await fetch(server + "/patients", {
+    const response = await fetch(server + "/patients" + filter, {
       headers: {
         "Authorization": `Bearer ${token}`
       }

@@ -83,7 +83,7 @@
                       </td>
                       <td>
                         <div class="d-flex align-items-center" v-if="alert.zone">
-                          {{ alert.zone.name }}
+                          <a :href="`/patients/zones/${alert.zone.id}`">{{ alert.zone.name }}</a>
                         </div>
                         <div v-else>
                           N/A

@@ -36,6 +36,11 @@
     </div>
 
     <div class="row">
+      <div class="col-12">
+      <h2 class="text-center mb-4">
+        {{title }}
+      </h2>
+    </div>
       <div class="col-12 col-md-6 col-lg-4 mb-4" v-for="patient in paginatedPatients" :key="patient.id">
         <div
           class="card h-100 shadow-sm cursor-pointer patient-card"
@@ -180,11 +185,18 @@ export default {
       patientToDelete: null,
       isLoading: true,
       currentPage: 1,
-      itemsPerPage: 12
+      itemsPerPage: 12,
+      title: ''
+    }
+  },
+  props: {
+    zoneId: {
+      type: Number,
+      default: null
     }
   },
   computed: {
-    ...mapState(useCounterStore, ['patients']),
+    ...mapState(useCounterStore, ['patients', 'getZoneName']),
     filteredPatients() {
       const searchTermLower = this.searchTerm.toLowerCase().trim()
       return this.patients.filter(patient =>
@@ -205,12 +217,15 @@ export default {
   },
   async mounted() {
     if (this.patients.length === 0) {
-      await this.loadPatients()
+      const filter = this.zoneId ? '?zoneId=' + this.zoneId : ''
+      await this.loadPatients(filter)
+      await this.loadZones()
+      this.title = this.zoneId ? `Pacientes de ${this.getZoneName(this.zoneId)}` : 'Todos los pacientes'
     }
     this.isLoading = false;
   },
   methods: {
-    ...mapActions(useCounterStore, ['loadPatients']),
+    ...mapActions(useCounterStore, ['loadPatients', 'loadZones']),
 
     deletePatient(patient) {
       this.patientToDelete = patient

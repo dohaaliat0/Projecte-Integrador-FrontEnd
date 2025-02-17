@@ -42,6 +42,13 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/patients/zones/:zoneId',
+      name: 'patients from zones',
+      component: PatientsView,
+      props: true,
+      meta: { requiresAuth: true }
+    },
+    {
       path: '/patients/add',
       name: 'patientsAdd',
       component: AddPatient,

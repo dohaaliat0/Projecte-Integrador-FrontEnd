@@ -20,6 +20,7 @@ export const useCounterStore = defineStore("counter", {
 
   getters: {
     getPatientById: (state) => (id) => state.patients.find((item) => item.id == id),
+    getZoneName: (state) => (id) => state.zones.find((item) => item.id == id)?.name,
     getCallByAlertId: (state) => (alertId) => state.calls.find((call) => call.outgoingCall?.alert?.id === Number(alertId))?.outgoingCall?.callId,
   },
 
@@ -34,9 +35,9 @@ export const useCounterStore = defineStore("counter", {
       const response = await repositoryModules.getAllCallsByPatient(idPatient);
       return response.data
     },
-    async loadPatients() {
+    async loadPatients(filter = '') {
       const repositoryModules = new PatientsRepository();
-      const response = await repositoryModules.getAllPatients();
+      const response = await repositoryModules.getAllPatients(filter);
       this.patients = response.data
     },
     async loadOperators() {
