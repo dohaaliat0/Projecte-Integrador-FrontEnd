@@ -47,13 +47,13 @@
                 <table class="table table-hover align-middle">
                   <thead class="table-light">
                   <tr>
-                    <th class="ps-4">#</th>
-                    <th>Título</th>
-                    <th>Paciente</th>
-                    <th>Fecha y Hora</th>
-                    <th>Operador</th>
-                    <th class="text-center">Tipo</th>
-                    <th class="text-center">Estado</th>
+                    <th class="ps-4 sortable" @click="sortBy('id')">#</th>
+                    <th class="sortable" @click="sortBy('title')">Título</th>
+                    <th class="sortable" @click="sortBy('patient.fullName')">Paciente</th>
+                    <th class="sortable" @click="sortBy('date')">Fecha y Hora</th>
+                    <th class="sortable" @click="sortBy('operator.name')">Operador</th>
+                    <th class="text-center sortable" @click="sortBy('type')">Tipo</th>
+                    <th class="text-center sortable" @click="sortBy('isActive')">Estado</th>
                     <th class="text-center">Acciones</th>
                   </tr>
                   </thead>
@@ -284,7 +284,9 @@ export default {
       isLoading: true,
       allAlerts: [],
       currentPage: 1,
-      itemsPerPage: 5
+      itemsPerPage: 5,
+      sortKey: '',
+      sortOrder: 1,
     }
   },
   computed: {
@@ -295,7 +297,17 @@ export default {
         if (!searchTermLower) return true
         return alert.patient && alert.patient.fullName.toLowerCase().includes(searchTermLower)
       })
-    }
+    },
+    sortedAlerts() {
+      return this.filteredAlerts.sort((a, b) => {
+        let aValue = this.getSortValue(a, this.sortKey);
+        let bValue = this.getSortValue(b, this.sortKey);
+
+        if (aValue < bValue) return -1 * this.sortOrder;
+        if (aValue > bValue) return 1 * this.sortOrder;
+        return 0;
+      });
+    },
   },
   methods: {
     ...mapActions(useCounterStore, ["loadAlerts" , "getAlertTypeBadgeClass", "getAlertTypeLabel", "formatRecurringDays"]),
@@ -304,7 +316,24 @@ export default {
       this.showAddAlert = false;
       this.editingAlert = null;
     },
+    sortBy(key) {
+      if (this.sortKey === key) {
+        this.sortOrder *= -1;
+      } else {
+        this.sortKey = key;
+        this.sortOrder = 1;
+      }
+    },
 
+    getSortValue(obj, key) {
+      return key.split('.').reduce((o, k) => (o || {})[k], obj);
+    },
+
+    getPaginatedAlerts() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.sortedAlerts.slice(start, end);
+    },
     formatDateTime(date, time) {
       const datetime = new Date(`${date}T${time}`)
       return datetime.toLocaleString()
@@ -361,11 +390,6 @@ export default {
       await this.loadAlerts()
     },
 
-    getPaginatedAlerts() {
-      const start = (this.currentPage - 1) * this.itemsPerPage;
-      const end = start + this.itemsPerPage;
-      return this.filteredAlerts.slice(start, end);
-    },
     getTotalPages() {
       return Math.ceil(this.filteredAlerts.length / this.itemsPerPage);
     },
@@ -636,5 +660,30 @@ export default {
   margin: 0 0.25rem;
   font-weight: 500;
   color: #4b5563;
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.sortable:hover {
+  background-color: #f0f0f0;
+}
+
+.sortable::after {
+  position: absolute;
+  right: 8px;
+  opacity: 0.5;
+}
+
+.sortable:active {
+  background-color: #e0e0e0;
+  transform: translateY(1px);
+}
+
+.sortable {
+  transition: background-color 0.2s, transform 0.1s;
 }
 </style>

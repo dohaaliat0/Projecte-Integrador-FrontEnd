@@ -47,12 +47,12 @@
                 <table class="table table-hover align-middle">
                   <thead class="table-light">
                   <tr>
-                    <th class="ps-4">#</th>
-                    <th>Tipo de Llamada</th>
-                    <th>Paciente</th>
-                    <th>Fecha y Hora</th>
-                    <th>Operador</th>
-                    <th class="text-center">Tipo</th>
+                    <th class="ps-4 sortable" @click="sortBy('id')">#</th>
+                    <th class="sortable" @click="sortBy('callDirection')">Tipo de Llamada</th>
+                    <th class="sortable" @click="sortBy('patient.fullName')">Paciente</th>
+                    <th class="sortable" @click="sortBy('dateTime')">Fecha y Hora</th>
+                    <th class="sortable" @click="sortBy('operator.name')">Operador</th>
+                    <th class="text-center sortable" @click="sortBy('type')">Tipo</th>
                     <th class="text-center">Acciones</th>
                   </tr>
                   </thead>
@@ -301,9 +301,22 @@ export default {
         call.patient.fullName.toLowerCase().includes(searchTermLower)
       )
     },
+    sortedCalls() {
+      return this.filteredCalls.sort((a, b) => {
+        let aValue = this.getSortValue(a, this.sortKey);
+        let bValue = this.getSortValue(b, this.sortKey);
+
+        if (aValue < bValue) return -1 * this.sortOrder;
+        if (aValue > bValue) return 1 * this.sortOrder;
+        return 0;
+      });
+    },
+
     paginatedCalls() {
-      return this.getPaginatedCalls()
-    }
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.sortedCalls.slice(start, end);
+    },
   },
   data() {
     return {
@@ -317,7 +330,8 @@ export default {
       itemsPerPage: 10,
       showDeleteDialog: false,
       patientToDelete: null,
-
+      sortKey: '',
+      sortOrder: 1,
     }
   },
   async mounted() {
@@ -372,6 +386,23 @@ export default {
       'loadCallsByPatient',
       'deleteCallFromStore'
     ]),
+    sortBy(key) {
+      if (this.sortKey === key) {
+        this.sortOrder *= -1;
+      } else {
+        this.sortKey = key;
+        this.sortOrder = 1;
+      }
+    },
+    getSortValue(obj, key) {
+      if (key === 'type') {
+        return obj.incomingCall ? obj.incomingCall.type : (obj.outgoingCall ? obj.outgoingCall.type : '');
+      }
+      if (key === 'callDirection') {
+        return obj.incomingCall ? 'Entrante' : 'Saliente';
+      }
+      return key.split('.').reduce((o, k) => (o || {})[k], obj);
+    },
     selectCall(call) {
       this.selectedCall = call
       this.showAddCall = false
@@ -425,38 +456,26 @@ export default {
       }
     },
     getDisplayedPageNumbers() {
-      const displayed = []
-      const totalDisplayed = 5
-      const totalPages = this.getTotalPages()
-
-      if (totalPages <= totalDisplayed) {
-        return Array.from({ length: totalPages }, (_, i) => i + 1)
+      const totalPages = this.getTotalPages();
+      if (totalPages <= 7) {
+        return Array.from({ length: totalPages }, (_, i) => i + 1);
       }
-
-      displayed.push(1)
-
-      let start = Math.max(2, this.currentPage - Math.floor(totalDisplayed / 2))
-      let end = Math.min(totalPages - 1, start + totalDisplayed - 3)
-
-      if (end === totalPages - 1) {
-        start = Math.max(2, end - totalDisplayed + 3)
+      let pages = [];
+      const currentPage = this.currentPage;
+      pages.push(1);
+      if (currentPage > 3) {
+        pages.push('...');
       }
-
-      if (start > 2) {
-        displayed.push('...')
+      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+        pages.push(i);
       }
-
-      for (let i = start; i <= end; i++) {
-        displayed.push(i)
+      if (currentPage < totalPages - 2) {
+        pages.push('...');
       }
-
-      if (end < totalPages - 1) {
-        displayed.push('...')
+      if (totalPages > 1) {
+        pages.push(totalPages);
       }
-
-      displayed.push(totalPages)
-
-      return displayed
+      return pages;
     },
     showEllipsisEnd() {
       return (
@@ -776,5 +795,29 @@ export default {
   margin: 0 0.25rem;
   font-weight: 500;
   color: #4b5563;
+}
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.sortable:hover {
+  background-color: #f0f0f0;
+}
+
+.sortable::after {
+  position: absolute;
+  right: 8px;
+  opacity: 0.5;
+}
+
+.sortable:active {
+  background-color: #e0e0e0;
+  transform: translateY(1px);
+}
+
+.sortable {
+  transition: background-color 0.2s, transform 0.1s;
 }
 </style>
