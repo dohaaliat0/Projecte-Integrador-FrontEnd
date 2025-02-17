@@ -133,27 +133,27 @@
         </div>
 
         <!-- Formulario -->
-        <div v-if="showAddAlert || selectedAlert" class="col-xl-4 mt-3 pb-5">
+        <div v-if="showAddAlert || selectedAlert != null" class="col-xl-4 mt-3 pb-5">
           <AddAlert v-if="showAddAlert" @alert-added="handleAlertAdded" @close="closeAddAlert" />
           <AddAlert v-else :editingAlert="selectedAlert" @alert-updated="handleAlertUpdated" @close="closeAddAlert" />
 
-            <div class="d-flex flex-column flex-md-row justify-content-end mt-3 gap-2 mr-2 text-md-right">
+          <div v-if="!showAddAlert" class="d-flex flex-column flex-md-row justify-content-end mt-3 gap-2 mr-2 text-md-right">
             <div :class="idRelatedCall ? 'mr-md-2' : ''">
               <router-link :to="{ name: 'callsNewWithAlert', params: { alertId: selectedAlert.id } }"
-              class="btn btn-primary d-flex align-items-center mb-2 mb-md-0">
-              Nueva llamada con alerta
-              <i class="fas fa-phone-alt ml-2"></i>
+                class="btn btn-primary d-flex align-items-center mb-2 mb-md-0">
+                Nueva llamada con alerta
+                <i class="fas fa-phone-alt ml-2"></i>
               </router-link>
             </div>
 
             <div>
               <router-link v-if="idRelatedCall" :to="{ name: 'edit call', params: { callId: idRelatedCall } }"
-              class="btn btn-secondary d-flex align-items-center">
-              Editar llamada relacionada
-              <i class="fas fa-edit ml-2"></i>
+                class="btn btn-secondary d-flex align-items-center">
+                Editar llamada relacionada
+                <i class="fas fa-edit ml-2"></i>
               </router-link>
             </div>
-            </div>
+          </div>
 
         </div>
       </div>
@@ -245,6 +245,7 @@ export default {
       this.showAddAlert = false;
     },
     toggleAddAlert() {
+      //  console.log('toggleAddAlert ' + this.showAddAlert);
       this.showAddAlert = !this.showAddAlert;
       this.selectedAlert = null;
       this.editingAlert = null;
@@ -254,19 +255,31 @@ export default {
       this.editingAlert = null;
       this.selectedAlert = null;
     },
-    handleAlertAdded(newAlert) {
+    async handleAlertAdded(newAlert) {
       this.showAddAlert = false;
       this.editingAlert = null;
-      this.loadAlerts();
+      await this.loadAlerts();
+      this.isLoading = true;
+      await this.loadAlerts();
+      this.allAlerts = this.alerts;
+
+      this.allAlerts = this.processRecurringAlerts(this.alerts);
+      this.isLoading = false;
     },
-    handleAlertUpdated(updatedAlert) {
+    async handleAlertUpdated(updatedAlert) {
       this.showAddAlert = false;
       this.editingAlert = null;
       const index = this.allAlerts.findIndex(a => a.id === updatedAlert.id);
       if (index !== -1) {
         this.allAlerts[index] = updatedAlert;
       }
-      this.loadAlerts();
+      this.isLoading = true;
+      await this.loadAlerts();
+      this.allAlerts = this.alerts;
+
+      this.allAlerts = this.processRecurringAlerts(this.alerts);
+      this.isLoading = false;
+
     },
     groupAlertsByDate() {
       const grouped = {};
@@ -349,30 +362,75 @@ export default {
 
 
       if (response.data === undefined || response.data.length === 0) {
-        console.log('No hay llamadas relacionadas' + response.data);
+        // console.log('No hay llamadas relacionadas' + response.data);
         return
       }
-      console.log(response.data.length)
+      // console.log(response.data.length)
       this.idRelatedCall = response.data[0].callId;
     },
+    processRecurringAlerts(alerts) {
+      return alerts.flatMap(alert => {
+        if (!alert.isRecurring || !alert.endDate || !alert.dayOfWeek) {
+          return alert;
+        }
+
+        const startDate = new Date(alert.date);
+        const endDate = new Date(alert.endDate);
+        const dayNameToNumber = {
+          'Sunday': 0,
+          'Monday': 1,
+          'Tuesday': 2,
+          'Wednesday': 3,
+          'Thursday': 4,
+          'Friday': 5,
+          'Saturday': 6
+        };
+        const daysOfWeek = alert.dayOfWeek ? alert.dayOfWeek.split(', ').map(day => dayNameToNumber[day]) : [];
+
+        // console.log('Processing recurring alert:', alert);
+        // console.log('Start Date:', startDate);
+        // console.log('End Date:', endDate);
+        // console.log('Days of Week:', daysOfWeek);
+        // console.log('Raw days of Week' + alert.dayOfWeek);
+
+        const recurringAlerts = [];
+        for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+          // console.log('Checking date:', date);
+          if (daysOfWeek.length === 0 || daysOfWeek.includes(date.getDay())) {
+            // console.log('Adding recurring alert for date:', date);
+            recurringAlerts.push({
+              ...alert,
+              date: date.toISOString().split('T')[0]
+            });
+          }
+        }
+
+        return recurringAlerts;
+      });
+    },
+    selectToday() {
+      const today = new Date();
+      const formattedToday = today.toISOString().split('T')[0];
+      const dayElement = document.querySelector(`.id-${formattedToday} .vc-day-content`);
+      // console.log(dayElement);
+      if (dayElement) {
+        dayElement.click();
+      }
+    }
   },
   async mounted() {
     if (this.alerts.length === 0) {
       await this.loadAlerts();
     }
     this.allAlerts = this.alerts;
-    console.log(this.allAlerts);
+    // console.log(this.allAlerts);
+
+    this.allAlerts = this.processRecurringAlerts(this.alerts);
     this.isLoading = false;
 
-    const today = new Date();
-    const formattedToday = today.toISOString().split('T')[0];
-    const dayElement = document.querySelector(`.id-${formattedToday} .vc-day-content`);
-    console.log(dayElement);
-    if (dayElement) {
-      dayElement.click();
-    }
-
+    this.selectToday();
   },
+
 
 };
 </script>
