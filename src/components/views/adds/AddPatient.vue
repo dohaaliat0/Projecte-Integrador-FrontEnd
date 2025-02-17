@@ -107,12 +107,11 @@
 
               <div>
                 <label for="languages">Idiomas</label>
-                <SearchableSelect
+                <LanguagesSelect
                   v-model="form.languages"
-                  :options="languages"
                   placeholder="Seleccionar idiomas"
                   :invalid="!!validationErrors.languages"
-                  multiple
+                  :multiple="true"
                 />
                 <div class="invalid-feedback">{{ validationErrors.languages }}</div>
               </div>
@@ -331,6 +330,7 @@ import PatientsRepository from '@/repositories/patients.repository.js'
 import { mapActions, mapState } from 'pinia'
 import { useCounterStore } from '@/stores/index.js'
 import SearchableSelect from '@/components/utils/SearchableSelect.vue'
+import LanguagesSelect from '@/components/utils/LanguagesSelect.vue'
 
 export default {
   props: ['id'],
@@ -341,7 +341,8 @@ export default {
     }
   },
   components: {
-    SearchableSelect
+    SearchableSelect,
+    LanguagesSelect
   },
   data() {
     return {

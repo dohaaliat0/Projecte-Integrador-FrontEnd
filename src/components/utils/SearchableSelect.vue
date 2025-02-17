@@ -57,6 +57,10 @@ export default {
     invalid: {
       type: Boolean,
       default: false
+    },
+    multiple: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
