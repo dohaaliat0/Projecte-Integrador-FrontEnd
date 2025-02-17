@@ -19,7 +19,8 @@ export const useCounterStore = defineStore("counter", {
   },
 
   getters: {
-    getPatientById: (state) => (id) => state.patients.find((item) => item.id == id)
+    getPatientById: (state) => (id) => state.patients.find((item) => item.id == id),
+    getCallByAlertId: (state) => (alertId) => state.calls.find((call) => call.outgoingCall?.alert?.id === Number(alertId))?.outgoingCall?.callId,
   },
 
   actions: {

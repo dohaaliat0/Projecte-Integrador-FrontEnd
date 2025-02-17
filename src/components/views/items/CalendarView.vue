@@ -70,6 +70,8 @@
                       <td>
                         <div class="d-flex align-items-center" v-if="alert.patient">
                           {{ alert.patient.fullName }}
+                          <a :href="`/calls/new-with-alert/${alert.id}`"><i v-if="!getCallByAlertId(alert.id)" class="fas fa-phone-alt ml-2" title="Ver llamada"></i></a>
+                          <a :href="`/calls/edit/${getCallByAlertId(alert.id)}`"><i v-if="getCallByAlertId(alert.id)" class="fas fa-pencil-alt ml-2" title="Editar llamada"></i></a>
                         </div>
                         <span v-else class="text-muted">Sin paciente asignado</span>
                       </td>
@@ -194,7 +196,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(useCounterStore, ['alerts']),
+    ...mapState(useCounterStore, ['alerts','getCallByAlertId']),
     filteredAlerts() {
       if (!this.selectedDate) return [];
       const searchTermLower = this.searchTerm.toLowerCase().trim();
@@ -218,7 +220,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(useCounterStore, ['loadAlerts', 'getAlertTypeBadgeClass', 'getAlertTypeLabel', 'formatRecurringDays']),
+    ...mapActions(useCounterStore, ['loadAlerts', 'loadCalls', 'getAlertTypeBadgeClass', 'getAlertTypeLabel', 'formatRecurringDays']),
     formatDate(date) {
       if (!date) return '';
       return date.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
@@ -421,6 +423,7 @@ export default {
   async mounted() {
     if (this.alerts.length === 0) {
       await this.loadAlerts();
+      await this.loadCalls();
     }
     this.allAlerts = this.alerts;
     // console.log(this.allAlerts);
@@ -428,6 +431,10 @@ export default {
     this.allAlerts = this.processRecurringAlerts(this.alerts);
     this.isLoading = false;
 
+    for (const alert of this.allAlerts) {
+      const callId = this.getCallByAlertId(alert.id);
+      console.log(`Alert ID: ${alert.id}, Call ID: ${callId}`);
+    }
     this.selectToday();
   },
 
