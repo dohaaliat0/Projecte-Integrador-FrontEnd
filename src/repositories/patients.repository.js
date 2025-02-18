@@ -79,18 +79,38 @@ export default class PatientsRepository {
   async changePatient(id, patient) {
     const authStore = useAuthStore();
     const token = authStore.token;
-
+  
+    // Crear un objeto con solo los campos necesarios
+    console.log(patient.languages);
+    const patientData = {
+      fullName: patient.fullName,
+      birthDate: patient.birthDate,
+      fullAddress: patient.fullAddress,
+      dni: patient.dni,
+      healthCardNumber: patient.healthCardNumber,
+      phone: patient.phone,
+      email: patient.email,
+      zoneId: patient.zoneId,
+      personalFamilySituation: patient.personalFamilySituation,
+      healthSituation: patient.healthSituation,
+      housingSituation: patient.housingSituation,
+      personalAutonomy: patient.personalAutonomy,
+      economicSituation: patient.economicSituation,
+      operatorId: patient.operatorId,
+      languages: patient.languages,
+      status: patient.status
+    };
+  
     const response = await fetch(server + "/patients/" + id, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify(patient)
+      body: JSON.stringify(patientData)
     });
-
+  
     if (!response.ok) {
-      // throw `Error ${response.status} de la BBDD: ${response.statusText}`;
       useMessagesStore().pushMessageAction({type: "error", message: `Error ${response.status} de la BBDD: ${response.statusText}`});
     }
     return await response.json();
