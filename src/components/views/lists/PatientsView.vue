@@ -216,13 +216,11 @@ export default {
     }
   },
   async mounted() {
-    if (this.patients.length === 0) {
       const filter = this.zoneId ? '?zoneId=' + this.zoneId : ''
       await this.loadPatients(filter)
       await this.loadZones()
       this.title = this.zoneId ? `Pacientes de ${this.getZoneName(this.zoneId)}` : 'Todos los pacientes'
-    }
-    this.isLoading = false;
+      this.isLoading = false;
   },
   methods: {
     ...mapActions(useCounterStore, ['loadPatients', 'loadZones']),

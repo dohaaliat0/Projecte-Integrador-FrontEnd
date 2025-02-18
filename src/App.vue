@@ -17,6 +17,7 @@ export default defineComponent({
       <h1 class="app-title">ConectaSalud</h1>
       <AppMenu />
     </header>
+    
     <main class="app-content">
       <RouterView />
     </main>
