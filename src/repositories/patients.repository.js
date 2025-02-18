@@ -8,7 +8,7 @@ export default class PatientsRepository {
     const authStore = useAuthStore();
     const token = authStore.token;
 
-    const response = await fetch(server + "/patients?debug=true" + filter, {
+    const response = await fetch(server + "/patients" + filter, {
       headers: {
         "Authorization": `Bearer ${token}`
       }

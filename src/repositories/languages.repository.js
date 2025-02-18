@@ -7,7 +7,7 @@ export default class LanguagesRepository {
     const authStore = useAuthStore();
     const token = authStore.token;
 
-    const response = await fetch(server + "/", {
+    const response = await fetch(server + "/languages", {
       headers: {
         "Authorization": `Bearer ${token}`
       }
