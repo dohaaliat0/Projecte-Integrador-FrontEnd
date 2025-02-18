@@ -331,6 +331,7 @@ import { mapActions, mapState } from 'pinia'
 import { useCounterStore } from '@/stores/index.js'
 import SearchableSelect from '@/components/utils/SearchableSelect.vue'
 import LanguagesSelect from '@/components/utils/LanguagesSelect.vue'
+import { useMessagesStore } from '@/stores/messages'
 
 export default {
   props: ['id'],
@@ -396,7 +397,8 @@ export default {
           this.$router.push('/patients')
         }
       } catch (error) {
-        console.error('Error loading patient data:', error)
+        // console.error('Error loading patient data:', error)
+        useMessagesStore().pushMessageAction({ message: 'Error al cargar los datos del paciente', type: 'error' })
         this.$router.push('/patients')
       }
     },
@@ -532,7 +534,8 @@ export default {
             throw new Error(response.message || 'Error al guardar el paciente')
           }
         } catch (error) {
-          console.error('Error al guardar el paciente:', error)
+          // console.error('Error al guardar el paciente:', error)
+          useMessagesStore().pushMessageAction({ message: 'Error al guardar el paciente', type: 'error' })
           this.handleServerErrors(error.response?.data?.errors || { general: [error.message] })
         } finally {
           this.isSubmitting = false
