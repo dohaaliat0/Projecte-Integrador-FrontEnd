@@ -372,14 +372,17 @@ export default {
   },
 
   async mounted() {
-    if (this.isEditing) {
-      await this.loadPatientData();
-    }
 
     this.initializeValidationSchema()
     await this.loadOperators()
     await this.loadZones()
     await this.loadLanguages()
+    if (this.isEditing) {
+      await this.loadPatientData();
+
+    }
+
+
   },
 
   methods: {
@@ -392,7 +395,7 @@ export default {
         if (response.data) {
           this.form = { ...this.form, ...response.data };
           // Ensure languages are in the correct format for the select component
-          this.form.languages = this.form.languages.map(lang => typeof lang === 'object' ? lang.name : lang);
+
         } else {
           this.$router.push('/patients')
         }
@@ -523,6 +526,7 @@ export default {
           const patientsRepository = new PatientsRepository()
           let response;
           if (this.isEditing) {
+            console.log(formData)
             response = await patientsRepository.changePatient(this.id, formData)
           } else {
             response = await patientsRepository.addPatient(formData)

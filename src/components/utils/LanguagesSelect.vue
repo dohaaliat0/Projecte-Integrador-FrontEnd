@@ -70,8 +70,8 @@ export default {
         ...mapState(useCounterStore, ['languages']),
         selectedText() {
             if (this.modelValue.length === 0) return this.placeholder;
-            return this.modelValue.map(id => {
-                const option = this.languages.find(opt => opt.id === id);
+            return this.modelValue.map(lang => {
+                const option = this.languages.find(opt => opt.id === lang.id);
                 return option ? option.name : '';
             }).join(', ');
         },
