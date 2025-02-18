@@ -13,9 +13,7 @@ export default class LanguagesRepository {
       }
     });
 
-    if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
-    }
+
 
     return await response.json();
   }

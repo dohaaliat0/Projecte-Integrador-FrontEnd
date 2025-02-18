@@ -283,9 +283,11 @@
 <script>
 import { mapActions, mapState } from 'pinia'
 import { useCounterStore } from '@/stores/index.js'
+import { useMessagesStore } from '@/stores/messages.js'
 import AddCall from '../adds/AddCall.vue'
 import ConfirmDialog from '@/components/utils/ConfirmDialog.vue'
 import PatientsRepository from '@/repositories/patients.repository.js'
+import CallsRepository from '@/repositories/calls.repository.js'
 
 export default {
   props: ['idPatient', 'typeCall', 'callId', 'alertId'],
@@ -423,11 +425,13 @@ export default {
     async deleteCall(call) {
       if (confirm(`¿Estás seguro de que quieres eliminar esta llamada?`)) {
         try {
-          await this.deleteCallFromStore(call.id)
+          const callsRepository = new CallsRepository()
+          await callsRepository.removeCall(call.id)
+
           this.allCalls = this.allCalls.filter((c) => c.id !== call.id)
+          useMessagesStore().pushMessageAction({ type: 'success', message: 'Llamada eliminada correctamente' })
         } catch (error) {
-          console.error('Error al eliminar la llamada:', error)
-          alert('Hubo un error al eliminar la llamada. Por favor, inténtalo de nuevo.')
+          useMessagesStore().pushMessageAction({ type: 'error', message: error || 'Error al eliminar la llamada' })
         }
       }
     },
@@ -437,6 +441,7 @@ export default {
       this.editingCall = null
       await this.loadCalls()
       this.allCalls = this.calls
+      useMessagesStore().pushMessageAction({ type: 'success', message: 'Llamada añadida correctamente' })
     },
     async handleCallUpdated(updatedCall) {
       this.showAddCall = false
@@ -446,6 +451,7 @@ export default {
       if (index !== -1) {
         this.allCalls[index] = updatedCall
       }
+      useMessagesStore().pushMessageAction({ type: 'success', message: 'Llamada actualizada correctamente' })
     },
     getTotalPages() {
       return Math.ceil(this.filteredCalls.length / this.itemsPerPage)
@@ -496,7 +502,7 @@ export default {
         await this.loadPatients()
         this.$emit('patient-deleted', this.patientToDelete.id)
       } catch (error) {
-        console.error('Error al eliminar el paciente:', error)
+        useMessagesStore().pushMessageAction({ type: 'error', message: 'Error al eliminar el paciente' })
       } finally {
         this.isLoading = false
         this.showDeleteDialog = false

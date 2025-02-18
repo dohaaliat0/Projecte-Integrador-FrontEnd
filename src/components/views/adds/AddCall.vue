@@ -125,6 +125,7 @@ import { IncomingCallsType, OutgoingCallsType, values } from '../../enums/callTy
 import CallsRepository from '@/repositories/calls.repository.js'
 import SearchableSelect from '@/components/utils/SearchableSelect.vue'
 import { useAuthStore } from '@/stores/auth.js'
+import { useMessagesStore } from '@/stores/messages.js'
 
 export default {
   components: { SearchableSelect },
@@ -176,6 +177,7 @@ export default {
   },
   methods: {
     ...mapActions(useCounterStore, ['loadPatients', 'loadOperators', 'loadAlerts']),
+    ...mapActions(useMessagesStore, ['pushMessageAction']),
     async submitCall() {
       this.errors = []
       this.isSubmitting = true
@@ -208,8 +210,8 @@ export default {
         this.$emit('call-added', response.data)
         this.resetForm()
       } catch (error) {
-        console.error('Error saving call:', error)
         this.errors.push('Error al guardar la llamada. Por favor, inténtelo de nuevo.')
+        this.pushMessageAction({type: 'error', message: 'Error al guardar la llamada. Por favor, inténtelo de nuevo.'})
       } finally {
         this.isSubmitting = false
       }
@@ -277,7 +279,7 @@ export default {
 
 
     } catch (error) {
-      console.error('Error loading data:', error)
+      useMessagesStore().pushMessageAction({type: 'error', message: 'Error al cargar los datos. Por favor, inténtelo de nuevo.'})
     }
   },
   watch: {

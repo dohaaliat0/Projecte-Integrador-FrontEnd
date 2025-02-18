@@ -117,14 +117,7 @@
               </div>
             </div>
 
-            <div
-              v-if="error"
-              class="alert alert-danger mt-4 d-flex align-items-center"
-              role="alert"
-            >
-              <i class="fas fa-exclamation-circle me-2"></i>
-              <div>{{ error }}</div>
-            </div>
+            
           </div>
         </div>
 
@@ -168,6 +161,7 @@
 <script>
 import { mapActions, mapState } from 'pinia';
 import {useCounterStore} from '@/stores/index'
+import {useMessagesStore} from '@/stores/messages'
 import ReportsRepository from '@/repositories/reports.repository.js'
 import VuePdfEmbed from 'vue-pdf-embed'
 
@@ -187,7 +181,6 @@ export default {
       isLoading: false,
       error: null,
       reportUrl: null,
-      errors: {}
     }
   },
   computed: {
@@ -217,8 +210,15 @@ export default {
         )
 
         this.reportUrl = URL.createObjectURL(response)
+        useMessagesStore().pushMessageAction({
+          type: 'info',
+          message: 'Informe generado correctamente'
+        })
       } catch (e) {
-        this.error = 'Error al generar el informe'
+        useMessagesStore().pushMessageAction({
+          type: 'error',
+          message: 'Ha ocurrido un error al generar el informe'
+        })
       } finally {
         this.isLoading = false
       }

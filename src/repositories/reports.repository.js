@@ -1,5 +1,4 @@
 import { useAuthStore } from '@/stores/auth.js'
-
 const API_URL = import.meta.env.VITE_URL_API;
 
 export default class ReportsRepository {
@@ -21,6 +20,11 @@ export default class ReportsRepository {
         "Authorization": `Bearer ${token}`
       },
     });
+
+    if (!response.ok) {
+      throw new Error('Error fetching report');
+    }
+
 
     return await response.blob();
   }

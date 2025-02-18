@@ -13,9 +13,7 @@ export default class CallsRepository {
       }
     });
 
-    if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
-    }
+
 
     return await response.json();
   }
@@ -30,9 +28,6 @@ export default class CallsRepository {
       }
     });
 
-    if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
-    }
 
     return await response.json();
   }
@@ -50,9 +45,7 @@ export default class CallsRepository {
       body: JSON.stringify(call)
     });
 
-    if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
-    }
+
 
     return await response.json();
   }
@@ -67,9 +60,7 @@ export default class CallsRepository {
       }
     });
 
-    if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
-    }
+
 
     return await response.json();
   }
@@ -85,9 +76,7 @@ export default class CallsRepository {
       }
     });
 
-    if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
-    }
+
 
     return await response.json();
   }
@@ -105,9 +94,7 @@ export default class CallsRepository {
       body: JSON.stringify(call)
     });
 
-    if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
-    }
+
 
     return await response.json();
   }
@@ -122,9 +109,7 @@ export default class CallsRepository {
       }
     });
 
-    if (!response.ok || response.success === false ) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
-    }
+
     return await response.json();
   }
 }

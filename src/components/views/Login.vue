@@ -77,6 +77,7 @@
 <script>
 import { mapActions, mapState } from 'pinia'
 import { useAuthStore } from '@/stores/auth.js'
+import { useMessagesStore } from '@/stores/messages.js'
 
 export default {
   data() {
@@ -92,13 +93,14 @@ export default {
       try {
         const response = await this.login(this.email, this.password)
         if (response) {
+          useMessagesStore().pushMessageAction({type: 'info', message: 'Inicio de sesión exitoso'})
+
           this.$router.push('/patients')
         } else {
-          alert('Error al iniciar sesión')
+          useMessagesStore().pushMessageAction({type: 'error', message: 'Error al iniciar sesión'})
         }
       } catch (error) {
-        console.error('Error during login:', error)
-        alert('Error al iniciar sesión. Por favor, inténtalo de nuevo.')
+        useMessagesStore().pushMessageAction({type: 'error', message: 'Error al iniciar sesión'})
       }
     },
     alternarContrasena() {
@@ -107,14 +109,14 @@ export default {
     async loginConGoogle() {
       try {
         const response = await this.loginWithGoogle()
-        console.log('login respones: ' + response + ' googleMessageError: ' + this.googleMessageError)
         if (response) {
+          useMessagesStore().pushMessageAction({type: 'info', message: 'Inicio de sesión con Google exitoso'})
           this.$router.push('/patients')
         } else {
-          alert('Error al iniciar sesión')
+          useMessagesStore().pushMessageAction({type: 'error', message: 'Error al iniciar sesión con Google' + this.googleMessageError})
         }
       } catch (error) {
-        console.error('Error during Google login:', error)
+        useMessagesStore().pushMessageAction({type: 'error', message: 'Error al iniciar sesión con Google' + this.googleMessageError})
       }
     },
   },

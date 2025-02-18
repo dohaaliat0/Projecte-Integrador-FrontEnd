@@ -13,9 +13,6 @@ export default class AlertsRepository {
       }
     });
 
-    if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
-    }
 
     return await response.json();
   }
@@ -33,9 +30,7 @@ export default class AlertsRepository {
       body: JSON.stringify(alert)
     });
 
-    if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
-    }
+
 
     return await response.json();
   }
@@ -50,9 +45,6 @@ export default class AlertsRepository {
       }
     });
 
-    if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
-    }
 
     return await response.json();
   }
@@ -68,9 +60,6 @@ export default class AlertsRepository {
       }
     });
 
-    if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
-    }
 
     return await response.json();
   }
@@ -88,9 +77,6 @@ export default class AlertsRepository {
       body: JSON.stringify(alert)
     });
 
-    if (!response.ok) {
-      throw `Error ${response.status} de la BBDD: ${response.statusText}`;
-    }
 
     return await response.json();
   }

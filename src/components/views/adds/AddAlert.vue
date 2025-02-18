@@ -135,6 +135,7 @@ import AlertsRepository from '@/repositories/alerts.repository.js'
 import { mapActions, mapState } from 'pinia'
 import { useCounterStore } from '@/stores/index.js'
 import { useAuthStore } from '@/stores/auth.js'
+import { useMessagesStore } from '@/stores/messages.js'
 import SearchableSelect from '@/components/utils/SearchableSelect.vue'
 
 export default {
@@ -243,7 +244,7 @@ export default {
 
         this.$emit('close');
       } catch (error) {
-        console.error('Error al guardar la alerta:', error)
+        useMessagesStore().pushMessageAction({ type: 'error', message: 'Error al guardar la alerta. Por favor, inténtelo de nuevo.' });
       }
     },
 

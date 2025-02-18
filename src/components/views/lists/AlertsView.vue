@@ -276,6 +276,7 @@ import { mapActions, mapState } from "pinia";
 import AddAlert from '@/components/views/adds/AddAlert.vue'
 import { useCounterStore } from '@/stores/index.js'
 import AlertsRepository from '@/repositories/alerts.repository.js'
+import { useMessagesStore } from '@/stores/messages.js'
 
 export default {
   props: ['idPatient'],
@@ -307,7 +308,7 @@ export default {
       })
     },
     sortedAlerts() {
-      return this.filteredAlerts.sort((a, b) => {
+      return [...this.filteredAlerts].sort((a, b) => {
         let aValue = this.getSortValue(a, this.sortKey);
         let bValue = this.getSortValue(b, this.sortKey);
 
@@ -375,8 +376,7 @@ export default {
           }
           await this.loadAlerts();
         } catch (error) {
-          console.error('Error al eliminar la alerta:', error);
-          alert('Hubo un error al eliminar la alerta. Por favor, inténtalo de nuevo.');
+          useMessagesStore().pushMessageAction({ type: 'error', message: 'Error al eliminar la alerta. Por favor, inténtelo de nuevo.' });
         }
       }
     },
