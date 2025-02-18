@@ -83,7 +83,8 @@ export default class PatientsRepository {
       economicSituation: patient.economicSituation,
       operatorId: patient.operatorId,
       languages: patient.languages,
-      status: patient.status
+      status: patient.status,
+      contactPersons: patient.contactPersons,
     };
   
     const response = await fetch(server + "/patients/" + id, {

@@ -5,6 +5,7 @@ import OperatorsRepository from '@/repositories/operators.repository.js'
 import ZonesRepository from '@/repositories/zones.repository.js'
 import LanguagesRepository from '@/repositories/languages.repository.js'
 import AlertsRepository from '@/repositories/alerts.repository.js'
+import RelationshipsRepository from '@/repositories/relationships.repository.js'
 
 export const useCounterStore = defineStore("counter", {
   state(){
@@ -14,7 +15,8 @@ export const useCounterStore = defineStore("counter", {
       operators: [],
       zones: [],
       languages: [],
-      alerts: []
+      alerts: [],
+      relationships: [],
     }
   },
 
@@ -59,6 +61,11 @@ export const useCounterStore = defineStore("counter", {
       const repositoryAlerts = new AlertsRepository();
       const response = await repositoryAlerts.getAllAlerts();
       this.alerts = response.data
+    },
+    async loadRelationships() {
+      const repositoryModules = new RelationshipsRepository();
+      const response = await repositoryModules.getAllRelationships();
+      this.relationships = response.data
     },
     getCallTypeLabel(call) {
       if (call.incomingCall !== null) {

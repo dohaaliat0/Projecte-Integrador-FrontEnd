@@ -268,13 +268,16 @@
 
                       <div class="col-md-6 mb-3">
                         <label :for="'relationship' + index">Relación *</label>
-                        <input
-                          type="text"
+                        <select
                           class="form-control"
                           :id="'relationship' + index"
                           v-model="contact.relationship"
                           :class="{ 'is-invalid': getContactError(index, 'relationship') }"
                         >
+                          <option v-for="relationship in this.relationships" :key="relationship" :value="relationship">
+                            {{ relationship }}
+                          </option>
+                        </select>
                         <div class="invalid-feedback">{{ getContactError(index, 'relationship') }}</div>
                       </div>
                     </div>
@@ -332,11 +335,13 @@ import { useCounterStore } from '@/stores/index.js'
 import SearchableSelect from '@/components/utils/SearchableSelect.vue'
 import LanguagesSelect from '@/components/utils/LanguagesSelect.vue'
 import { useMessagesStore } from '@/stores/messages'
+import { useAuthStore } from '@/stores/auth'
 
 export default {
   props: ['id'],
   computed: {
-    ...mapState(useCounterStore, ['operators', 'zones', 'languages']),
+    ...mapState(useCounterStore, ['operators', 'zones', 'languages', 'relationships']),
+    ...mapState(useAuthStore, ['user']),
     isEditing() {
       return !!this.id;
     }
@@ -377,16 +382,19 @@ export default {
     await this.loadOperators()
     await this.loadZones()
     await this.loadLanguages()
+    await this.loadRelationships()
     if (this.isEditing) {
       await this.loadPatientData();
 
     }
+    this.form.operatorId = this.user.id;
+
 
 
   },
 
   methods: {
-    ...mapActions(useCounterStore, ['loadOperators', 'loadZones', 'loadLanguages']),
+    ...mapActions(useCounterStore, ['loadOperators', 'loadZones', 'loadLanguages', 'loadRelationships']),
 
     async loadPatientData() {
       try {
@@ -525,22 +533,22 @@ export default {
         try {
           const patientsRepository = new PatientsRepository()
           let response;
+          console.log(formData);
           if (this.isEditing) {
             response = await patientsRepository.changePatient(this.id, formData)
           } else {
             response = await patientsRepository.addPatient(formData)
           }
 
-          if (response.success) {
+          if (response.success || response.data || response.id ) {
             useMessagesStore().pushMessageAction({ message: 'Paciente guardado correctamente', type: 'success' })
             this.$router.push('/patients')
           } else {
             useMessagesStore().pushMessageAction({ message: response.message || 'Error al guardar el paciente', type: 'error' })
-            throw new Error(response.message || 'Error al guardar el paciente')
           }
         } catch (error) {
           // console.error('Error al guardar el paciente:', error)
-          useMessagesStore().pushMessageAction({ message: 'Error al guardar el paciente', type: 'error' })
+          useMessagesStore().pushMessageAction({ message: response.message || 'Error al guardar el paciente', type: 'error' })
           this.handleServerErrors(error.response?.data?.errors || { general: [error.message] })
         } finally {
           this.isSubmitting = false

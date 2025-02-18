@@ -134,6 +134,7 @@
 import AlertsRepository from '@/repositories/alerts.repository.js'
 import { mapActions, mapState } from 'pinia'
 import { useCounterStore } from '@/stores/index.js'
+import { useAuthStore } from '@/stores/auth.js'
 import SearchableSelect from '@/components/utils/SearchableSelect.vue'
 
 export default {
@@ -148,6 +149,7 @@ export default {
   },
   computed: {
     ...mapState(useCounterStore, ['patients', 'operators', 'zones']),
+    ...mapState(useAuthStore, ['user']),
     dayOfWeek() {
       return this.selectedDays.join(', ')
     }
@@ -285,6 +287,8 @@ export default {
     if (this.zones.length === 0) {
       await this.loadZones()
     }
+
+    this.form.operatorId = this.user.id
   }
 }
 </script>
