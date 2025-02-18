@@ -526,15 +526,16 @@ export default {
           const patientsRepository = new PatientsRepository()
           let response;
           if (this.isEditing) {
-            console.log(formData)
             response = await patientsRepository.changePatient(this.id, formData)
           } else {
             response = await patientsRepository.addPatient(formData)
           }
 
           if (response.success) {
+            useMessagesStore().pushMessageAction({ message: 'Paciente guardado correctamente', type: 'success' })
             this.$router.push('/patients')
           } else {
+            useMessagesStore().pushMessageAction({ message: response.message || 'Error al guardar el paciente', type: 'error' })
             throw new Error(response.message || 'Error al guardar el paciente')
           }
         } catch (error) {

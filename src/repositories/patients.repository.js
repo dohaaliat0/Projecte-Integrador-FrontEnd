@@ -1,5 +1,4 @@
 import { useAuthStore } from "@/stores/auth.js";
-import { useMessagesStore } from "@/stores/messages";
 
 const server = import.meta.env.VITE_URL_API;
 
@@ -14,10 +13,7 @@ export default class PatientsRepository {
       }
     });
 
-    if (!response.ok) {
-      // throw `Error ${response.status} de la BBDD: ${response.statusText}`;
-      useMessagesStore().pushMessageAction({type: "error", message: `Error ${response.status} de la BBDD: ${response.statusText}`});
-    }
+
     return await response.json();
   }
 
@@ -31,10 +27,6 @@ export default class PatientsRepository {
       }
     });
 
-    if (!response.ok) {
-      // throw `Error ${response.status} de la BBDD: ${response.statusText}`;
-      useMessagesStore().pushMessageAction({type: "error", message: `Error ${response.status} de la BBDD: ${response.statusText}`});
-    }
     return await response.json();
   }
 
@@ -51,10 +43,6 @@ export default class PatientsRepository {
       body: JSON.stringify(patient)
     });
 
-    if (!response.ok) {
-      // throw `Error ${response.status} de la BBDD: ${response.statusText}`;
-      useMessagesStore().pushMessageAction({type: "error", message: `Error ${response.status} de la BBDD: ${response.statusText}`});
-    }
     return await response.json();
   }
 
@@ -69,10 +57,7 @@ export default class PatientsRepository {
       }
     });
 
-    if (!response.ok) {
-      // throw `Error ${response.status} de la BBDD: ${response.statusText}`;
-      useMessagesStore().pushMessageAction({type: "error", message: `Error ${response.status} de la BBDD: ${response.statusText}`});
-    }
+
     return await response.json();
   }
 
@@ -110,9 +95,7 @@ export default class PatientsRepository {
       body: JSON.stringify(patientData)
     });
   
-    if (!response.ok) {
-      useMessagesStore().pushMessageAction({type: "error", message: `Error ${response.status} de la BBDD: ${response.statusText}`});
-    }
+
     return await response.json();
   }
 }
