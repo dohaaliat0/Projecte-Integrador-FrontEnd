@@ -13,9 +13,22 @@ export default defineComponent({
   },
   mounted(){
     window.Echo.channel('ConectaSalud')
-    .listen('LlamadaActualizada', (e) => {
-      console.log(e)
-      useMessagesStore().pushMessageAction({type: 'info', message: e.message})
+    .listen('.LlamadaActualizada', (e) => {
+      console.log('Llamada actualizada', e)
+      let message = '';
+      if(e.call){
+        message = `Llamada ${e.call.id} actualizada. Realizada en ${e.call.dateTime}`
+      } 
+
+      if(e.patient){
+        message = `Paciente ${e.patient.id} actualizado: ${e.patient.name}`
+      }
+
+      if(e.alert){
+        message = `Alerta ${e.alert.id} actualizada: ${e.alert.status}`
+      }
+
+      useMessagesStore().pushMessageAction({type: 'info', message: message})
     });
     console.log('Escuchando mensajes')
   }
