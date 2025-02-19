@@ -338,7 +338,7 @@ export default {
   },
   async mounted() {
     if (this.idPatient) {
-      this.allCalls = await this.loadCallsByPatient(this.idPatient);
+      this.allCalls = await this.loadCallsByPatientAndTypeCall(this.idPatient, this.typeCall);
     } else {
       if (this.calls.length === 0) {
         await this.loadCalls()
@@ -385,7 +385,7 @@ export default {
       'loadCalls',
       'getCallTypeLabel',
       'getCallTypeBadgeClass',
-      'loadCallsByPatient',
+      'loadCallsByPatientAndTypeCall',
       'deleteCallFromStore'
     ]),
     sortBy(key) {
@@ -439,7 +439,7 @@ export default {
       this.showAddCall = false
       this.selectedCall = null
       this.editingCall = null
-      await this.loadCalls()
+      this.calls.push(call)
       this.allCalls = this.calls
       useMessagesStore().pushMessageAction({ type: 'success', message: 'Llamada añadida correctamente' })
     },

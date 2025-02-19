@@ -32,10 +32,14 @@ export const useCounterStore = defineStore("counter", {
       const response = await repositoryModules.getAllCalls();
       this.calls = response.data
     },
-    async loadCallsByPatient(idPatient) {
+    async loadCallsByPatientAndTypeCall(idPatient, typeCall) {
       const repositoryModules = new CallsRepository();
-      const response = await repositoryModules.getAllCallsByPatient(idPatient);
-      return response.data
+      let response = await repositoryModules.getAllCallsByPatient(idPatient);
+      response = response.data;
+      if (typeCall) {
+        response = response.filter((call) => (!!call.incomingCall && typeCall === 'incomingCall') || (!!call.outgoingCall && typeCall === 'outgoingCall'));
+      }
+      return response
     },
     async loadPatients(filter = '') {
       const repositoryModules = new PatientsRepository();

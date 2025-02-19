@@ -132,6 +132,7 @@ router.beforeEach((to, from, next) => {
     next('/login');
   }
   else if (isAuthenticated && to.path === '/login') {
+    next('/patients');
   }
   else {
     next();
