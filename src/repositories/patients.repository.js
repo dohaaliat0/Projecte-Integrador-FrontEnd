@@ -64,9 +64,7 @@ export default class PatientsRepository {
   async changePatient(id, patient) {
     const authStore = useAuthStore();
     const token = authStore.token;
-  
-    // Crear un objeto con solo los campos necesarios
-    console.log(patient.languages);
+
     const patientData = {
       fullName: patient.fullName,
       birthDate: patient.birthDate,

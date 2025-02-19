@@ -70,7 +70,6 @@ export default {
         ...mapState(useCounterStore, ['languages']),
         selectedText() {
             if (this.modelValue.length === 0) return this.placeholder;
-            console.log('modelValue', this.modelValue);
             return this.modelValue.map(lang => {
                 const option = this.languages.find(opt => {
                     console.log('opt', opt);

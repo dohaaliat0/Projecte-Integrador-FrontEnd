@@ -60,11 +60,7 @@
           {{ user.name.length > 0 ? user.name.charAt(0).toUpperCase() : '#' }}
         </button>
         <div v-show="isUserMenuOpen" class="user-dropdown">
-          <RouterLink to="/settings" class="dropdown-item">
-            <span class="fas fa-cog"></span>
-            Configuración
-          </RouterLink>
-          <button @click="logoutAndRedirect" class="dropdown-item">
+          <button @click="logoutAndRedirect" class="dropdown-item logout-button">
             <span class="fas fa-sign-out-alt"></span>
             Cerrar sesión
           </button>
@@ -246,6 +242,29 @@ export default {
   cursor: pointer;
 }
 
+.logout-button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  color: #e74c3c;
+  background-color: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.logout-button:hover {
+  background-color: #fdf2f0;
+}
+
+.logout-button .fas {
+  margin-right: 0.75rem;
+  font-size: 1.1rem;
+}
+
 @media (max-width: 768px) {
   .menu {
     position: fixed;
@@ -317,6 +336,10 @@ export default {
     right: 0;
     width: 100%;
     border-radius: 8px 8px 0 0;
+  }
+
+  .logout-button {
+    justify-content: center;
   }
 }
 

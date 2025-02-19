@@ -533,7 +533,7 @@ export default {
         try {
           const patientsRepository = new PatientsRepository()
           let response;
-          console.log(formData);
+
           if (this.isEditing) {
             response = await patientsRepository.changePatient(this.id, formData)
           } else {
