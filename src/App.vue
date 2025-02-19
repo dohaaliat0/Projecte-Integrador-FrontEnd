@@ -3,12 +3,21 @@ import AppFooter from '@/components/views/AppFooter.vue'
 import AppMenu from '@/components/views/items/AppMenu.vue'
 import { defineComponent } from 'vue'
 import StickyMessages from './components/utils/StickyMessages.vue';
+import { useMessagesStore } from './stores/messages';
 
 export default defineComponent({
   components: {
     AppMenu,
     AppFooter,
     StickyMessages,
+  },
+  mounted(){
+    window.Echo.channel('ConectaSalud')
+    .listen('LlamadaActualizada', (e) => {
+      console.log(e)
+      useMessagesStore().pushMessageAction({type: 'info', message: e.message})
+    });
+    console.log('Escuchando mensajes')
   }
 })
 </script>
