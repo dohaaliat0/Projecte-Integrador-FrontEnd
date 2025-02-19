@@ -57,7 +57,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr v-for="call in paginatedCalls" :key="call.id" class="call-row">
+                  <tr v-for="call in paginatedCalls" :key="call.id" class="call-row" @click="selectCall(call)">
                     <td class="ps-4">{{ call.id }}</td>
                     <td>
                       <div class="d-flex align-items-center">
@@ -509,6 +509,10 @@ export default {
         this.patientToDelete = null
       }
     },
+    cancelDelete() {
+      this.showDeleteDialog = false
+      this.patientToDelete = null
+    },
   }
 }
 </script>
@@ -808,10 +812,6 @@ export default {
   position: relative;
 }
 
-.sortable:hover {
-  background-color: #f0f0f0;
-}
-
 .sortable::after {
   position: absolute;
   right: 8px;
@@ -819,7 +819,6 @@ export default {
 }
 
 .sortable:active {
-  background-color: #e0e0e0;
   transform: translateY(1px);
 }
 

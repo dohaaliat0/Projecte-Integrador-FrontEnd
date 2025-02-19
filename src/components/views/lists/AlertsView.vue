@@ -293,7 +293,7 @@ export default {
       isLoading: true,
       allAlerts: [],
       currentPage: 1,
-      itemsPerPage: 5,
+      itemsPerPage: 10,
       sortKey: '',
       sortOrder: 1,
     }
@@ -676,10 +676,6 @@ export default {
   position: relative;
 }
 
-.sortable:hover {
-  background-color: #f0f0f0;
-}
-
 .sortable::after {
   position: absolute;
   right: 8px;
@@ -687,7 +683,6 @@ export default {
 }
 
 .sortable:active {
-  background-color: #e0e0e0;
   transform: translateY(1px);
 }
 
