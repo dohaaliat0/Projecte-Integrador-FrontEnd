@@ -234,7 +234,6 @@ export default {
 
         let response;
         if (this.editingAlert) {
-          console.log(alertData)
           response = await repositoryAlerts.changeCall(alertData);
           this.$emit('alert-updated', response.data);
         } else {
