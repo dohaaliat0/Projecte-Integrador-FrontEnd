@@ -428,6 +428,7 @@ export default {
           'Friday': 5,
           'Saturday': 6
         };
+        console.log(alert.dayOfWeek);
         const daysOfWeek = alert.dayOfWeek ? alert.dayOfWeek.split(', ').map(day => dayNameToNumber[day]) : [];
 
         const recurringAlerts = [];

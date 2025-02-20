@@ -173,6 +173,7 @@
 
 <script>
 import PatientsRepository from "@/repositories/patients.repository.js";
+import { useMessagesStore } from "@/stores/messages";
 
 export default {
   props: ['id'],
@@ -186,6 +187,13 @@ export default {
     if (this.id) {
       const repositoryPatients = new PatientsRepository()
       const response = await repositoryPatients.getPatientById(this.id);
+      if(!response.success){
+        useMessagesStore().pushMessageAction({
+          type: 'error',
+          message: response.message ?? 'Error al obtener la información del paciente'
+        });
+      }
+
       if (response.data.id) {
         this.isLoading = false
         this.patient = response.data;

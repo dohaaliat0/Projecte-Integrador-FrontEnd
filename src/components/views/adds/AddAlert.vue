@@ -235,9 +235,18 @@ export default {
         let response;
         if (this.editingAlert) {
           response = await repositoryAlerts.changeCall(alertData);
+          if(!response.success){
+            useMessagesStore().pushMessageAction({ type: 'error', message: response.message ?? 'Error al guardar la alerta. Por favor, inténtelo de nuevo.' });
+            return;
+          }
+          
           this.$emit('alert-updated', response.data);
         } else {
           response = await repositoryAlerts.addAlert(alertData);
+          if(!response.success){
+            useMessagesStore().pushMessageAction({ type: 'error', message: response.message ?? 'Error al guardar la alerta. Por favor, inténtelo de nuevo.' });
+            return;
+          }
           this.$emit('alert-added', response.data);
         }
 
