@@ -103,4 +103,12 @@ h1 {
   flex-grow: 1;
   padding: 2rem;
 }
+
+@media screen and (max-width: 600px) {
+  .app-content{
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+}
 </style>

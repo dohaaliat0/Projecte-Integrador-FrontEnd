@@ -42,7 +42,7 @@
             <div class="card-header d-flex justify-content-between align-items-center">
               <h5 class="card-title mb-0">Calendario de Alertas</h5>
             </div>
-            <div class="card-body">
+            <div class="card-body calendar-full-width">
               <VCalendar
                 v-model:date="selectedDate"
                 :attributes="calendarAttributes"
@@ -119,7 +119,7 @@
                             {{ alert.isActive ? 'Activa' : 'Inactiva' }}
                           </span>
                       </td>
-                      <td class="text-center">
+                      <!-- <td class="text-center">
                         <button
                           @click.stop="editAlert(alert)"
                           class="btn btn-sm btn-link p-0 me-2"
@@ -135,6 +135,14 @@
                         >
                           <i class="fas fa-trash-alt text-danger"></i>
                         </button>
+                      </td> -->
+                      <td>
+                        <div class="d-flex align-items-center" v-if="alert.patient">
+                          {{ alert.patient.fullName }}
+                            <a :href="`/calls/new-with-alert/${alert.id}`" @click.stop><i v-if="!getCallByAlertId(alert.id)" class="fas fa-phone-alt ml-2" title="Ver llamada"></i></a>
+                          <a :href="`/calls/edit/${getCallByAlertId(alert.id)}`"><i v-if="getCallByAlertId(alert.id)" class="fas fa-pencil-alt ml-2" title="Editar llamada"></i></a>
+                        </div>
+                        <span v-else class="text-muted">Sin paciente asignado</span>
                       </td>
                     </tr>
                     </tbody>
@@ -185,7 +193,7 @@
           </div>
         </div>
 
-        <div class="col-xl-4" v-if="selectedAlert || showAddAlert">
+        <!-- <div class="col-xl-4" v-if="selectedAlert || showAddAlert">
           <div class="card h-100">
             <div class="card-header d-flex justify-content-between align-items-center">
               <h5 class="card-title mb-0">{{ showAddAlert ? 'Añadir Alerta' : 'Detalles de Alerta' }}</h5>
@@ -207,6 +215,29 @@
               />
             </div>
           </div>
+        </div> -->
+        <div v-if="showAddAlert || selectedAlert != null" class="col-xl-4 mt-3 pb-5">
+          <AddAlert v-if="showAddAlert" @alert-added="handleAlertAdded" @close="closeAddAlert" />
+          <AddAlert v-else :editingAlert="selectedAlert" @alert-updated="handleAlertUpdated" @close="closeAddAlert" />
+
+          <div v-if="!showAddAlert" class="d-flex flex-column flex-md-row justify-content-end mt-3 gap-2 mr-2 text-md-right">
+            <div :class="idRelatedCall ? 'mr-md-2' : ''">
+              <router-link :to="{ name: 'callsNewWithAlert', params: { alertId: selectedAlert.id } }"
+                class="btn btn-primary d-flex align-items-center mb-2 mb-md-0">
+                Hacer llamada
+                <i class="fas fa-phone-alt ml-2"></i>
+              </router-link>
+            </div>
+
+            <div>
+              <router-link v-if="idRelatedCall" :to="{ name: 'edit call', params: { callId: idRelatedCall ?? 1} }"
+                class="btn btn-secondary d-flex align-items-center">
+                Editar llamada existente
+                <i class="fas fa-edit ml-2"></i>
+              </router-link>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -221,6 +252,7 @@ import 'v-calendar/dist/style.css';
 import AddAlert from '@/components/views/adds/AddAlert.vue';
 import AlertsRepository from '@/repositories/alerts.repository.js';
 import { useMessagesStore } from '@/stores/messages.js';
+import CallsRepository from '@/repositories/calls.repository.js';
 
 export default {
   name: 'CalendarView',
@@ -242,10 +274,14 @@ export default {
       sortKey: '',
       sortOrder: 1,
       alertsRepository: new AlertsRepository(),
+      callRepository: new CallsRepository(),
+
+      idRelatedCall: null,
+
     };
   },
   computed: {
-    ...mapState(useCounterStore, ['alerts']),
+    ...mapState(useCounterStore, ['alerts', 'getCallByAlertId']),
     filteredAlerts() {
       if (!this.selectedDate) return [];
       return this.allAlerts.filter(alert => {
@@ -289,11 +325,13 @@ export default {
       this.showAddAlert = false;
       this.currentPage = 1;
     },
-    selectAlert(alert) {
+    async selectAlert(alert) {
       if (this.selectedAlert === alert) {
         this.selectedAlert = null;
+        this.idRelatedCall = null;
       } else {
         this.selectedAlert = alert;
+        await this.firstRelatedCall();
       }
       this.showAddAlert = false;
     },
@@ -459,6 +497,17 @@ export default {
     },
     getAlertTypeLabel(type) {
       return useCounterStore().getAlertTypeLabel(type);
+    },
+    async firstRelatedCall() {
+      const response = await this.callRepository.getCallByAlertId(this.selectedAlert.id);
+
+
+      if (response.data === undefined || response.data.length === 0) {
+        // console.log('No hay llamadas relacionadas' + response.data);
+        return
+      }
+      // console.log(response.data.length)
+      this.idRelatedCall = response.data[0].callId;
     },
   },
   async mounted() {
