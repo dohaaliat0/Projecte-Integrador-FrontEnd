@@ -70,7 +70,7 @@
     <template v-else>
       <button @click="$router.push('/login')" class="login-button">
         <span class="fas fa-user"></span>
-        <span class="login-text">Iniciar sesión / Registrarse</span>
+        <span class="login-text">Iniciar sesión</span>
       </button>
     </template>
   </nav>

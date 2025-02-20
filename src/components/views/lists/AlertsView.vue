@@ -22,8 +22,8 @@
                 type="text"
                 class="form-control border-left-0 pl-0"
                 placeholder="Buscar alertas por nombre de pacientes"
-                style="border-left: none; box-shadow: none;"
-              >
+                style="border-left: none; box-shadow: none"
+              />
               <button
                 @click="toggleAddAlert"
                 class="btn btn-light ml-3 add-alert-btn"
@@ -46,90 +46,113 @@
               <div class="table-responsive">
                 <table class="table table-hover align-middle">
                   <thead class="table-light">
-                  <tr>
-                    <th class="ps-4 sortable" @click="sortBy('id')">#</th>
-                    <th class="sortable" @click="sortBy('title')">Título</th>
-                    <th class="sortable" @click="sortBy('patient.fullName')">Paciente</th>
-                    <th class="sortable" @click="sortBy('date')">Fecha y Hora</th>
-                    <th class="sortable" @click="sortBy('operator.name')">Operador</th>
-                    <th class="sortable" @click="sortBy('zoneId')">Zona</th>
-                    <th class="text-center sortable" @click="sortBy('type')">Tipo</th>
-                    <th class="text-center sortable" @click="sortBy('isActive')">Estado</th>
-                    <th class="text-center">Acciones</th>
-                  </tr>
+                    <tr>
+                      <th class="ps-4 sortable" @click="sortBy('id')">#</th>
+                      <th class="sortable" @click="sortBy('title')">Título</th>
+                      <th class="sortable" @click="sortBy('patient.fullName')">Paciente</th>
+                      <th class="sortable" @click="sortBy('date')">Fecha y Hora</th>
+                      <th class="sortable" @click="sortBy('operator.name')">Operador</th>
+                      <th class="sortable" @click="sortBy('zoneId')">Zona</th>
+                      <th class="text-center sortable" @click="sortBy('type')">Tipo</th>
+                      <th class="text-center sortable" @click="sortBy('isActive')">Estado</th>
+                      <th class="text-center">Acciones</th>
+                    </tr>
                   </thead>
                   <tbody>
-                  <tr
-                    v-for="alert in getPaginatedAlerts()"
-                    :key="alert.id"
-                    class="alert-row"
-                    @click="selectAlert(alert)"
-                  >
-                    <td class="ps-4">{{ alert.id }}</td>
-                    <td class="text-wrap" style="max-width: 200px;">
-                      <div class="text-truncate" :title="alert.title">{{ alert.title }}</div>
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center" v-if="alert.patient">
-                        <div class="rounded-circle me-2"
-                             style="width: 32px; height: 32px; background-color: #007bff; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; margin-right: 5px;">
-                          {{ alert.patient.fullName.charAt(0).toUpperCase() }}
+                    <tr
+                      v-for="alert in getPaginatedAlerts()"
+                      :key="alert.id"
+                      class="alert-row"
+                      @click="selectAlert(alert)"
+                    >
+                      <td class="ps-4">{{ alert.id }}</td>
+                      <td class="text-wrap" style="max-width: 200px">
+                        <div class="text-truncate" :title="alert.title">{{ alert.title }}</div>
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center" v-if="alert.patient">
+                          <div
+                            class="rounded-circle me-2"
+                            style="
+                              width: 32px;
+                              height: 32px;
+                              background-color: #007bff;
+                              display: flex;
+                              justify-content: center;
+                              align-items: center;
+                              color: white;
+                              font-weight: bold;
+                              margin-right: 5px;
+                            "
+                          >
+                            {{ alert.patient.fullName.charAt(0).toUpperCase() }}
+                          </div>
+                          <a :href="`/patient/${alert.patient.id}`">{{ alert.patient.fullName }}</a>
                         </div>
-                        <a :href="`/patient/${alert.patient.id}`">{{ alert.patient.fullName }}</a>
-                      </div>
-                      <span v-else class="text-muted">Sin paciente asignado</span>
-                    </td>
-                    <td>{{ formatDateTime(alert.date, alert.time) }}</td>
-                    <td>
-                      <div class="d-flex align-items-center" v-if="alert.operator">
-                        <div class="rounded-circle me-2"
-                             style="width: 32px; height: 32px; background-color: #007bff; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; margin-right: 5px;">
-                          {{ alert.operator.name.charAt(0).toUpperCase() }}
+                        <span v-else class="text-muted">Sin paciente asignado</span>
+                      </td>
+                      <td>{{ formatDateTime(alert.date, alert.time) }}</td>
+                      <td>
+                        <div class="d-flex align-items-center" v-if="alert.operator">
+                          <div
+                            class="rounded-circle me-2"
+                            style="
+                              width: 32px;
+                              height: 32px;
+                              background-color: #007bff;
+                              display: flex;
+                              justify-content: center;
+                              align-items: center;
+                              color: white;
+                              font-weight: bold;
+                              margin-right: 5px;
+                            "
+                          >
+                            {{ alert.operator.name.charAt(0).toUpperCase() }}
+                          </div>
+                          {{ alert.operator.name }}
                         </div>
-                        {{ alert.operator.name }}
-                      </div>
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center" v-if="alert.zone">
-
-                      {{ alert.zone.name }}
-                      </div>
-                      <span v-else class="text-muted">Sin zona asignada</span>
-                    </td>
-                    <td class="text-center">
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center" v-if="alert.zone">
+                          {{ alert.zone.name }}
+                        </div>
+                        <span v-else class="text-muted">Sin zona asignada</span>
+                      </td>
+                      <td class="text-center">
                         <span
                           class="badge rounded-pill"
                           :class="getAlertTypeBadgeClass(alert.type)"
                         >
                           {{ getAlertTypeLabel(alert.type) }}
                         </span>
-                    </td>
-                    <td class="text-center">
+                      </td>
+                      <td class="text-center">
                         <span
                           class="badge rounded-pill"
                           :class="alert.isActive ? 'bg-success' : 'bg-secondary'"
                         >
                           {{ alert.isActive ? 'Activa' : 'Inactiva' }}
                         </span>
-                    </td>
-                    <td class="text-center">
-                      <button
-                        @click.stop="editAlert(alert)"
-                        class="btn btn-sm btn-link p-0 me-2"
-                        title="Editar"
-                        style="margin-right: 5px"
-                      >
-                        <i class="fas fa-pencil text-primary"></i>
-                      </button>
-                      <button
-                        @click.stop="deleteAlert(alert)"
-                        class="btn btn-sm btn-link p-0"
-                        title="Eliminar"
-                      >
-                        <i class="fas fa-trash-alt text-danger"></i>
-                      </button>
-                    </td>
-                  </tr>
+                      </td>
+                      <td class="text-center">
+                        <button
+                          @click.stop="editAlert(alert)"
+                          class="btn btn-sm btn-link p-0 me-2"
+                          title="Editar"
+                          style="margin-right: 5px"
+                        >
+                          <i class="fas fa-pencil text-primary"></i>
+                        </button>
+                        <button
+                          @click.stop="deleteAlert(alert)"
+                          class="btn btn-sm btn-link p-0"
+                          title="Eliminar"
+                        >
+                          <i class="fas fa-trash-alt text-danger"></i>
+                        </button>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -141,7 +164,11 @@
           <div class="card h-100">
             <div class="card-header d-flex justify-content-between align-items-center">
               <h5 class="card-title mb-0">Detalles de Alerta</h5>
-              <button @click="selectedAlert = null" class="btn btn-sm btn-link" style="color: red; font-size: 1.2rem">
+              <button
+                @click="selectedAlert = null"
+                class="btn btn-sm btn-link"
+                style="color: red; font-size: 1.2rem"
+              >
                 <i class="fas fa-times"></i>
               </button>
             </div>
@@ -149,7 +176,13 @@
               <div class="text-center mb-4" v-if="selectedAlert.operator">
                 <div
                   class="rounded-circle mx-auto mb-3 shadow-sm d-flex align-items-center justify-content-center"
-                  style="width: 80px; height: 80px; background-color: #007bff; color: white; font-size: 2rem;"
+                  style="
+                    width: 80px;
+                    height: 80px;
+                    background-color: #007bff;
+                    color: white;
+                    font-size: 2rem;
+                  "
                 >
                   {{ selectedAlert.operator.name.charAt(0).toUpperCase() }}
                 </div>
@@ -177,7 +210,9 @@
                   </div>
                   <div class="detail-item">
                     <span class="detail-label">Fecha y Hora</span>
-                    <span class="detail-value">{{ formatDateTime(selectedAlert.date, selectedAlert.time) }}</span>
+                    <span class="detail-value">{{
+                      formatDateTime(selectedAlert.date, selectedAlert.time)
+                    }}</span>
                   </div>
                   <div class="detail-item">
                     <span class="detail-label">Tipo</span>
@@ -194,11 +229,18 @@
                   </div>
                   <div class="detail-item" v-if="selectedAlert.isRecurring">
                     <span class="detail-label">Fecha de finalización</span>
-                    <span class="detail-value">{{ formatDateTime(selectedAlert.endDate, '00:00:00') }}</span>
+                    <span class="detail-value">{{
+                      formatDateTime(selectedAlert.endDate, '00:00:00')
+                    }}</span>
                   </div>
-                  <div class="detail-item" v-if="selectedAlert.isRecurring && selectedAlert.dayOfWeek">
+                  <div
+                    class="detail-item"
+                    v-if="selectedAlert.isRecurring && selectedAlert.dayOfWeek"
+                  >
                     <span class="detail-label">Días de recurrencia</span>
-                    <span class="detail-value">{{ formatRecurringDays(selectedAlert.dayOfWeek) }}</span>
+                    <span class="detail-value">{{
+                      formatRecurringDays(selectedAlert.dayOfWeek)
+                    }}</span>
                   </div>
                   <div class="detail-item">
                     <span class="detail-label">Recurrente</span>
@@ -249,11 +291,7 @@
             {{ pageNumber }}
           </button>
 
-          <button
-            v-if="showEllipsisEnd()"
-            class="pagination-ellipsis"
-            disabled
-          >
+          <button v-if="showEllipsisEnd()" class="pagination-ellipsis" disabled>
             <span>&hellip;</span>
           </button>
 
@@ -268,19 +306,32 @@
         </nav>
       </div>
     </div>
+    <ConfirmDialog
+      :show="showDeleteDialog"
+      title="Eliminar alerta"
+      :message="'¿Seguro que quieres eliminar esta alerta?'"
+      type="danger"
+      confirm-text="Eliminar"
+      cancel-text="Cancelar"
+      @confirm="confirmDelete"
+      @cancel="cancelDelete"
+    />
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from "pinia";
+import { mapActions, mapState } from 'pinia'
 import AddAlert from '@/components/views/adds/AddAlert.vue'
 import { useCounterStore } from '@/stores/index.js'
 import AlertsRepository from '@/repositories/alerts.repository.js'
 import { useMessagesStore } from '@/stores/messages.js'
+import CallsRepository from '@/repositories/calls.repository.js'
+import ConfirmDialog from '@/components/utils/ConfirmDialog.vue'
 
 export default {
   props: ['idPatient'],
   components: {
+    ConfirmDialog,
     AddAlert
   },
 
@@ -296,52 +347,59 @@ export default {
       itemsPerPage: 10,
       sortKey: '',
       sortOrder: 1,
+      alertToDetele: null,
+      showDeleteDialog: false
     }
   },
   computed: {
-    ...mapState(useCounterStore, ["alerts"]),
+    ...mapState(useCounterStore, ['alerts']),
     filteredAlerts() {
       const searchTermLower = this.searchTerm.toLowerCase().trim()
-      return this.allAlerts.filter(alert => {
+      return this.allAlerts.filter((alert) => {
         if (!searchTermLower) return true
         return alert.patient && alert.patient.fullName.toLowerCase().includes(searchTermLower)
       })
     },
     sortedAlerts() {
       return [...this.filteredAlerts].sort((a, b) => {
-        let aValue = this.getSortValue(a, this.sortKey);
-        let bValue = this.getSortValue(b, this.sortKey);
+        let aValue = this.getSortValue(a, this.sortKey)
+        let bValue = this.getSortValue(b, this.sortKey)
 
-        if (aValue < bValue) return -1 * this.sortOrder;
-        if (aValue > bValue) return 1 * this.sortOrder;
-        return 0;
-      });
-    },
+        if (aValue < bValue) return -1 * this.sortOrder
+        if (aValue > bValue) return 1 * this.sortOrder
+        return 0
+      })
+    }
   },
   methods: {
-    ...mapActions(useCounterStore, ["loadAlerts" , "getAlertTypeBadgeClass", "getAlertTypeLabel", "formatRecurringDays"]),
+    ...mapActions(useCounterStore, [
+      'loadAlerts',
+      'getAlertTypeBadgeClass',
+      'getAlertTypeLabel',
+      'formatRecurringDays'
+    ]),
     selectAlert(alert) {
-      this.selectedAlert = alert;
-      this.showAddAlert = false;
-      this.editingAlert = null;
+      this.selectedAlert = alert
+      this.showAddAlert = false
+      this.editingAlert = null
     },
     sortBy(key) {
       if (this.sortKey === key) {
-        this.sortOrder *= -1;
+        this.sortOrder *= -1
       } else {
-        this.sortKey = key;
-        this.sortOrder = 1;
+        this.sortKey = key
+        this.sortOrder = 1
       }
     },
 
     getSortValue(obj, key) {
-      return key.split('.').reduce((o, k) => (o || {})[k], obj);
+      return key.split('.').reduce((o, k) => (o || {})[k], obj)
     },
 
     getPaginatedAlerts() {
-      const start = (this.currentPage - 1) * this.itemsPerPage;
-      const end = start + this.itemsPerPage;
-      return this.sortedAlerts.slice(start, end);
+      const start = (this.currentPage - 1) * this.itemsPerPage
+      const end = start + this.itemsPerPage
+      return this.sortedAlerts.slice(start, end)
     },
     formatDateTime(date, time) {
       const datetime = new Date(`${date}T${time}`)
@@ -360,101 +418,127 @@ export default {
     },
 
     editAlert(alert) {
-      this.editingAlert = { ...alert };
-      this.showAddAlert = true;
-      this.selectedAlert = null;
+      this.editingAlert = { ...alert }
+      this.showAddAlert = true
+      this.selectedAlert = null
     },
 
     async deleteAlert(alert) {
-      if (confirm(`¿Estás seguro de que quieres eliminar esta alerta?`)) {
-        try {
-          const alertsRepository = new AlertsRepository();
-          await alertsRepository.removeCall(alert.id);
-          this.allAlerts = this.allAlerts.filter(a => a.id !== alert.id);
-          if (this.selectedAlert && this.selectedAlert.id === alert.id) {
-            this.selectedAlert = null;
-          }
-        } catch (error) {
-          useMessagesStore().pushMessageAction({ type: 'error', message: 'Error al eliminar la alerta. Por favor, inténtelo de nuevo.' });
+      this.alertToDetele = alert
+      this.showDeleteDialog = true
+    },
+    async confirmDelete() {
+      try {
+        const alertsRepository = new AlertsRepository();
+        await alertsRepository.removeCall(this.alertToDetele.id);
+        this.allAlerts = this.allAlerts.filter(a => a.id !== this.alertToDetele.id);
+        if (this.selectedAlert && this.selectedAlert.id === this.alertToDetele.id) {
+          this.selectedAlert = null;
         }
+        useMessagesStore().pushMessageAction({
+          type: 'success',
+          message: 'Alerta eliminada correctamente'
+        })
+      } catch (error) {
+        useMessagesStore().pushMessageAction({
+          type: 'error',
+          message: 'Error al eliminar la alerta'
+        })
+      } finally {
+        this.isLoading = false
+        this.showDeleteDialog = false
+        this.alertToDetele = null
       }
     },
-
+    cancelDelete() {
+      useMessagesStore().pushMessageAction({ type: 'error', message: 'Eliminación cancelada' })
+      this.showDeleteDialog = false
+      this.alertToDetele = null
+    },
     async handleAlertAdded(newAlert) {
       this.showAddAlert = false
       this.editingAlert = null
-      if(this.idPatient && newAlert.patient.id === this.idPatient) {
+      if (this.idPatient && newAlert.patient.id === this.idPatient) {
         this.allAlerts = this.alerts.push(newAlert)
       } else {
         this.alerts.push(newAlert)
         this.allAlerts = this.alerts
       }
-      useMessagesStore().pushMessageAction({ type: 'success', message: 'Alerta actualizada correctamente' });
+      useMessagesStore().pushMessageAction({
+        type: 'success',
+        message: 'Alerta actualizada correctamente'
+      })
     },
 
     async handleAlertUpdated(updatedAlert) {
       this.showAddAlert = false
       this.editingAlert = null
-      if(this.idPatient) {
-        const index = this.allAlerts.findIndex(a => a.id === updatedAlert.id)
+      if (this.idPatient) {
+        const index = this.allAlerts.findIndex((a) => a.id === updatedAlert.id)
         if (index !== -1) {
           this.allAlerts[index] = updatedAlert
         }
       } else {
-        const index = this.alerts.findIndex(a => a.id === updatedAlert.id)
+        const index = this.alerts.findIndex((a) => a.id === updatedAlert.id)
         if (index !== -1) {
           this.allAlerts[index] = updatedAlert
         }
         this.allAlerts = this.alerts
       }
-      useMessagesStore().pushMessageAction({ type: 'success', message: 'Alerta actualizada correctamente' });
+      useMessagesStore().pushMessageAction({
+        type: 'success',
+        message: 'Alerta actualizada correctamente'
+      })
     },
 
     getTotalPages() {
-      return Math.ceil(this.filteredAlerts.length / this.itemsPerPage);
+      return Math.ceil(this.filteredAlerts.length / this.itemsPerPage)
     },
     changePage(page) {
       if (page >= 1 && page <= this.getTotalPages()) {
-        this.currentPage = page;
-        this.selectedAlert = null;
+        this.currentPage = page
+        this.selectedAlert = null
       }
     },
     getDisplayedPageNumbers() {
-      const displayed = [];
-      const totalDisplayed = 5;
-      const totalPages = this.getTotalPages();
+      const displayed = []
+      const totalDisplayed = 5
+      const totalPages = this.getTotalPages()
 
       if (totalPages <= totalDisplayed) {
-        return Array.from({ length: totalPages }, (_, i) => i + 1);
+        return Array.from({ length: totalPages }, (_, i) => i + 1)
       }
 
-      displayed.push(1);
+      displayed.push(1)
 
-      let start = Math.max(2, this.currentPage - Math.floor(totalDisplayed / 2));
-      let end = Math.min(totalPages - 1, start + totalDisplayed - 3);
+      let start = Math.max(2, this.currentPage - Math.floor(totalDisplayed / 2))
+      let end = Math.min(totalPages - 1, start + totalDisplayed - 3)
 
       if (end === totalPages - 1) {
-        start = Math.max(2, end - totalDisplayed + 3);
+        start = Math.max(2, end - totalDisplayed + 3)
       }
 
       if (start > 2) {
-        displayed.push('...');
+        displayed.push('...')
       }
 
       for (let i = start; i <= end; i++) {
-        displayed.push(i);
+        displayed.push(i)
       }
 
       if (end < totalPages - 1) {
-        displayed.push('...');
+        displayed.push('...')
       }
 
-      displayed.push(totalPages);
+      displayed.push(totalPages)
 
-      return displayed;
+      return displayed
     },
     showEllipsisEnd() {
-      return this.getTotalPages() > 5 && !this.getDisplayedPageNumbers().includes(this.getTotalPages() - 1);
+      return (
+        this.getTotalPages() > 5 &&
+        !this.getDisplayedPageNumbers().includes(this.getTotalPages() - 1)
+      )
     }
   },
 
@@ -464,7 +548,7 @@ export default {
     }
 
     if (this.idPatient) {
-      this.allAlerts = this.alerts.filter(item => item?.patient?.id == this.idPatient);
+      this.allAlerts = this.alerts.filter((item) => item?.patient?.id == this.idPatient)
     } else {
       this.allAlerts = this.alerts
     }
@@ -636,7 +720,9 @@ export default {
   align-items: center;
   background-color: #fff;
   border-radius: 0.5rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
   padding: 0.5rem;
 }
 
@@ -699,6 +785,8 @@ export default {
 }
 
 .sortable {
-  transition: background-color 0.2s, transform 0.1s;
+  transition:
+    background-color 0.2s,
+    transform 0.1s;
 }
 </style>

@@ -16,42 +16,42 @@
         <div class="form-group">
           <label for="patientId">Paciente</label>
           <SearchableSelect
-            v-model="call.patientId"
-            :options="patients"
-            placeholder="Seleccionar paciente"
+              v-model="call.patientId"
+              :options="patients"
+              placeholder="Seleccionar paciente"
           />
         </div>
 
         <div class="form-group">
           <label for="operatorId">Operador</label>
           <SearchableSelect
-            v-model="call.operatorId"
-            :options="operators"
-            placeholder="Seleccionar operador"
+              v-model="call.operatorId"
+              :options="operators"
+              placeholder="Seleccionar operador"
           />
         </div>
 
         <div class="form-group">
           <label for="dateTime">Fecha y Hora</label>
           <input
-            v-model="formattedDateTime"
-            type="datetime-local"
-            class="form-control"
-            id="dateTime"
-            required
+              v-model="formattedDateTime"
+              type="datetime-local"
+              class="form-control"
+              id="dateTime"
+              required
           />
         </div>
 
         <div v-if="callType === 'incoming'" class="form-group">
           <label for="incomingCallType">Tipo de Llamada Entrante</label>
           <select
-            v-model="call.incomingCall.type"
-            class="form-control"
-            id="incomingCallType"
-            required
+              v-model="call.incomingCall.type"
+              class="form-control"
+              id="incomingCallType"
+              required
           >
             <option v-for="type in incomingCallTypes" :key="type" :value="type">
-              {{ type }}
+              {{ translations[type] || type }}
             </option>
           </select>
         </div>
@@ -59,10 +59,10 @@
         <div v-if="callType === 'incoming'" class="form-group">
           <label for="emergencyLevel">Nivel de Emergencia</label>
           <select
-            v-model="call.incomingCall.emergencyLevel"
-            class="form-control"
-            id="emergencyLevel"
-            required
+              v-model="call.incomingCall.emergencyLevel"
+              class="form-control"
+              id="emergencyLevel"
+              required
           >
             <option v-for="level in [1, 2, 3, 4, 5]" :key="level" :value="level">
               {{ level }}
@@ -73,13 +73,13 @@
         <div v-if="callType === 'outgoing'" class="form-group">
           <label for="outgoingCallType">Tipo de Llamada Saliente</label>
           <select
-            v-model="call.outgoingCall.type"
-            class="form-control"
-            id="outgoingCallType"
-            required
+              v-model="call.outgoingCall.type"
+              class="form-control"
+              id="outgoingCallType"
+              required
           >
             <option v-for="type in outgoingCallTypes" :key="type" :value="type">
-              {{ type }}
+              {{ translations[type] || type }}
             </option>
           </select>
         </div>
@@ -87,20 +87,20 @@
         <div v-if="callType === 'outgoing'" class="form-group">
           <label for="alertId">Alerta (opcional)</label>
           <SearchableSelect
-            v-model="call.outgoingCall.alertId"
-            :options="alerts"
-            placeholder="Seleccionar alerta"
+              v-model="call.outgoingCall.alertId"
+              :options="alerts"
+              placeholder="Seleccionar alerta"
           />
         </div>
 
         <div class="form-group">
           <label for="details">Detalles de la Llamada</label>
           <textarea
-            v-model="call.details"
-            class="form-control"
-            id="details"
-            rows="3"
-            required
+              v-model="call.details"
+              class="form-control"
+              id="details"
+              rows="3"
+              required
           ></textarea>
         </div>
 
@@ -155,7 +155,26 @@ export default {
       errors: [],
       isSubmitting: false,
       incomingCallTypes: values(IncomingCallsType),
-      outgoingCallTypes: values(OutgoingCallsType)
+      outgoingCallTypes: values(OutgoingCallsType),
+      translations: {
+        "Social Emergencies": "Emergencias Sociales",
+        "Health Emergencies": "Emergencias de Salud",
+        "Loneliness or Distress Crisis": "Crisis de Soledad o Angustia",
+        "Unanswered Alarm": "Alarma sin Respuesta",
+        "Notify Absences or Returns": "Notificar Ausencias o Regresos",
+        "Modify Personal Data": "Modificar Datos Personales",
+        "Accidental Calls": "Llamadas Accidentales",
+        "Request Information": "Solicitar Información",
+        "Suggestions, Complaints or Claims": "Sugerencias, Quejas o Reclamaciones",
+        "Social Calls (to greet or talk with staff)": "Llamadas Sociales (para saludar o hablar con el personal)",
+        "Register Medical Appointments from a Call": "Registrar Citas Médicas desde una Llamada",
+        "Other Types of Calls": "Otros Tipos de Llamadas",
+        "Follow-up after notice or hospitalization": "Seguimiento después de aviso u hospitalización",
+        "Check if person is okay": "Comprobar si la persona está bien",
+        "Follow-up on activated alarm": "Seguimiento de alarma activada",
+        "General unexpected emergencies": "Emergencias generales inesperadas",
+        "Follow-up call regarding medication": "Llamada de seguimiento sobre medicación"
+      }
     }
   },
   computed: {

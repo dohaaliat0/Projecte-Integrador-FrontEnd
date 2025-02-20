@@ -269,8 +269,8 @@
     </div>
     <ConfirmDialog
       :show="showDeleteDialog"
-      title="Eliminar Paciente"
-      :message="'¿Seguro que quieres eliminar esta llamda?'"
+      title="Eliminar llamada"
+      :message="'¿Seguro que quieres eliminar esta llamada?'"
       type="danger"
       confirm-text="Eliminar"
       cancel-text="Cancelar"
@@ -286,7 +286,6 @@ import { useCounterStore } from '@/stores/index.js'
 import { useMessagesStore } from '@/stores/messages.js'
 import AddCall from '../adds/AddCall.vue'
 import ConfirmDialog from '@/components/utils/ConfirmDialog.vue'
-import PatientsRepository from '@/repositories/patients.repository.js'
 import CallsRepository from '@/repositories/calls.repository.js'
 
 export default {
@@ -331,7 +330,7 @@ export default {
       currentPage: 1,
       itemsPerPage: 10,
       showDeleteDialog: false,
-      patientToDelete: null,
+      callToDelete: null,
       sortKey: '',
       sortOrder: 1,
     }
@@ -421,17 +420,8 @@ export default {
       this.selectedCall = null
     },
     async deleteCall(call) {
-      if (confirm(`¿Estás seguro de que quieres eliminar esta llamada?`)) {
-        try {
-          const callsRepository = new CallsRepository()
-          await callsRepository.removeCall(call.id)
-
-          this.allCalls = this.allCalls.filter((c) => c.id !== call.id)
-          useMessagesStore().pushMessageAction({ type: 'success', message: 'Llamada eliminada correctamente' })
-        } catch (error) {
-          useMessagesStore().pushMessageAction({ type: 'error', message: error || 'Error al eliminar la llamada' })
-        }
-      }
+      this.showDeleteDialog = true
+      this.callToDelete = call
     },
     async handleCallAdded(call) {
       this.showAddCall = false
@@ -514,21 +504,22 @@ export default {
     async confirmDelete() {
       try {
         this.isLoading = true
-        const repositoryPatients = new PatientsRepository()
-        await repositoryPatients.removePatient(this.patientToDelete.id)
-        await this.loadPatients()
-        this.$emit('patient-deleted', this.patientToDelete.id)
+        const repositoryPatients = new CallsRepository()
+        await repositoryPatients.removeCall(this.callToDelete.id)
+        this.allCalls = this.allCalls.filter(a => a.id !== this.callToDelete.id);
+        useMessagesStore().pushMessageAction({ type: 'success', message: 'Llamada eliminada correctamente' })
       } catch (error) {
-        useMessagesStore().pushMessageAction({ type: 'error', message: 'Error al eliminar el paciente' })
+        useMessagesStore().pushMessageAction({ type: 'error', message: 'Error al eliminar la llamada' })
       } finally {
         this.isLoading = false
         this.showDeleteDialog = false
-        this.patientToDelete = null
+        this.callToDelete = null
       }
     },
     cancelDelete() {
+      useMessagesStore().pushMessageAction({ type: 'error', message: 'Eliminación cancelada' })
       this.showDeleteDialog = false
-      this.patientToDelete = null
+      this.callToDelete = null
     },
   }
 }

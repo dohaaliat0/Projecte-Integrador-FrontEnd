@@ -90,7 +90,7 @@
                           v-model="patientId"
                           class="form-select select-custom"
                         >
-                          <option value="">Seleccione una zona</option>
+                          <option value="">Seleccione un paciente</option>
 
                           <option v-for="patient in patients" :key="patient.id" :value="patient.id">
                           {{ patient.fullName }} {{ patient.id }}

@@ -21,8 +21,6 @@
   FOLLOW_UP_ON_ACTIVATED_ALARM: "Follow-up on activated alarm",
   GENERAL_UNEXPECTED_EMERGENCIES: "General unexpected emergencies",
   FOLLOW_UP_CALL_MEDICATION: "Follow-up call regarding medication",
-
-  
 }
 
 function values(obj) {

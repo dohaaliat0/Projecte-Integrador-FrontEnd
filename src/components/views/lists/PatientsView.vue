@@ -17,16 +17,16 @@
                 </span>
             </div>
             <input
-              v-model="searchTerm"
-              type="text"
-              class="form-control border-left-0 pl-0"
-              placeholder="Buscar pacientes por nombre, email o teléfono"
-              style="border-left: none; box-shadow: none;"
+                v-model="searchTerm"
+                type="text"
+                class="form-control border-left-0 pl-0"
+                placeholder="Buscar pacientes por nombre, email o teléfono"
+                style="border-left: none; box-shadow: none;"
             >
             <button
-              @click="$router.push('/patients/add')"
-              class="btn btn-light ml-3 add-patient-btn"
-              title="Añadir Paciente"
+                @click="$router.push('/patients/add')"
+                class="btn btn-light ml-3 add-patient-btn"
+                title="Añadir Paciente"
             >
               <i class="fas fa-plus"></i>
             </button>
@@ -37,20 +37,20 @@
 
     <div class="row">
       <div class="col-12">
-      <h2 class="text-center mb-4">
-        {{title }}
-      </h2>
-    </div>
+        <h2 class="text-center mb-4">
+          {{title }}
+        </h2>
+      </div>
       <div class="col-12 col-md-6 col-lg-4 mb-4" v-for="patient in paginatedPatients" :key="patient.id">
         <div
-          class="card h-100 shadow-sm cursor-pointer patient-card"
-          @click="$router.push('/patient/' + patient.id)"
+            class="card h-100 shadow-sm cursor-pointer patient-card"
+            @click="$router.push('/patient/' + patient.id)"
         >
           <div class="card-body">
             <div class="d-flex align-items-center mb-3">
               <div
-                class="rounded-circle d-flex align-items-center justify-content-center mr-3 bg-primary"
-                style="width: 50px; height: 50px;"
+                  class="rounded-circle d-flex align-items-center justify-content-center mr-3 bg-primary"
+                  style="width: 50px; height: 50px;"
               >
                 <span class="text-white font-weight-bold">{{ patient.fullName.charAt(0) }}</span>
               </div>
@@ -73,30 +73,30 @@
 
             <div class="position-absolute" style="right: 10px; bottom: 10px">
               <button
-                @click.stop="$router.push('/calls/patient/' + patient.id)"
-                class="btn btn-light btn-sm"
-                title="Lista de llamadas"
+                  @click.stop="$router.push('/calls/patient/' + patient.id)"
+                  class="btn btn-light btn-sm"
+                  title="Lista de llamadas"
               >
                 <i class="fas fa-phone text-primary"></i>
               </button>
               <button
-                @click.stop="$router.push('/alerts/patient/' + patient.id)"
-                class="btn btn-light btn-sm"
-                title="Lista de alertes"
+                  @click.stop="$router.push('/alerts/patient/' + patient.id)"
+                  class="btn btn-light btn-sm"
+                  title="Lista de alertes"
               >
                 <i class="fas fa-exclamation-triangle text-primary"></i>
               </button>
               <button
-                @click.stop="$router.push('/patients/edit/' + patient.id)"
-                class="btn btn-light btn-sm mr-2"
-                title="Editar"
+                  @click.stop="$router.push('/patients/edit/' + patient.id)"
+                  class="btn btn-light btn-sm mr-2"
+                  title="Editar"
               >
                 <i class="fas fa-edit text-primary"></i>
               </button>
               <button
-                @click.stop="deletePatient(patient)"
-                class="btn btn-light btn-sm"
-                title="Eliminar"
+                  @click.stop="deletePatient(patient)"
+                  class="btn btn-light btn-sm"
+                  title="Eliminar"
               >
                 <i class="fas fa-trash-alt text-danger"></i>
               </button>
@@ -109,38 +109,38 @@
     <div v-if="!isLoading" class="pagination-container mt-4">
       <nav class="pagination" role="navigation" aria-label="pagination">
         <button
-          class="pagination-button"
-          :disabled="currentPage === 1"
-          @click="changePage(currentPage - 1)"
-          aria-label="Previous page"
+            class="pagination-button"
+            :disabled="currentPage === 1"
+            @click="changePage(currentPage - 1)"
+            aria-label="Previous page"
         >
           <i class="fas fa-chevron-left"></i>
         </button>
 
         <button
-          v-for="pageNumber in getDisplayedPageNumbers()"
-          :key="pageNumber"
-          @click="changePage(pageNumber)"
-          :class="['pagination-button', { 'is-current': pageNumber === currentPage }]"
-          :aria-label="`Page ${pageNumber}`"
-          :aria-current="pageNumber === currentPage ? 'page' : undefined"
+            v-for="pageNumber in getDisplayedPageNumbers()"
+            :key="pageNumber"
+            @click="changePage(pageNumber)"
+            :class="['pagination-button', { 'is-current': pageNumber === currentPage }]"
+            :aria-label="`Page ${pageNumber}`"
+            :aria-current="pageNumber === currentPage ? 'page' : undefined"
         >
           {{ pageNumber }}
         </button>
 
         <button
-          v-if="showEllipsisEnd()"
-          class="pagination-ellipsis"
-          disabled
+            v-if="showEllipsisEnd()"
+            class="pagination-ellipsis"
+            disabled
         >
           <span>&hellip;</span>
         </button>
 
         <button
-          class="pagination-button"
-          :disabled="currentPage === getTotalPages()"
-          @click="changePage(currentPage + 1)"
-          aria-label="Next page"
+            class="pagination-button"
+            :disabled="currentPage === getTotalPages()"
+            @click="changePage(currentPage + 1)"
+            aria-label="Next page"
         >
           <i class="fas fa-chevron-right"></i>
         </button>
@@ -156,14 +156,14 @@
     </div>
 
     <ConfirmDialog
-      :show="showDeleteDialog"
-      title="Eliminar Paciente"
-      :message="deleteMessage"
-      type="danger"
-      confirm-text="Eliminar"
-      cancel-text="Cancelar"
-      @confirm="confirmDelete"
-      @cancel="cancelDelete"
+        :show="showDeleteDialog"
+        title="Eliminar Paciente"
+        :message="deleteMessage"
+        type="danger"
+        confirm-text="Eliminar"
+        cancel-text="Cancelar"
+        @confirm="confirmDelete"
+        @cancel="cancelDelete"
     />
   </div>
 </template>
@@ -197,13 +197,13 @@ export default {
     }
   },
   computed: {
-    ...mapState(useCounterStore, ['patients', 'getZoneName']),
+    ...mapState(useCounterStore, ['patients', 'getZoneName', 'zones']),
     filteredPatients() {
       const searchTermLower = this.searchTerm.toLowerCase().trim()
       return this.patients.filter(patient =>
-        patient.fullName.toLowerCase().includes(searchTermLower) ||
-        patient.email.toLowerCase().includes(searchTermLower) ||
-        patient.phone.includes(searchTermLower)
+          patient.fullName.toLowerCase().includes(searchTermLower) ||
+          patient.email.toLowerCase().includes(searchTermLower) ||
+          patient.phone.includes(searchTermLower)
       )
     },
     paginatedPatients() {
@@ -217,14 +217,16 @@ export default {
     }
   },
   async mounted() {
-      const filter = this.zoneId ? '?zoneId=' + this.zoneId : ''
-      await this.loadPatients(filter)
+    const filter = this.zoneId ? '?zoneId=' + this.zoneId : ''
+    await this.loadPatients(filter)
+    if (this.zones.length === 0){
       await this.loadZones()
-      this.title = this.zoneId ? `Pacientes de ${this.getZoneName(this.zoneId)}` : 'Todos los pacientes'
-      this.isLoading = false;
-      if(!this.patients || this.patients.length === 0) {
-        useMessagesStore().pushMessageAction({type: 'warning', message: 'No se han encontrado pacientes registrados'});
-      }
+    }
+    this.title = this.zoneId ? `Pacientes de ${this.getZoneName(this.zoneId)}` : 'Todos los pacientes'
+    this.isLoading = false;
+    if(!this.patients || this.patients.length === 0) {
+      useMessagesStore().pushMessageAction({type: 'warning', message: 'No se han encontrado pacientes registrados'});
+    }
   },
   methods: {
     ...mapActions(useCounterStore, ['loadPatients', 'loadZones']),
@@ -239,8 +241,9 @@ export default {
         this.isLoading = true
         const repositoryPatients = new PatientsRepository()
         await repositoryPatients.removePatient(this.patientToDelete.id)
-        await this.loadPatients()
-        this.$emit('patient-deleted', this.patientToDelete.id)
+        this.patients = this.patients.filter(a => a.id !== this.patientToDelete.id);
+        const filter = this.zoneId ? '?zoneId=' + this.zoneId : ''
+        await this.loadPatients(filter)
         useMessagesStore().pushMessageAction({type: 'info', message: 'Paciente eliminado correctamente'})
       } catch (error) {
         console.error('Error al eliminar el paciente:', error)
