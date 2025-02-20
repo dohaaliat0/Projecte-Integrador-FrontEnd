@@ -17,18 +17,9 @@
                   <i class="fas fa-search text-primary"></i>
                 </span>
               </div>
-              <input
-                v-model="searchTerm"
-                type="text"
-                class="form-control border-left-0 pl-0"
-                placeholder="Buscar alertas por nombre de pacientes"
-                style="border-left: none; box-shadow: none;"
-              >
-              <button
-                @click="toggleAddAlert"
-                class="btn btn-light ml-3 add-alert-btn"
-                title="Añadir Alerta"
-              >
+              <input v-model="searchTerm" type="text" class="form-control border-left-0 pl-0"
+                placeholder="Buscar alertas por nombre de pacientes" style="border-left: none; box-shadow: none;">
+              <button @click="toggleAddAlert" class="btn btn-light ml-3 add-alert-btn" title="Añadir Alerta">
                 <i class="fas fa-plus"></i>
               </button>
             </div>
@@ -43,83 +34,69 @@
               <h5 class="card-title mb-0">Calendario de Alertas</h5>
             </div>
             <div class="card-body calendar-full-width">
-              <VCalendar
-                v-model:date="selectedDate"
-                :attributes="calendarAttributes"
-                @dayclick="onDateSelect"
-                :initial-date="selectedDate"
-              />
+              <VCalendar v-model:date="selectedDate" :attributes="calendarAttributes" @dayclick="onDateSelect"
+                :initial-date="selectedDate" />
               <div class="mt-4">
                 <h6>Alertas para {{ formatDate(selectedDate) }}</h6>
                 <div class="table-responsive">
                   <table class="table table-hover align-middle">
                     <thead class="table-light">
-                    <tr>
-                      <th class="ps-4 sortable" @click="sortBy('id')">#</th>
-                      <th class="sortable" @click="sortBy('title')">Título</th>
-                      <th class="sortable" @click="sortBy('patient.fullName')">Paciente</th>
-                      <th class="sortable" @click="sortBy('time')">Hora</th>
-                      <th class="sortable" @click="sortBy('operator.name')">Operador</th>
-                      <th class="sortable" @click="sortBy('zoneId')">Zona</th>
-                      <th class="text-center sortable" @click="sortBy('type')">Tipo</th>
-                      <th class="text-center sortable" @click="sortBy('isActive')">Estado</th>
-                      <th class="text-center">Acciones</th>
-                    </tr>
+                      <tr>
+                        <th class="ps-4 sortable" @click="sortBy('id')">#</th>
+                        <th class="sortable" @click="sortBy('title')">Título</th>
+                        <th class="sortable" @click="sortBy('patient.fullName')">Paciente</th>
+                        <th class="sortable" @click="sortBy('time')">Hora</th>
+                        <th class="sortable" @click="sortBy('operator.name')">Operador</th>
+                        <th class="sortable" @click="sortBy('zoneId')">Zona</th>
+                        <th class="text-center sortable" @click="sortBy('type')">Tipo</th>
+                        <th class="text-center sortable" @click="sortBy('isActive')">Estado</th>
+                        <th class="text-center">Acciones</th>
+                      </tr>
                     </thead>
                     <tbody>
-                    <tr
-                      v-for="alert in getPaginatedAlerts()"
-                      :key="alert.id"
-                      class="alert-row"
-                      @click="selectAlert(alert)"
-                    >
-                      <td class="ps-4">{{ alert.id }}</td>
-                      <td class="text-wrap" style="max-width: 200px;">
-                        <div class="text-truncate" :title="alert.title">{{ alert.title }}</div>
-                      </td>
-                      <td>
-                        <div class="d-flex align-items-center" v-if="alert.patient">
-                          <div class="rounded-circle me-2"
-                               style="width: 32px; height: 32px; background-color: #007bff; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; margin-right: 5px;">
-                            {{ alert.patient.fullName.charAt(0).toUpperCase() }}
+                      <tr v-for="alert in getPaginatedAlerts()" :key="alert.id" class="alert-row"
+                        @click="selectAlert(alert)">
+                        <td class="ps-4">{{ alert.id }}</td>
+                        <td class="text-wrap" style="max-width: 200px;">
+                          <div class="text-truncate" :title="alert.title">{{ alert.title }}</div>
+                        </td>
+                        <td>
+                          <div class="d-flex align-items-center" v-if="alert.patient">
+                            <div class="rounded-circle me-2"
+                              style="width: 32px; height: 32px; background-color: #007bff; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; margin-right: 5px;">
+                              {{ alert.patient.fullName.charAt(0).toUpperCase() }}
+                            </div>
+                            <a :href="`/patient/${alert.patient.id}`">{{ alert.patient.fullName }}</a>
                           </div>
-                          <a :href="`/patient/${alert.patient.id}`">{{ alert.patient.fullName }}</a>
-                        </div>
-                        <span v-else class="text-muted">Sin paciente asignado</span>
-                      </td>
-                      <td>{{ formatTime(alert.time) }}</td>
-                      <td>
-                        <div class="d-flex align-items-center" v-if="alert.operator">
-                          <div class="rounded-circle me-2"
-                               style="width: 32px; height: 32px; background-color: #007bff; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; margin-right: 5px;">
-                            {{ alert.operator.name.charAt(0).toUpperCase() }}
+                          <span v-else class="text-muted">Sin paciente asignado</span>
+                        </td>
+                        <td>{{ formatTime(alert.time) }}</td>
+                        <td>
+                          <div class="d-flex align-items-center" v-if="alert.operator">
+                            <div class="rounded-circle me-2"
+                              style="width: 32px; height: 32px; background-color: #007bff; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; margin-right: 5px;">
+                              {{ alert.operator.name.charAt(0).toUpperCase() }}
+                            </div>
+                            {{ alert.operator.name }}
                           </div>
-                          {{ alert.operator.name }}
-                        </div>
-                      </td>
-                      <td>
-                        <div class="d-flex align-items-center" v-if="alert.zone">
-                          {{ alert.zone.name }}
-                        </div>
-                        <span v-else class="text-muted">Sin zona asignada</span>
-                      </td>
-                      <td class="text-center">
-                          <span
-                            class="badge rounded-pill"
-                            :class="getAlertTypeBadgeClass(alert.type)"
-                          >
+                        </td>
+                        <td>
+                          <div class="d-flex align-items-center" v-if="alert.zone">
+                            {{ alert.zone.name }}
+                          </div>
+                          <span v-else class="text-muted">Sin zona asignada</span>
+                        </td>
+                        <td class="text-center">
+                          <span class="badge rounded-pill" :class="getAlertTypeBadgeClass(alert.type)">
                             {{ getAlertTypeLabel(alert.type) }}
                           </span>
-                      </td>
-                      <td class="text-center">
-                          <span
-                            class="badge rounded-pill"
-                            :class="alert.isActive ? 'bg-success' : 'bg-secondary'"
-                          >
+                        </td>
+                        <td class="text-center">
+                          <span class="badge rounded-pill" :class="alert.isActive ? 'bg-success' : 'bg-secondary'">
                             {{ alert.isActive ? 'Activa' : 'Inactiva' }}
                           </span>
-                      </td>
-                      <!-- <td class="text-center">
+                        </td>
+                        <!-- <td class="text-center">
                         <button
                           @click.stop="editAlert(alert)"
                           class="btn btn-sm btn-link p-0 me-2"
@@ -136,55 +113,41 @@
                           <i class="fas fa-trash-alt text-danger"></i>
                         </button>
                       </td> -->
-                      <td>
-                        <div class="d-flex align-items-center" v-if="alert.patient">
-                          {{ alert.patient.fullName }}
-                            <a :href="`/calls/new-with-alert/${alert.id}`" @click.stop><i v-if="!getCallByAlertId(alert.id)" class="fas fa-phone-alt ml-2" title="Ver llamada"></i></a>
-                          <a :href="`/calls/edit/${getCallByAlertId(alert.id)}`"><i v-if="getCallByAlertId(alert.id)" class="fas fa-pencil-alt ml-2" title="Editar llamada"></i></a>
-                        </div>
-                        <span v-else class="text-muted">Sin paciente asignado</span>
-                      </td>
-                    </tr>
+                        <td>
+                          <div class="d-flex align-items-center" v-if="alert.patient">
+                            <a :href="`/calls/new-with-alert/${alert.id}`" @click.stop><i
+                                v-if="!getCallByAlertId(alert.id)" class="fas fa-phone-alt ml-2"
+                                title="Ver llamada"></i></a>
+                            <a :href="`/calls/edit/${getCallByAlertId(alert.id)}`"><i v-if="getCallByAlertId(alert.id)"
+                                class="fas fa-pencil-alt ml-2" title="Editar llamada"></i></a>
+                          </div>
+                          <span v-else class="text-muted">Sin paciente asignado</span>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
               </div>
               <div v-if="!isLoading" class="pagination-container mt-4">
                 <nav class="pagination" role="navigation" aria-label="pagination">
-                  <button
-                    class="pagination-button"
-                    :disabled="currentPage === 1"
-                    @click="changePage(currentPage - 1)"
-                    aria-label="Previous page"
-                  >
+                  <button class="pagination-button" :disabled="currentPage === 1" @click="changePage(currentPage - 1)"
+                    aria-label="Previous page">
                     <i class="fas fa-chevron-left"></i>
                   </button>
 
-                  <button
-                    v-for="pageNumber in getDisplayedPageNumbers()"
-                    :key="pageNumber"
+                  <button v-for="pageNumber in getDisplayedPageNumbers()" :key="pageNumber"
                     @click="changePage(pageNumber)"
                     :class="['pagination-button', { 'is-current': pageNumber === currentPage }]"
-                    :aria-label="`Page ${pageNumber}`"
-                    :aria-current="pageNumber === currentPage ? 'page' : undefined"
-                  >
+                    :aria-label="`Page ${pageNumber}`" :aria-current="pageNumber === currentPage ? 'page' : undefined">
                     {{ pageNumber }}
                   </button>
 
-                  <button
-                    v-if="showEllipsisEnd()"
-                    class="pagination-ellipsis"
-                    disabled
-                  >
+                  <button v-if="showEllipsisEnd()" class="pagination-ellipsis" disabled>
                     <span>&hellip;</span>
                   </button>
 
-                  <button
-                    class="pagination-button"
-                    :disabled="currentPage === getTotalPages()"
-                    @click="changePage(currentPage + 1)"
-                    aria-label="Next page"
-                  >
+                  <button class="pagination-button" :disabled="currentPage === getTotalPages()"
+                    @click="changePage(currentPage + 1)" aria-label="Next page">
                     <i class="fas fa-chevron-right"></i>
                   </button>
                 </nav>
@@ -220,7 +183,8 @@
           <AddAlert v-if="showAddAlert" @alert-added="handleAlertAdded" @close="closeAddAlert" />
           <AddAlert v-else :editingAlert="selectedAlert" @alert-updated="handleAlertUpdated" @close="closeAddAlert" />
 
-          <div v-if="!showAddAlert" class="d-flex flex-column flex-md-row justify-content-end mt-3 gap-2 mr-2 text-md-right">
+          <div v-if="!showAddAlert"
+            class="d-flex flex-column flex-md-row justify-content-end mt-3 gap-2 mr-2 text-md-right">
             <div :class="idRelatedCall ? 'mr-md-2' : ''">
               <router-link :to="{ name: 'callsNewWithAlert', params: { alertId: selectedAlert.id } }"
                 class="btn btn-primary d-flex align-items-center mb-2 mb-md-0">
@@ -230,7 +194,7 @@
             </div>
 
             <div>
-              <router-link v-if="idRelatedCall" :to="{ name: 'edit call', params: { callId: idRelatedCall ?? 1} }"
+              <router-link v-if="idRelatedCall" :to="{ name: 'edit call', params: { callId: idRelatedCall ?? 1 } }"
                 class="btn btn-secondary d-flex align-items-center">
                 Editar llamada existente
                 <i class="fas fa-edit ml-2"></i>
@@ -312,7 +276,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(useCounterStore, ['loadAlerts']),
+    ...mapActions(useCounterStore, ['loadAlerts', 'loadCalls']),
     formatDate(date) {
       if (!date) return '';
       return date.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
@@ -511,11 +475,13 @@ export default {
     },
   },
   async mounted() {
-    if (this.alerts.length === 0) {
-      await this.loadAlerts();
-    }
+    await this.loadAlerts();
+    await this.loadCalls();
     this.allAlerts = this.alerts;
     this.allAlerts = this.processRecurringAlerts(this.allAlerts);
+    this.allAlerts.forEach(alert => {
+      console.log(this.getCallByAlertId(alert.id));
+    });
     this.isLoading = false;
   },
 };

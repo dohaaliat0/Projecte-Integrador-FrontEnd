@@ -23,7 +23,7 @@ export const useCounterStore = defineStore("counter", {
   getters: {
     getPatientById: (state) => (id) => state.patients.find((item) => item.id == id),
     getZoneName: (state) => (id) => state.zones.find((item) => item.id == id)?.name,
-    getCallByAlertId: (state) => (alertId) => state.calls.find((call) => call.outgoingCall?.alert?.id === Number(alertId))?.outgoingCall?.callId,
+    getCallByAlertId: (state) => (alertId) => state.calls.find((call) => call.outgoingCall?.alert?.id == Number(alertId))?.outgoingCall?.callId,
   },
 
   actions: {
