@@ -8,7 +8,7 @@
     </div>
 
     <div v-else>
-      <div v-if="!idPatient" class="row justify-content-center mb-5">
+      <div class="row justify-content-center mb-5">
         <div class="col-12 col-md-8 col-lg-6">
           <div class="card-body">
             <div class="input-group input-group-lg">
@@ -384,18 +384,31 @@ export default {
     async handleAlertAdded(newAlert) {
       this.showAddAlert = false
       this.editingAlert = null
-      await this.loadAlerts()
-      this.allAlerts = this.alerts
+      if(this.idPatient && newAlert.patient.id === this.idPatient) {
+        this.allAlerts = this.alerts.push(newAlert)
+      } else {
+        this.alerts.push(newAlert)
+        this.allAlerts = this.alerts
+      }
+      useMessagesStore().pushMessageAction({ type: 'success', message: 'Alerta actualizada correctamente' });
     },
 
     async handleAlertUpdated(updatedAlert) {
       this.showAddAlert = false
       this.editingAlert = null
-      const index = this.allAlerts.findIndex(a => a.id === updatedAlert.id)
-      if (index !== -1) {
-        this.allAlerts[index] = updatedAlert
+      if(this.idPatient) {
+        const index = this.allAlerts.findIndex(a => a.id === updatedAlert.id)
+        if (index !== -1) {
+          this.allAlerts[index] = updatedAlert
+        }
+      } else {
+        const index = this.alerts.findIndex(a => a.id === updatedAlert.id)
+        if (index !== -1) {
+          this.allAlerts[index] = updatedAlert
+        }
+        this.allAlerts = this.alerts
       }
-      await this.loadAlerts()
+      useMessagesStore().pushMessageAction({ type: 'success', message: 'Alerta actualizada correctamente' });
     },
 
     getTotalPages() {
