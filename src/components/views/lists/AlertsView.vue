@@ -369,12 +369,11 @@ export default {
       if (confirm(`¿Estás seguro de que quieres eliminar esta alerta?`)) {
         try {
           const alertsRepository = new AlertsRepository();
-          await alertsRepository.deleteAlert(alert.id);
+          await alertsRepository.removeCall(alert.id);
           this.allAlerts = this.allAlerts.filter(a => a.id !== alert.id);
           if (this.selectedAlert && this.selectedAlert.id === alert.id) {
             this.selectedAlert = null;
           }
-          await this.loadAlerts();
         } catch (error) {
           useMessagesStore().pushMessageAction({ type: 'error', message: 'Error al eliminar la alerta. Por favor, inténtelo de nuevo.' });
         }
