@@ -459,6 +459,10 @@ export default {
           this.allCalls = await this.loadCallsByPatientAndTypeCall(this.idPatient, this.typeCall);
         }
       } else {
+        const index = this.calls.findIndex(a => a.id === updatedCall.id)
+        if (index !== -1) {
+          this.allCalls[index] = updatedCall
+        }
         await this.loadCalls()
         this.allCalls = this.calls
       }
