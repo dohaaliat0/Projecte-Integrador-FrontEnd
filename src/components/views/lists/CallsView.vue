@@ -299,7 +299,6 @@ export default {
     ...mapState(useCounterStore, ['calls']),
     filteredCalls() {
       const searchTermLower = this.searchTerm.toLowerCase().trim()
-      console.log(this.allCalls)
       return this.allCalls.filter((call) =>
         call.patient.fullName.toLowerCase().includes(searchTermLower)
       )
@@ -442,23 +441,34 @@ export default {
       // this.allCalls = this.calls
       useMessagesStore().pushMessageAction({ type: 'success', message: 'Llamada añadida correctamente' })
       this.isLoading = true
-      await this.loadCalls()
-      this.allCalls = this.calls
+      this.allCalls.push(call)
+      if (this.idPatient || this.typeCall) {
+        this.allCalls.push(call)
+      } else {
+        this.calls.push(call)
+        this.allCalls = this.calls
+      }
       this.isLoading = false
     },
     async handleCallUpdated(updatedCall) {
       this.showAddCall = false
       this.selectedCall = null
       this.editingCall = null
-      // const index = this.allCalls.findIndex((c) => c.id === updatedCall.id)
-      // if (index !== -1) {
-      //   this.allCalls[index] = updatedCall
-      // }
+      if(this.idPatient || this.typeCall) {
+        const index = this.allCalls.findIndex(a => a.id === updatedCall.id)
+        if (index !== -1) {
+          this.allCalls[index] = updatedCall
+        }
+      } else {
+        const index = this.calls.findIndex(a => a.id === updatedCall.id)
+        if (index !== -1) {
+          this.allCalls[index] = updatedCall
+        }
+        this.allCalls = this.calls
+      }
       useMessagesStore().pushMessageAction({ type: 'success', message: 'Llamada actualizada correctamente' })
-      this.isLoading = true
-      await this.loadCalls()
-      this.allCalls = this.calls
       this.isLoading = false
+      window.location.reload()
     },
     getTotalPages() {
       return Math.ceil(this.filteredCalls.length / this.itemsPerPage)
