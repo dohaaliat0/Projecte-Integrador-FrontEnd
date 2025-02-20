@@ -202,12 +202,13 @@ export default {
         if (this.isEditing) {
           callData.id = this.editCall.id
           response = await callsRepository.changeCall(callData)
+          this.$emit('call-updated', callData)
         } else {
           response = await callsRepository.addCall(callData)
           this.calls.push(response.data)
+          this.$emit('call-added', callData)
         }
 
-        this.$emit('call-added', response.data)
         this.resetForm()
       } catch (error) {
         this.errors.push('Error al guardar la llamada. Por favor, inténtelo de nuevo.')

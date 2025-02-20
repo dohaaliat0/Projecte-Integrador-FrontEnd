@@ -14,7 +14,6 @@ export default defineComponent({
   mounted(){
     window.Echo.channel('ConectaSalud')
     .listen('.LlamadaActualizada', (e) => {
-      console.log('Llamada actualizada', e)
       let message = '';
       if(e.call){
         message = `Llamada ${e.call.id} actualizada. Realizada en ${e.call.dateTime}`
