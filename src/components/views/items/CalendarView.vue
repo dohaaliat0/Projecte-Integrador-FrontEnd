@@ -82,9 +82,11 @@
                         </td>
                         <td>
                           <div class="d-flex align-items-center" v-if="alert.zone">
-                            {{ alert.zone.name }}
+                            <a :href="`/patients/zones/${alert.zone.id}`">{{ alert.zone.name }}</a>
                           </div>
-                          <span v-else class="text-muted">Sin zona asignada</span>
+                          <div v-else>
+                            N/A
+                          </div>
                         </td>
                         <td class="text-center">
                           <span class="badge rounded-pill" :class="getAlertTypeBadgeClass(alert.type)">
