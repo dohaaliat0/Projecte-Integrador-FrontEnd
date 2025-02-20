@@ -248,15 +248,29 @@ export default {
   },
   computed: {
     ...mapState(useCounterStore, ['alerts', 'getCallByAlertId']),
+    // filteredAlerts() {
+    //   if (!this.selectedDate) return [];
+    //   return this.allAlerts.filter(alert => {
+    //     const alertDate = new Date(alert.date);
+    //     return (
+    //       alertDate.getDate() === this.selectedDate.getDate() &&
+    //       alertDate.getMonth() === this.selectedDate.getMonth() &&
+    //       alertDate.getFullYear() === this.selectedDate.getFullYear()
+    //     );
+    //   });
+    // },
     filteredAlerts() {
       if (!this.selectedDate) return [];
+      const searchTermLower = this.searchTerm.toLowerCase().trim();
       return this.allAlerts.filter(alert => {
         const alertDate = new Date(alert.date);
-        return (
+        const dateMatch = (
           alertDate.getDate() === this.selectedDate.getDate() &&
           alertDate.getMonth() === this.selectedDate.getMonth() &&
           alertDate.getFullYear() === this.selectedDate.getFullYear()
         );
+        const searchMatch = !searchTermLower || (alert.patient && alert.patient.fullName.toLowerCase().includes(searchTermLower));
+        return dateMatch && searchMatch;
       });
     },
     sortedAlerts() {
@@ -412,6 +426,20 @@ export default {
       return classes[alert.type] || 'bg-secondary';
     },
     processRecurringAlerts(alerts) {
+
+      alerts = 
+      alerts.sort((a, b) => {
+        const today = new Date().setHours(0, 0, 0, 0);
+        const dateA = new Date(a.date).setHours(0, 0, 0, 0);
+        const dateB = new Date(b.date).setHours(0, 0, 0, 0);
+
+        if (dateA === today && dateB !== today) return -1;
+        if (dateA !== today && dateB === today) return 1;
+        if (dateA > today && dateB <= today) return -1;
+        if (dateA <= today && dateB > today) return 1;
+        return dateA - dateB;
+      });
+
       return alerts.flatMap(alert => {
         if (!alert.isRecurring || !alert.endDate || !alert.dayOfWeek) {
           return alert;
@@ -476,6 +504,14 @@ export default {
       // console.log(response.data.length)
       this.idRelatedCall = response.data[0].callId;
     },
+    selectToday() {
+      const today = new Date();
+      const formattedToday = today.toISOString().split('T')[0];
+      const dayElement = document.querySelector(`.id-${formattedToday} .vc-day-content`);
+      if (dayElement) {
+        dayElement.click();
+      }
+    },
   },
   async mounted() {
     await this.loadAlerts();
@@ -486,6 +522,8 @@ export default {
       console.log(this.getCallByAlertId(alert.id));
     });
     this.isLoading = false;
+    this.selectToday();
+
   },
 };
 </script>
